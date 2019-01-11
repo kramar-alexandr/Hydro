@@ -1,0 +1,610 @@
+external inner procedure HT2Per(date,date,var string);
+external procedure HeadLin(var integer);
+external inner function Integer WeekNr(Date,string); // plo 30.11.2006
+
+function boolean CheckMatch(string swhere, string swhat)
+begin
+  integer i;
+  boolean est;
+  
+  est = false;
+  for (i=1;i<=len(swhere);i=i+1) begin
+    if (CharacterMatch(swhere,swhat,i)) begin
+      est = true;
+    end;
+  end;
+  CheckMatch = est;
+  return;
+end;
+
+procedure GetItem(string icode,var string itemtype,var val koef,var record SMVc SMr,boolean weekincl,val qty,string cl1, string cl2, string cl3, string cl4)
+begin
+  record INVc INr;
+  row INVc INrw;
+  row SMVc SMrw;
+  integer lcnt,l;
+  integer i,k;
+
+  INr.Code = icode;
+  ResetLoop(INr);
+  itemtype = 0;
+  if ReadFirstMain(INr,1,true) then begin
+    itemtype = INr.Group;
+    koef = INr.UnitCoefficient;
+    // PT koodid
+    lcnt = MatRowCnt(INr);
+    k = MatRowCnt(SMr);
+    for (l=0;l<lcnt;l=l+1) begin
+      MatRowGet(INr,l,INrw);
+      if (Left(INrw.LangCode,2) == "PT") then begin
+        if (CheckMatch(INrw.Text,"/")==false) then begin
+          if (INrw.LangCode <> "PTAL")  then begin
+            i = 3;
+            if (INrw.LangCode == "PTPC")  then begin //Powder Coating
+              i = 4;
+            end;
+            if (INrw.LangCode == "PTFA")  then begin //Fabrication
+              i = 5;
+            end;
+            MatRowGet(SMr,i,SMrw);
+
+            SMrw.CurCredVal = SMrw.CurCredVal + (StringToVal(INrw.Text,M4Val)*qty/1000);// ??? delete to 1000
+            if (weekincl==true) then begin
+              SMrw.CurDebVal = SMrw.CurDebVal + (StringToVal(INrw.Text,M4Val)*qty/1000); // ??? delete to 1000
+              // metal item types
+              if (cl1== Left(INr.Group,2)) then begin
+                SMrw.DebVal = SMrw.DebVal + (StringToVal(INrw.Text,M4Val)*qty/1000);
+              end;
+              if (cl2== Left(INr.Group,2)) then begin
+                SMrw.CredVal = SMrw.CredVal + (StringToVal(INrw.Text,M4Val)*qty/1000);
+              end;
+              if (cl3== Left(INr.Group,2)) then begin
+                SMrw.DebVal2 = SMrw.DebVal2 + (StringToVal(INrw.Text,M4Val)*qty/1000);
+              end;
+              if (cl4== Left(INr.Group,2)) then begin
+                SMrw.CredVal2 = SMrw.CredVal2  + (StringToVal(INrw.Text,M4Val/1000)*qty);
+              end;
+            end;
+            MatRowPut(SMr,i,SMrw);
+          end;
+        end;
+      end;
+    end;
+  end;
+  return;
+end;
+
+procedure GetTable(record SMVc SMValr, string qtype, date sdate, date edate,string custype)
+begin
+  record QTVc QTr;
+  row QTVc QTrw;
+  row SMVc SMrw;
+  record ITVc ITr;
+  val ikoef;
+  string 5 col1,col2,col3,col4,col5,itype;
+  Val val51,val52,val53,val54,val5year,val5last;        // (5) Material
+  Val val41,val42,val43,val44,val4year,val4last;       // (4) Quantity in tons
+  Val val101,val102,val103,val104,val10year,val10last; // (10) Total value
+  LongInt tnof1,tnof2,tnof3,tnof4; // total Number of Offers
+  Boolean quotenr;
+  Boolean TrHs,test;
+  Date dat1,dat2;
+  integer i,rwcnt,coord;
+
+  dat1 = StringToDate("01.01." & GetYear(sdate));
+  dat2 = edate;
+
+  QTr.QTDate = dat1;
+
+  val10last = 0;
+  val10year = 0;
+  val5last = 0;
+  val5year = 0;
+  val4last = 0;
+  val4year = 0;
+
+  val51 = 0;
+  val52 = 0;
+  val53 = 0;
+  val54 = 0;
+
+  val41 = 0;
+  val42 = 0;
+  val43 = 0;
+  val44 = 0;
+
+  val101 = 0;
+  val102 = 0;
+  val103 = 0;
+  val104 = 0;
+
+  //columns
+  ResetLoop(ITr);
+
+  TrHs = true;
+  //col3 = "";
+  //col4 = "";
+  while (LoopMain(ITr,1,TrHs)) begin
+    if (Left(ITr.Code,1) == "M") then begin
+      if (Left(ITr.Code,2) == "MS") then begin
+        col1 = "MS" ;
+      end;
+      if (Left(ITr.Code,2) == "MC") then begin
+        col2 = "MC" ;
+      end;
+      if (Left(ITr.Code,2) <> "MC") and (Left(ITr.Code,2) <> "MS") then begin
+        if blank(col3)  then begin
+          col3 = Left(ITr.Code,2);
+        end;
+        if blank(col4) and (col3 <> Left(ITr.Code,2)) then begin
+          col4 = Left(ITr.Code,2);
+          //TrHs = false;
+        end;
+      end;
+    end;
+  end;
+
+  TrHs = true;
+  while (LoopKey("QTDate",QTr,1,TrHs)) begin
+    test = true;
+    if (nonblank(qtype)) then begin
+      if (SetInSet(QTr.QuoteClass,qtype) == false) then begin
+        test = false;
+      end;
+    end;
+    //new 05.09
+    if (Left(QTr.QuoteClass,2) == "EL") then begin test = false; end;
+    if (QTr.QTDate > edate) then begin
+      test = false;
+    end;
+    if (Left(QTr.CustCat,1) <> custype) then begin
+      test = false;
+    end;
+
+    if test then begin
+      /*24.11  // NUMBER OF OFFERS
+      MatRowGet(SMValr,0,SMrw);
+      if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+      SMrw.CurDebVal = SMrw.CurDebVal +1;
+      end;
+      SMrw.CurCredVal = SMrw.CurCredVal +1;
+      MatRowPut(SMValr,0,SMrw);*/
+      quotenr = false;
+
+      // ITEM QTY AND SUMS
+      rwcnt = MatRowCnt(QTr);
+      for (i = 0 ; i<rwcnt ;i=i+1) begin
+        MatRowGet(QTr,i,QTrw);
+        if nonblank(QTrw.ArtCode) then begin
+          // problem
+          if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+            GetItem(QTrw.ArtCode,itype,ikoef,SMValr,true,QTrw.Quant,col1,col2,col3,col4);
+          end else begin
+            GetItem(QTrw.ArtCode,itype,ikoef,SMValr,false,QTrw.Quant,col1,col2,col3,col4);
+          end;
+
+          // NUMBER OF OFFERS 24.11.000
+          if ( quotenr == false)	then begin
+            MatRowGet(SMValr,0,SMrw);
+            if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+              if (Left(itype,1) == "M") then begin
+                quotenr = true;
+                SMrw.CurDebVal = SMrw.CurDebVal +1;
+                if (col1==Left(itype,2)) then begin
+                  SMrw.DebVal = SMrw.DebVal + 1;
+                  tnof1 = tnof1 + 1;
+                end;
+                if (col2== Left(itype,2)) then begin
+                  SMrw.CredVal = SMrw.CredVal + 1;
+                  tnof2 = tnof2 + 1;
+                end;
+                if (col3== Left(itype,2)) then begin
+                  SMrw.DebVal2 = SMrw.DebVal2 + 1;
+                  tnof3 = tnof3 + 1;
+                end;
+                if (col4== Left(itype,2)) then begin
+                  SMrw.CredVal2 = SMrw.CredVal2  + 1;
+                  tnof4 = tnof4 + 1;
+                end;
+              end;
+            end;
+            if (Left(itype,1) == "M") then begin
+              SMrw.CurCredVal = SMrw.CurCredVal +1;
+            end;
+            MatRowPut(SMValr,0,SMrw);
+          end;
+
+          if (Left(itype,1) == "M") then begin
+            MatRowGet(SMValr,1,SMrw);
+            SMrw.CurCredVal = SMrw.CurCredVal + QTrw.Quant * ikoef/1000;
+            val10last = val10last + (QTrw.Sum/1000);
+            val4last = SMrw.CurCredVal;
+            if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+              SMrw.CurDebVal = SMrw.CurDebVal + QTrw.Quant * ikoef/1000;
+              val10year = val10year + (QTrw.Sum/1000);
+
+              if (col1==Left(itype,2)) then begin
+                SMrw.DebVal = SMrw.DebVal + QTrw.Quant * ikoef/1000;
+                val101 = val101 + (QTrw.Sum/1000);
+              end;
+              if (col2== Left(itype,2)) then begin
+                SMrw.CredVal = SMrw.CredVal + QTrw.Quant * ikoef/1000;
+                val102 = val102 + (QTrw.Sum/1000);
+              end;
+              if (col3== Left(itype,2)) then begin
+                SMrw.DebVal2 = SMrw.DebVal2 + QTrw.Quant * ikoef/1000;
+                val103 = val103 + (QTrw.Sum/1000);
+              end;
+              if (col4== Left(itype,2)) then begin
+                SMrw.CredVal2 = SMrw.CredVal2  + QTrw.Quant * ikoef/1000;
+                val104 = val104 + (QTrw.Sum/1000);
+              end;
+              val4year = SMrw.CurDebVal;
+              val41 	 = SMrw.DebVal;
+              val42	 = SMrw.CredVal;
+              val43	 = SMrw.DebVal2;
+              val44	 = SMrw.CredVal2;
+            end;
+            MatRowPut(SMValr,1,SMrw);
+          end;
+
+          //accessories
+          if (Left(itype,1) == "A") then begin
+            MatRowGet(SMValr,6,SMrw);
+            SMrw.CurCredVal = SMrw.CurCredVal + QTrw.Sum/1000;
+            if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+              SMrw.CurDebVal = SMrw.CurDebVal + QTrw.Sum/1000;
+            end;
+            MatRowPut(SMValr,6,SMrw);
+          end;
+
+          //dies
+          if (Left(itype,1) == "D") then begin
+            MatRowGet(SMValr,7,SMrw);
+            SMrw.CurCredVal = SMrw.CurCredVal + QTrw.Sum/1000;
+            if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+              SMrw.CurDebVal = SMrw.CurDebVal + QTrw.Sum/1000;
+            end;
+            MatRowPut(SMValr,7,SMrw);
+          end;
+
+          //others
+          if ((Left(itype,1) <> "M") and (Left(itype,1) <> "D")) then begin
+            MatRowGet(SMValr,8,SMrw);
+            SMrw.CurCredVal = SMrw.CurCredVal + QTrw.Sum/1000;
+            if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+              SMrw.CurDebVal = SMrw.CurDebVal + QTrw.Sum/1000;
+            end;
+            MatRowPut(SMValr,8,SMrw);
+          end;
+
+          // Cost Cover
+          MatRowGet(SMValr,9,SMrw);
+          SMrw.CurCredVal = SMrw.CurCredVal + QTrw.rowGP/1000;
+          if (DateInRange( QTr.QTDate,sdate,edate)==true) then begin
+            SMrw.CurDebVal = SMrw.CurDebVal + QTrw.rowGP/1000;
+            if (col1== Left(itype,2)) then begin
+              SMrw.DebVal = SMrw.DebVal + QTrw.rowGP/1000;
+            end;
+            if (col2== Left(itype,2)) then begin
+              SMrw.CredVal = SMrw.CredVal + QTrw.rowGP/1000;
+            end;
+            if (col3== Left(itype,2)) then begin
+              SMrw.DebVal2 = SMrw.DebVal2 + QTrw.rowGP/1000;
+            end;
+            if (col4== Left(itype,2)) then begin
+              SMrw.CredVal2 = SMrw.CredVal2 + QTrw.rowGP/1000;
+            end;
+          end;
+          MatRowPut(SMValr,9,SMrw);
+        end; // end nonblank(QTrw.ArtCode)
+      end; // end for
+
+    end; // end test
+  end; // end while
+
+  //update (5) and (11)
+  rwcnt= MatRowCnt(SMValr);
+  for (i = 3; i<6;i=i+1) begin
+    MatRowGet(SMValr,i,SMrw);
+    val5year = val5year + SMrw.CurDebVal;
+    val5last = val5last + SMrw.CurCredVal;
+    val51 = val51 + SMrw.DebVal;
+    val52 = val52 + SMrw.CredVal;
+    val53 = val53 + SMrw.DebVal2;
+    val54 = val54 + SMrw.CredVal2;
+  end;
+
+  MatRowGet(SMValr,2,SMrw);
+  SMrw.CurCredVal = val10last - val5last;
+  SMrw.CurDebVal = val10year - val5year;
+  SMrw.DebVal = val101 - val51;
+  SMrw.CredVal = val102 - val52;
+  SMrw.DebVal2 = val103 - val53;
+  SMrw.CredVal2 =	val104 - val54;
+  MatRowPut(SMValr,2,SMrw);
+
+  MatRowGet(SMValr,10,SMrw);
+  SMrw.CurCredVal = val10last;
+  SMrw.CurDebVal = val10year;
+  SMrw.DebVal = val101;
+  SMrw.CredVal = val102;
+  SMrw.DebVal2 = val103;
+  SMrw.CredVal2 =	val104;
+  MatRowPut(SMValr,10,SMrw);
+
+  MatRowGet(SMValr,11,SMrw);
+  SMrw.CurDebVal  = (val10year - val5year)/val4year;
+  SMrw.CurCredVal = (val10last - val5last)/val4last;
+  SMrw.DebVal   = (val101 - val51)/val41;
+  SMrw.CredVal  = (val102 - val52)/val42;
+  SMrw.DebVal2  = (val103 - val53)/val43;
+  SMrw.CredVal2 =	(val104 - val54)/val44;
+  MatRowPut(SMValr,11,SMrw);
+
+  rwcnt = MatRowCnt(SMValr);
+  for (i = 0; i< rwcnt ;i=i+1) begin
+    MatRowGet(SMValr,i,SMrw);
+    StartFormat(15);
+    // OutString(0,0,SMrw.AccNumber,false);
+    OutString(0,0,SMrw.Comment,false);
+    coord = 180;
+    if nonblank(col1) then begin
+      if  (i<>6) and (i<>7)  and (i<>8) then begin
+        OutVal( coord,0,SMrw.DebVal, M4Val,true);
+      end;
+    end;
+    if nonblank(col2) then begin
+      coord = coord + 60;
+      if  (i<>6) and (i<>7)  and (i<>8) then begin
+        OutVal(coord,0,SMrw.CredVal, M4Val,true);
+      end;
+    end;
+    if nonblank(col3) then begin
+      coord = coord + 60;
+      if  (i<>6) and (i<>7)  and (i<>8) then begin
+        OutVal( coord,0,SMrw.DebVal2, M4Val,true);
+      end;
+    end;
+    if nonblank(col4) then begin
+      coord = coord + 60;
+      if (i<>6) and (i<>7)  and (i<>8) then begin
+        OutVal( coord,0,SMrw.CredVal2, M4Val,true);
+      end;
+    end;
+    coord = coord + 60;
+    OutVal( coord,0,SMrw.CurDebVal, M4Val,true);
+    coord = coord + 60;
+    OutVal( coord,0,SMrw.CurCredVal, M4Val,true);
+    EndFormat;
+  end;
+  return;
+end;
+
+global
+procedure PakkumRn(record RcVc RepSpec)
+begin
+  record SMVc SMr;
+  row SMVc SMrw;
+  record SMVc SMallr;
+  row SMVc SMallrw;
+  record CYBlock Compr;
+  string 255 tstr;
+  integer rw,i,weeknumb,cd;
+  val a1,a2,a3,a4,at,al;
+
+  StartReportJob("Offers");
+  rw = 1;
+  if nonblank(RepSpec.f1) then begin
+  tstr = "Pak.tüüp: " & RepSpec.f1;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+
+  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  Header(rw,tstr,1);
+  // rw = rw + 1;
+  EndHeader;
+  StartFormat(15);
+  HeadLin(cd);
+  weeknumb = WeekNr(RepSpec.sEndDate,Compr.CountryCode);
+  OutString(180 + (cd  *60),0, "Week " & weeknumb,true);
+  OutString(240 + (cd  *60),0, " Total "& GetYear(RepSpec.sStartDate),true);
+  EndFormat;
+
+  SMrw.AccNumber = "(1)";
+  SMrw.Comment = "Number of Offers";
+  MatRowPut(SMr,0,SMrw);
+  SMallrw.AccNumber = "(1)";
+  SMallrw.Comment = "Number of Offers";
+  MatRowPut(SMallr,0,SMallrw);
+
+  SMrw.AccNumber = "(2)";
+  SMrw.Comment = "Quantity in tons";
+  MatRowPut(SMr,1,SMrw);
+  SMallrw.AccNumber = "(2)";
+  SMallrw.Comment = "Quantity in tons";
+  MatRowPut(SMallr,1,SMallrw);
+
+  SMrw.AccNumber = "(3)";
+  SMrw.Comment = "Material,000EEK";
+  MatRowPut(SMr,2,SMrw);
+  SMallrw.AccNumber = "(3)";
+  SMallrw.Comment = "Material,000EEK";
+  MatRowPut(SMallr,2,SMallrw);
+
+  SMrw.AccNumber = "(4)";
+  SMrw.Comment = "Anodising,000EEK";
+  MatRowPut(SMr,3,SMrw);
+  SMallrw.AccNumber = "(4)";
+  SMallrw.Comment = "Anodising,000EEK";
+  MatRowPut(SMallr,3,SMallrw);
+
+  SMrw.AccNumber = "(5)";
+  SMrw.Comment = "Powder coating,000EEK";
+  MatRowPut(SMr,4,SMrw);
+  SMallrw.AccNumber = "(5)";
+  SMallrw.Comment = "Powder coating,000EEK";
+  MatRowPut(SMallr,4,SMallrw);
+
+  SMrw.AccNumber = "(6)";
+  SMrw.Comment = "Fabrication,000EEK";
+  MatRowPut(SMr,5,SMrw);
+  SMallrw.AccNumber = "(6)";
+  SMallrw.Comment = "Fabrication,000EEK";
+  MatRowPut(SMallr,5,SMallrw);
+
+  SMrw.AccNumber = "(7)";
+  SMrw.Comment = "Accessories,000EEK";
+  MatRowPut(SMr,6,SMrw);
+  SMallrw.AccNumber = "(7)";
+  SMallrw.Comment = "Accessories,000EEK";
+  MatRowPut(SMallr,6,SMallrw);
+
+  SMrw.AccNumber = "(8)";
+  SMrw.Comment = "Dies,000EEK";
+  MatRowPut(SMr,7,SMrw);
+  SMallrw.AccNumber = "(8)";
+  SMallrw.Comment = "Dies,000EEK";
+  MatRowPut(SMallr,7,SMallrw);
+
+  SMrw.AccNumber = "(9)";
+  SMrw.Comment = "Others,000EEK";
+  MatRowPut(SMr,8,SMrw);
+  SMallrw.AccNumber = "(9)";
+  SMallrw.Comment = "Others,000EEK";
+  MatRowPut(SMallr,8,SMallrw);
+
+  SMrw.AccNumber = "(10)";
+  SMrw.Comment = "CostCover,000EEK";
+  MatRowPut(SMr,9,SMrw);
+  SMallrw.AccNumber = "(10)";
+  SMallrw.Comment = "CostCover,000EEK";
+  MatRowPut(SMallr,9,SMallrw);
+
+  SMrw.AccNumber = "(11)";
+  SMrw.Comment = "Total value,000EEK";
+  MatRowPut(SMr,10,SMrw);
+  SMallrw.AccNumber = "(11)";
+  SMallrw.Comment = "Total value,000EEK";
+  MatRowPut(SMallr,10,SMallrw);
+
+  SMrw.AccNumber = "(12)";
+  SMrw.Comment = "Average price,EEK/kg";
+  MatRowPut(SMr,11,SMrw);
+  SMallrw.AccNumber = "(12)";
+  SMallrw.Comment = "Average price,EEK/kg";
+  MatRowPut(SMallr,11,SMallrw);
+
+  Black_Divider(0,1);
+  StartFormat(15);
+  OutString(0,0,"1.1.     To Existing",false);
+  EndFormat;
+
+  GetTable(SMr,RepSpec.f1,RepSpec.sStartDate,RepSpec.sEndDate,"E");
+  // sumup
+  for (i = 0; i<11 ;i=i+1) begin
+    MatRowGet(SMr,i,SMrw);
+    MatRowGet(SMallr,i,SMallrw);
+    SMallrw.DebVal = SMallrw.DebVal + SMrw.DebVal;
+    SMallrw.CredVal = SMallrw.CredVal + SMrw.CredVal;
+    SMallrw.DebVal2 = SMallrw.DebVal2 + SMrw.DebVal2;
+    SMallrw.CredVal2 = SMallrw.CredVal2 + SMrw.CredVal2;
+    SMallrw.CurDebVal = SMallrw.CurDebVal + SMrw.CurDebVal;
+    SMallrw.CurCredVal = SMallrw.CurCredVal + SMrw.CurCredVal;
+
+    SMrw.DebVal = 0;
+    SMrw.CredVal = 0;
+    SMrw.DebVal2 = 0;
+    SMrw.CredVal2 = 0;
+    SMrw.CurDebVal = 0;
+    SMrw.CurCredVal = 0 ;
+    MatRowPut(SMallr,i,SMallrw);
+    MatRowPut(SMr,i,SMrw);
+  end;
+
+  Black_Divider(0,1);
+  StartFormat(15);
+  OutString(0,0,"1.2.     To Prospects",false);
+  EndFormat;
+  GetTable(SMr,RepSpec.f1,RepSpec.sStartDate,RepSpec.sEndDate,"P");
+  // sumup
+  for (i = 0; i<11 ;i=i+1) begin
+    MatRowGet(SMr,i,SMrw);
+    MatRowGet(SMallr,i,SMallrw);
+    SMallrw.DebVal = SMallrw.DebVal + SMrw.DebVal;
+    SMallrw.CredVal = SMallrw.CredVal + SMrw.CredVal;
+    SMallrw.DebVal2 = SMallrw.DebVal2 + SMrw.DebVal2;
+    SMallrw.CredVal2 = SMallrw.CredVal2 + SMrw.CredVal2;
+    SMallrw.CurDebVal = SMallrw.CurDebVal + SMrw.CurDebVal;
+    SMallrw.CurCredVal = SMallrw.CurCredVal + SMrw.CurCredVal;
+
+    SMrw.DebVal = 0;
+    SMrw.CredVal = 0;
+    SMrw.DebVal2 = 0;
+    SMrw.CredVal2 = 0;
+    SMrw.CurDebVal = 0;
+    SMrw.CurCredVal = 0 ;
+    MatRowPut(SMallr,i,SMallrw);
+    MatRowPut(SMr,i,SMrw);
+  end;
+
+  Black_Divider(0,1);
+  StartFormat(15);
+  OutString(0,0,"1.3.     All together",false);
+  EndFormat;
+
+  // Average Price
+  MatRowGet(SMallr,2,SMallrw);
+  a1 = SMallrw.DebVal;
+  a2 = SMallrw.CredVal;
+  a3 = SMallrw.DebVal2;
+  a4 = SMallrw.CredVal2;
+  at = SMallrw.CurDebVal;
+  al = SMallrw.CurCredVal;
+
+  MatRowGet(SMallr,1,SMallrw);
+  a1 = a1/SMallrw.DebVal;
+  a2 = a2/SMallrw.CredVal;
+  a3 = a3/SMallrw.DebVal2;
+  a4 = a4/SMallrw.CredVal2;
+  at = at/SMallrw.CurDebVal;
+  al = al/SMallrw.CurCredVal;
+
+  MatRowGet(SMallr,11,SMallrw);
+  SMallrw.DebVal    = a1;
+  SMallrw.CredVal   = a2;
+  SMallrw.DebVal2   = a3;
+  SMallrw.CredVal2  = a4;
+  SMallrw.CurDebVal = at;
+  SMallrw.CurCredVal= al;
+  MatRowPut(SMallr,11,SMallrw);
+
+  for (i = 0; i<12 ;i=i+1) begin
+    MatRowGet(SMallr,i,SMallrw);
+    StartFormat(15);
+    // OutString(0,0,SMallrw.AccNumber,false);
+    OutString(0,0,SMallrw.Comment,false);
+    if  (i<>6) and (i<>7) and (i<>8) then begin
+      if (cd>0) then begin
+        OutVal(180,0,SMallrw.DebVal, M4Val,true);
+      end;
+      if (cd>1) then begin
+        OutVal(240,0,SMallrw.CredVal, M4Val,true);
+      end;
+      if (cd>2) then begin
+        OutVal(300,0,SMallrw.DebVal2, M4Val,true);
+      end;
+      if (cd>3) then begin
+      OutVal(360,0,SMallrw.CredVal2, M4Val,true);
+      end;
+    end;
+    OutVal( 180 + (cd *60),0,SMallrw.CurDebVal, M4Val,true);
+    OutVal( 240 + (cd *60),0,SMallrw.CurCredVal, M4Val,true);
+    EndFormat;
+  end;
+  EndJob;
+
+  return;
+end;
+

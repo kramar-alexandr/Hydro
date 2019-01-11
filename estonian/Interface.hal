@@ -1,0 +1,199 @@
+/* $Id$ */
+
+/* HansaWorld EE 5.1 - 6.2 */
+/* HÄT Systems / ERP Systems */
+
+#ifdef HAL
+
+event DefineWindows
+begin
+  Real h, h1, h2, h3, h4, h5, h6, h7, hm, v, vm, l, vs, hs, f, v2, t, c, v3;
+  String 255 label;
+
+  SetLangMode(LangEstonian,"EST",0);
+
+  WindowBegin("MŠŠra klassifikaatori lisamine kliendile",BEAddINVcClassVClass,CGMnt,RcType);
+  SetWRect(20,80,400,308);
+  vs = 20;h = 160; v = 6;
+  PeriodField(h,v,"Periood");
+  EditFieldTL(h,v+=vs,80,"Artikliklass",M4UStr,Normal,20,f1,false,ITSClass);
+  EditFieldTL(h,v+=vs,80,"Lisa klassifikaator",M4UStr,Normal,20,f6,false,DISClass);
+  ButtonFrame(h=100,vm=(v+=61),123,3,"Register");
+  CheckBox(h,v,    0,"Arved",flags[1]);
+  CheckBox(h,v+=16,0,"Laoliikumised",flags[2]);
+  CheckBox(h,v+=16,0,"Lao mahakandmised",flags[3]);
+  CheckBox(h,v+=16,0,"Laosissetulekud",flags[4]);
+  CheckBox(h,v+=16,0,"LŠhetused",flags[5]);
+  EndWindow;
+
+  if (PocketVersion == false) then begin
+    WindowBegin("MŠŠra arvete nimekiri,  kogus 2", Sapa_IVJRClass, CGRcW, RcType);
+    SetWRect(20, 80, 520, 400);
+    vs = 20;
+    hs = 150;
+    Tile(0, 20, false, "", f1);
+    EditFieldTL(h=150, v=10, 150, "Arve nr.", M4Str, Normal, 30, f1, false, 0);
+    TileButtons(v, 2);
+    Tile(1, 280, false, "1", f2);
+    v = 10;
+    PeriodField(h, vm=v, "Periood");
+    EditFieldTL(h, v+=vs, 150, "Klient", M4UStr, Normal, 50, f2, false, CUSClass);
+    EditFieldTL(h, v+=vs, 100, "Kliendiklass", M4UStr, Normal, 5, f3, false, CCatSClass);
+    EditFieldTL(h, v+=vs, 100, "Klassif. tŸŸbid", M4UStr, Normal, 60, f5, false, CTypeSClass);
+    EditFieldTL(h, v+=vs, 100, "Klassifikaator", M4UStr, Normal, 30, f4, false, CClassSClass);
+    EditFieldTL(h, v+=vs, 100, "MŸŸgimees", M4UStr, Normal, 10, AccStr, false, UserSClass);
+    EditFieldTL(h, v+=vs, 200, "Objekt", M4UStr, Normal, 60, ObjStr, false, ObjSClass);
+    EditFieldTL(h, v+=vs, 100, "ObjektitŸŸp", M4UStr, Normal, 5, ObjType, false, OTSClass);
+    EditFieldTL(h, v+=vs, 100, "Projekt", M4UStr, Normal, 20, FirstAcc, false, PRSClass);
+    EditFieldTL(h, v+=vs, 100, "Ladu", M4UStr, Normal, 60, LastAcc, false, LocationSClass);
+    EditFieldTL(h, v+=vs, 100, "Tasumistingimus", M4UStr, Normal, 5, TransStr, false, PDSClass);
+    EditFieldTL(h, v+=vs, 200, "Ametlik seerianr.", M4UStr, Normal, 41, f6, false, 0);
+    EditFieldTL(h, v3=(v+=vs), 100, "Min. summa", M4Val, Normal, 0, vals0, false, 0);
+
+    ButtonFrame(h=320, v=vm+10, 125, 5, "Vali");
+    CheckBox(h, v, 0, "Kinnitamata", flags[1]);
+    CheckBox(h, v+=16, 0, "Kinnitatud", flags[2]);
+    RadioButton(h, v+=16, 0, 0, "K.a. vaidlustatud", flags[7]);
+    RadioButton(h, v+=16, 1, 0, "V.a. vaidlustatud", flags[7]);
+    RadioButton(h, v+=16, 2, 0, "Ainult vaidlustatud", flags[7]);
+
+    ButtonFrame(h=150, vm=(v=(v3+=40)), 125, 3, "Esitus");
+    RadioButton(h, v, 0, 0, "Kokkuv›te", ArtMode);
+    RadioButton(h, v+=16, 1, 0, "Detailne", ArtMode);
+    RadioButton(h, v+=16, 4, 0, "Kokkuv. valuutaga", ArtMode);
+
+    ButtonFrame(h2=320, v=vm, 125, 5, "JŠrjestus");
+    RadioButton(h2, v, 0, 0, "Kande kp.", flags[10]);
+    RadioButton(h2, v+=16, 1, 0, "Arve nr.", flags[10]);
+    RadioButton(h2, v+=16, 2, 0, "Ladu", flags[10]);
+    RadioButton(h2, v+=16, 3, 0, "Kokkuv›te ametl.ser.nr-ga", flags[10]);
+    RadioButton(h2, v+=16, 4, 0, "Arve kp.", flags[10]);
+
+    Tile(2, 300, false, "2", Stext);
+    v = 10;
+    EditFieldTL(h=150, v, 100, "Artikliklass", M4UStr, Normal, 21, Stext, false, ITSClass);
+    //EditFieldTL(h, v+=vs, 50, "Order Class", M4UStr, Normal, 5, Stext, false, OrderClassSClass); // no more strings to use....
+    StaticText(h+120, v+12,  "(ainult detailses)", false);
+    ButtonFrame(h=30, vm = (v+=50), 125, 4, "Arve tŸŸp");
+    CheckBox(h, v, 0, "Arved", flags[3]);
+    CheckBox(h, v+=16, 0, "Sularahaarved", flags[4]);
+    CheckBox(h, v+=16, 0, "Kreeditarved", flags[5]);
+    CheckBox(h, v+=16, 0, "Viivisarved", flags[6]);
+
+    CheckBox(h=220, v=vm, 0, "NŠita kommentaare", flags[11]);
+    CheckBox(h, v+=16, 0, "NŠita kokku baasvaluutas 1 ja 2", flags[12]);
+    CheckBox(h, v+=16, 0, "Ainult fiskaalarved", flags[13]);
+    CheckBox(h, v+=16, 0, "K.a. tŸhistatud arved", flags[14]);
+    CheckBox(h, v+=16, 0, "NŠita KM summasid", flags[15]);
+    CheckBox(h, v+=16, 0, "Ainult trŸkkimata arved", flags[17]);
+    CheckBox(h, v+=16, 0, "NŠita ametl. seerianr.", flags[16]);
+    EndWindow;
+  end;
+
+  // based on 5.3
+  WindowBegin("MŠŠra artikli ajalugu",Sapa_INrsRClass,CGRcW,RcType);
+  SetWRect(20,80,550,420);
+  v = 6; vs = 20; h = 140;
+  PeriodField(h,v,"Periood");
+  EditFieldTL(h,v2=(v+=vs),150,"Artikkel",M4UStr,Normal,50,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,150,"Artikliklass",M4UStr,Normal,5,f3,false,ITSClass);
+  EditFieldTL(h,v+=vs, 150,"Art. klassifikaator", M4UStr,Normal,60,f4,false,DISClass);
+  EditFieldTL(h,v+=vs, 100,"Klassifikaatori tŸŸp",M4UStr,Normal,60,f5,false,CTypeSClass);
+  EditFieldTL(h,v+=vs,150,"Ladu",M4Code,Normal,21,f6,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Osakond",M4UStr,Normal,10,AccStr,false,DepSClass);
+  EditFieldTL(h,v+=vs,150,"Vaikimisi hakija",M4UStr,Normal,10,f2,false,VESClass);
+  CheckBox(20,v+=42,0,"Ainult _laoartiklid ",flags[11]);
+  //  CheckBox(20,v+=16,0,"NŠita kog.2",flags[12]);
+  CheckBox(20,v+=16,0,"NŠita ajaloota artiklite saldosid",flags[13]);
+  CheckBox(20,v+=16,0,"Kaasaarvatud tuleviku kaardid",flags[14]);//??
+  CheckBox(20,v+=16,0,"Lao kohta",flags[15]);
+  //  CheckBox(20,v+=16,0,"Include History Before Stocktake",flags[19]);
+  ButtonFrame(h=20,vm=(v+=38),123,2,"Esitus");
+  RadioButton(h,v,0,0,"Kokku_v›te",flags[9]);
+  RadioButton(h,v+=16,1,0,"Detailne",flags[9]);
+  ButtonFrame(h=20,v+=40,123,2,"JŠrjestus");
+  RadioButton(h,v,0,0,"Kulu kuupŠev",flags[10]);
+  RadioButton(h,v+=16,1,0,"Kande kuupŠev",flags[10]);
+  ButtonFrame(h+=164,v=vm,123,3,"Vali");
+  RadioButton(h,v,0,0,"Kogustega",ArtMode);
+  RadioButton(h,v+=16,3,0,"Koguste ja teisenditega",ArtMode);
+  RadioButton(h,v+=16,1,0,"Summadega",ArtMode);// 2 Has some code for it, don't know what....
+  ButtonFrame(h+=164,v=vm,143,3,"Vali");//  CheckBox(20,v+=16,0,"Show Quantity 2",flags[12]);
+  RadioButton(h,v,0,0,"€ra nŠita kogus 2",flags[12]);
+  RadioButton(h,v+=16,1,0,"NŠita kogus 2",flags[12]);
+  RadioButton(h,v+=16,2,0,"NŠita koefitsienti",flags[12]);
+  ButtonFrame(h,v=vs,150,11,"Registrid");
+  CheckBox(h,v,0,"Arved",flags[1]);
+  CheckBox(h,v+=16,0,"Laoliikumised",flags[4]);
+  CheckBox(h,v+=16,0,"Lao ma_hakandmised",flags[6]);
+  CheckBox(h,v+=16,0,"Laosissetulekud",flags[3]);
+  CheckBox(h,v+=16,0,"LŠhetused",flags[2]);
+  //  CheckBox(h,v+=16,0,"POS arved",flags[16]);
+  CheckBox(h,v+=16,0,"Siselaoliikumised",flags[17]);
+  CheckBox(h,v+=16,0,"Tagastatud kaubad",flags[8]);
+  CheckBox(h,v+=16,0,"Tagastatud kaubad hankijale",flags[19]);
+  CheckBox(h,v+=16,0,"Tootmised",flags[5]);
+  //CheckBox(h,v+=16,0,"Tootmise operatsioonid",flags[20]);
+  CheckBox(h,v+=16,0,"Tootmistellimused",flags[18]);
+  CheckBox(h,v+=16,0,"Tššlehed",flags[7]);
+  EndWindow;
+
+  WindowBegin("Specify Sales Invoices",NewArveClass,CGRcW,RcType);
+  SetWRect(120,73,470,200);
+  vs=20;
+  PeriodField(h=120,v=6,"Period");
+  EditFieldTL(h,v+=vs,150,"Customer",M4UStr,Normal,20,f1,false,CUSClass);
+  EditFieldTL(180,v+=vs,90,"Klass ",M4UStr,Normal,10,f2,false,OrderClassSClass);
+  ButtonFrame(h=100,vm=(v+=41),86,4,"Period");
+  RadioButton(h,v,0,0,"Week",flags[1]);
+  RadioButton(h,v+=16,1,0,"Month",flags[1]);
+  EndWindow;
+
+  WindowBegin("Specify Sales Orders",UusTellimClass,CGRcW,RcType);
+  SetWRect(120,73,470,200);
+  vs=20;
+  PeriodField(h=120,v=6,"Period");
+  EditFieldTL(h,v+=vs,150,"Customer",M4UStr,Normal,20,f1,false,CUSClass);
+  EditFieldTL(180,v+=vs,90,"Klass (Orderes + Invoices)",M4UStr,Normal,10,f2,false,OrderClassSClass);
+  ButtonFrame(h=100,vm=(v+=41),86,4,"Period");
+  RadioButton(h,v,0,0,"Week",flags[1]);
+  RadioButton(h,v+=16,1,0,"Month",flags[1]);
+  EndWindow;
+
+  WindowBegin("MŠŠra Pakkumised",PakkumClass,CGRcW,RcType);
+  SetWRect(140,73,470,200);
+  vs=20;
+  PeriodField(h=120,v=6,"Periood");
+  EditFieldTL(h,v+=vs,150,"Pakkumiste tŸŸp",M4UStr,Normal,50,f1,false,QuoteClassSClass);
+  EndWindow;
+
+  WindowBegin("MŠŠra tegevused",TegevusClass,CGRcW,RcType);
+  SetWRect(140,73,470,200);
+  vs=20;
+  PeriodField(h=120,v=6,"Periood");
+  EditFieldTL(h,v+=vs,150,"Tegevuste tŸŸp",M4UStr,Normal,50,f1,false,ActTypeSClass);
+  EditFieldTL(h,v+=vs,150,"MŸŸgiagent",   M4UStr,Normal,50,f2,false,UserSClass);
+  EndWindow;
+
+  WindowBegin("Specify Sales Orders",TellimClass,CGRcW,RcType);
+  SetWRect(120,73,470,200);
+  vs=20;
+  PeriodField(h=120,v=6,"Period");
+  EditFieldTL(h,v+=vs,150,"Customer",M4UStr,Normal,20,f1,false,CUSClass);
+  EditFieldTL(180,v+=vs,90,"Klass (Orderes + Invoices)",M4UStr,Normal,10,f2,false,OrderClassSClass);
+  EndWindow;
+
+  WindowBegin("SAPA:Koosta ostutellimus",OstuClass, CGMnt,RcType);
+  SetWRect(65,80,510,230);
+  v = 10; vs = 20; h = 120;
+  EditFieldTL(h,v, 150,"Tellimuse Nr.", M4Str,Normal,30,f2,false,ORSClass);
+  EditFieldTL(h,v+=vs,150,"Hankija",M4UStr,Normal,20,f1,false,VESClass);
+  ButtonFrame(h,v=v+40,170,2,"Aadress");
+  RadioButton(h,v,1,0,"Kliendi",flags[1]);
+  RadioButton(h,v+=16,2,0,"Meie lŠhetuse",flags[1]);
+  EndWindow;
+  
+  return;
+end;
+
+#endif

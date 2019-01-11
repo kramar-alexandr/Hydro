@@ -1,0 +1,125 @@
+external updating function boolean S_PrintItemDetAll(string ,record RcVc ,var val  , var val , var val  , var val , var val , var val , var val  , var val ,  var val , var val , var val ,var val ,var val , var val ,var val );
+
+
+global updating
+procedure SapaDeliveryEn1(record RcVc RepSpec)
+begin
+  record ExportAutoBlock ExportAutoBl;
+  Boolean catflag,catfound;
+  Boolean matchf,printedf,firstf;
+  Boolean testf,TrHs;
+  Boolean cuPrinted;
+  val t_kog2;
+  val t_novat;
+  val t_r11;
+  val t_spread;
+  val t_Anodising;
+  val t_PowderCoating;
+  val t_Dies;
+  val t_Others;
+  val t_Extrusions;
+  val t_Fabrication;
+  val t_cost;
+  val t_Accessories;
+  val tA_r14_17,tP_r14_17;
+  val gp;
+  val t_avpr1;
+  string 255 tstr;
+  string 255 filename;
+  string 5 s;
+  
+  /*
+  s = "UTF-8";
+  if (WindowsMode) then begin
+    s = "CP1252";
+  end else begin
+    s = "MACINTOSH";
+  end;
+  */
+  
+  //s = "MACINTOSH";
+
+  //if (SetExportCodePage(s)) then begin end;
+
+  BlockLoad(ExportAutoBl);
+  if (RepSpec.ArtMode!=99) then begin 
+    filename = ExportAutoBl.ReportPath & "//delivery.csv";
+    CreateFile(filename); 
+  end;  
+  S_PrintItemDetAll("export",RepSpec,t_kog2,t_novat,t_r11,t_spread,t_Anodising,t_PowderCoating,t_Dies,t_Others,t_Extrusions,t_Fabrication,t_Accessories,t_cost,tA_r14_17,tP_r14_17,t_avpr1);
+  if (RepSpec.ArtMode!=99) then begin 
+    CloseFile;
+  end;  
+
+  return;
+end;  
+
+
+global
+updating procedure DeliveryFromServer(string arg)
+begin
+  record ExportAutoBlock ExportAutoBl;
+  integer compnr,days;
+  record RcVc RepSpec;
+
+  compnr = StringToInt(arg);
+  if (SetCompany(compnr,false)) then begin
+    BlockLoad(ExportAutoBl);
+    days = ExportAutoBl.NrOfDays-1;
+    LogText(0,"DELIVERY_EXPORT scheduled task is executed  : " & CurrentDate & CurrentTime);
+    ReportDefaults(RepSpec,"SapaDeliveryEClass");
+    RepSpec.sStartDate = AddDay(CurrentDate,-days);
+    RepSpec.sEndDate = CurrentDate;
+    RepSpec.Period2Str = RepSpec.sStartDate;
+    RepSpec.Period2Str = RepSpec.Period2Str & ":";
+    RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;
+    SapaDeliveryEn1(RepSpec);
+    ExportAutoBl.RepLastExportDate = CurrentDate;
+    ExportAutoBl.RepLastExportTime = CurrentTime;
+    BlockStore(ExportAutoBl);
+  end;
+  return;
+end;
+
+
+global
+updating procedure SapaDeliveryEn(record RcVc RepSpec)
+begin
+  Date d;
+  Time t;
+  string  20 compcode;  
+  record ExportAutoBlock ExportAutoBl;
+  
+  BlockLoad(ExportAutoBl);
+  
+  if blank(ExportAutoBl.CUStart) then begin 
+    MessageBox(1936,"");
+    goto LSapaDeliveryEn;
+  end;
+  
+  if blank(ExportAutoBl.ReportPath) then begin 
+    MessageBox(1936,"");
+    goto LSapaDeliveryEn;
+  end;
+  
+  t = CurrentTime;
+  t.second = t.second + 20;
+  d = CurrentDate;
+  if (TaskExists("DELIVERY_EXPORT")) then begin      
+    RemoveTask("DELIVERY_EXPORT");
+  end;
+  
+  compcode = CurrentCompany;
+  NewTimedTask("DELIVERY_EXPORT","delivery.csv eksport","DeliveryFromServer",compcode,d,t,"","");
+LSapaDeliveryEn:;
+  return;
+end;
+
+global
+updating procedure SapaDeliveryMn(record RcVc RepSpec)
+begin
+
+  SapaDeliveryEn(RepSpec);
+   
+  return; 
+end;

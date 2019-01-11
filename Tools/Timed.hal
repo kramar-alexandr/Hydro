@@ -1,0 +1,307 @@
+external updating procedure SapaCustomerEn1(record RcVc);
+external updating procedure SapaDeliveryEn1(record RcVc);
+external updating procedure SapaBookingEn1(record RcVc);
+external updating procedure SapaOrderEn1(record RcVc);
+
+
+updating procedure ExportCustomer()
+begin
+  record ExportAutoBlock ExportAutoBl;
+  record RcVc RepSpec;
+  
+  BlockLoad(ExportAutoBl);
+
+  ReportDefaults(RepSpec,"SapaCustomerEClass");
+  RepSpec.ArtMode = 99;
+  SapaCustomerEn1(RepSpec);
+  
+  return;
+end; 
+ 
+updating procedure ExportDelivery()
+begin
+  record ExportAutoBlock ExportAutoBl;
+  record RcVc RepSpec;
+  integer days;
+  
+  BlockLoad(ExportAutoBl);
+
+  days = ExportAutoBl.NrOfDays-1;
+  ReportDefaults(RepSpec, "SapaDeliveryEClass");
+  RepSpec.sStartDate = AddDay(CurrentDate,-days);
+  RepSpec.sEndDate   = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;
+  RepSpec.ArtMode = 99;
+  SapaDeliveryEn1(RepSpec);
+  return;
+end;  
+
+updating procedure ExportBooking()
+begin
+  record ExportAutoBlock ExportAutoBl;
+  record RcVc RepSpec;
+  integer days;
+  
+  BlockLoad(ExportAutoBl);
+
+  days = ExportAutoBl.BNrOfDays-1;
+  ReportDefaults(RepSpec, "SapaBookingEClass");
+  RepSpec.sStartDate = AddDay(CurrentDate,-days);
+  RepSpec.sEndDate   = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;
+  RepSpec.ArtMode = 99;
+  SapaBookingEn1(RepSpec);
+  return;
+end;
+
+updating procedure ExportOrder()
+begin
+  record ExportAutoBlock ExportAutoBl;
+  record RcVc RepSpec;
+  integer days;
+  
+  BlockLoad(ExportAutoBl);
+
+  days = ExportAutoBl.ONrOfDays-1;
+  ReportDefaults(RepSpec, "SapaOrderEClass");
+  RepSpec.sStartDate = AddDay(CurrentDate,-days);
+  RepSpec.sEndDate   = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;
+  RepSpec.ArtMode = 99;
+  SapaOrderEn1(RepSpec);
+  return;
+end;  
+   
+
+global
+updating procedure Timed2()
+begin
+  record ExportAutoBlock ExportAutoBl;
+  Time t,xx;
+  Date d;
+  Boolean timechanged;
+  record RcVc RepSpec1,RepSpec2,RepSpec3,RepSpec4;
+  integer days;
+  
+  BlockLoad(ExportAutoBl);
+  
+  t = CurrentTime;
+  d = CurrentDate;
+  
+  if nonblank(ExportAutoBl.CUPath) and (ExportAutoBl.ExportCU==1) then begin
+    if (DirExists(ExportAutoBl.CUPath)==true) then begin
+      if nonblanktime(ExportAutoBl.CUExportTime) then begin
+        xx = ExportAutoBl.CUExportTime;
+        if ((t.hour==xx.hour) and (d<>ExportAutoBl.CULastExportDate)) then begin
+          ExportAutoBl.CULastExportDate = d;
+          ExportAutoBl.CULastExportTime = t;
+          timechanged = true;
+          ReportDefaults(RepSpec1,"SapaCustomerEClass");
+          SapaCustomerEn1(RepSpec1);
+        end;  
+      end; 
+    end else begin
+      LogText(0,"Path " & ExportAutoBl.CUPath & " does not exist on server"); 
+    end;  
+  end;
+  
+  t = CurrentTime;
+  d = CurrentDate;
+  
+  if nonblank(ExportAutoBl.ReportPath) and (ExportAutoBl.ExportReport==1) then begin
+    if (DirExists(ExportAutoBl.ReportPath)==true) then begin
+      if nonblanktime(ExportAutoBl.RepExportTime) then begin
+        xx = ExportAutoBl.RepExportTime;
+        if ((t.hour==xx.hour) and (d<>ExportAutoBl.RepLastExportDate)) then begin
+          ExportAutoBl.RepLastExportDate = d;
+          ExportAutoBl.RepLastExportTime = t;
+          timechanged = true;
+          days = ExportAutoBl.NrOfDays-1;
+          ReportDefaults(RepSpec2, "SapaDeliveryEClass");
+          RepSpec2.sStartDate = AddDay(CurrentDate,-days);
+          RepSpec2.sEndDate   = CurrentDate;
+          RepSpec2.Period2Str = RepSpec2.sStartDate;
+          RepSpec2.Period2Str = RepSpec2.Period2Str & ":";
+          RepSpec2.Period2Str = RepSpec2.Period2Str & RepSpec2.sEndDate;
+          LogText(0,"AUTO DELIVERY_EXPORT is executed:" & CurrentDate & CurrentTime);
+          LogText(0,"RepSpec2.Period2Str:" & RepSpec2.Period2Str);
+          LogText(0,"RepSpec2.sStartDate:" & RepSpec2.sStartDate);
+          LogText(0,"  RepSpec2.sEndDate:" & RepSpec2.sEndDate);
+
+          SapaDeliveryEn1(RepSpec2);
+        end;  
+      end; 
+    end else begin
+      LogText(0,"Path " & ExportAutoBl.ReportPath & " does not exist on server"); 
+    end;  
+  end;
+  
+  //-----------------------------------------------------------------------
+  t = CurrentTime;
+  d = CurrentDate;
+  
+  
+  if nonblank(ExportAutoBl.BReportPath) and (ExportAutoBl.ExportBookings==1) then begin
+    if (DirExists(ExportAutoBl.BReportPath)==true) then begin
+      if nonblanktime(ExportAutoBl.BExportTime) then begin
+        xx = ExportAutoBl.BExportTime;
+        if ((t.hour==xx.hour) and (d<>ExportAutoBl.BLastExportDate)) then begin
+          ExportAutoBl.BLastExportDate = d;
+          ExportAutoBl.BLastExportTime = t;
+          timechanged = true;
+          days = ExportAutoBl.BNrOfDays-1;
+          ReportDefaults(RepSpec3, "SapaBookingEClass");
+          RepSpec3.sStartDate = AddDay(CurrentDate,-days);
+          RepSpec3.sEndDate   = CurrentDate;
+          RepSpec3.Period2Str = RepSpec3.sStartDate;
+          RepSpec3.Period2Str = RepSpec3.Period2Str & ":";
+          RepSpec3.Period2Str = RepSpec3.Period2Str & RepSpec3.sEndDate;
+          LogText(0,"AUTO DELIVERY_EXPORT is executed:" & CurrentDate & CurrentTime);
+          LogText(0,"RepSpec3.Period2Str:" & RepSpec3.Period2Str);
+          LogText(0,"RepSpec3.sStartDate:" & RepSpec3.sStartDate);
+          LogText(0,"RepSpec3.sEndDate:"   & RepSpec3.sEndDate);
+
+          SapaBookingEn1(RepSpec3);
+        end;  
+      end; 
+    end else begin
+      LogText(0,"Path " & ExportAutoBl.ReportPath & " does not exist on server"); 
+    end;  
+  end;
+  
+
+  
+  
+  if nonblank(ExportAutoBl.OReportPath) and (ExportAutoBl.ExportOrders==1) then begin
+    if (DirExists(ExportAutoBl.OReportPath)==true) then begin
+      if nonblanktime(ExportAutoBl.OExportTime) then begin
+        xx = ExportAutoBl.OExportTime;
+        if ((t.hour==xx.hour) and (d<>ExportAutoBl.OLastExportDate)) then begin
+          ExportAutoBl.OLastExportDate = d;
+          ExportAutoBl.OLastExportTime = t;
+          timechanged = true;
+          days = ExportAutoBl.ONrOfDays-1;
+          ReportDefaults(RepSpec3, "SapaOrderEClass");
+          RepSpec4.sStartDate = AddDay(CurrentDate,-days);
+          RepSpec4.sEndDate   = CurrentDate;
+          RepSpec4.Period2Str = RepSpec4.sStartDate;
+          RepSpec4.Period2Str = RepSpec4.Period2Str & ":";
+          RepSpec4.Period2Str = RepSpec4.Period2Str & RepSpec4.sEndDate;
+          LogText(0,"AUTO DELIVERY_EXPORT is executed:" & CurrentDate & CurrentTime);
+          LogText(0,"RepSpec4.Period2Str:" & RepSpec4.Period2Str);
+          LogText(0,"RepSpec4.sStartDate:" & RepSpec4.sStartDate);
+          LogText(0,"RepSpec4.sEndDate:" & RepSpec4.sEndDate);
+          SapaOrderEn1(RepSpec4);
+        end;  
+      end; 
+    end else begin
+      LogText(0,"Path " & ExportAutoBl.ReportPath & " does not exist on server"); 
+    end;  
+  end;
+ 
+  if (timechanged==true) then begin 
+    BlockStore(ExportAutoBl);
+  end;
+  return;
+end;  
+
+
+global
+updating procedure Timed()
+begin
+  record H_AllEksportBlock H_AllEksportBl;
+  record CompaniesBlock CompaniesRec;
+  row CompaniesBlock comprw;
+  Integer i,rwcnt;
+  Integer compnr,curcomp;
+  time xx;
+  time t;
+  date d;
+  string 255 filename;
+  
+
+  
+  if (SingleUserMode or ServerMode) then begin
+
+    curcomp = CurrentCompany;  
+    BlockLoad(CompaniesRec);
+    rwcnt = MatRowCnt(CompaniesRec);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(CompaniesRec,i,comprw);
+      if (SetCompanyCode(comprw.CompCode,false)) then begin
+        Timed2;
+      end;
+    end;
+    
+
+    BlockLoad(H_AllEksportBl);
+    if nonblank(H_AllEksportBl.ExportPath) then begin 
+      if (DirExists(H_AllEksportBl.ExportPath)==true) then begin
+      if nonblanktime(H_AllEksportBl.ExportTime) then begin
+        t = CurrentTime;
+        d = CurrentDate;
+        xx = H_AllEksportBl.ExportTime;
+        if ((t.hour==xx.hour) and (d<>H_AllEksportBl.LastExportDate)) then begin
+          H_AllEksportBl.LastExportDate = d;
+          H_AllEksportBl.LastExportTime = t;
+          BlockLoad(CompaniesRec);
+          rwcnt = MatRowCnt(CompaniesRec);
+          
+          filename = H_AllEksportBl.ExportPath & "//customer.csv";
+          CreateFile(filename);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(CompaniesRec,i,comprw);
+            if (SetCompanyCode(comprw.CompCode,false)) then begin
+              ExportCustomer;
+              LogText(0,"Company: " & CurrentCompany);
+            end;
+          end;   
+          CloseFile;
+          
+          filename = H_AllEksportBl.ExportPath & "//orders.csv";
+          CreateFile(filename);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(CompaniesRec,i,comprw);
+            if (SetCompanyCode(comprw.CompCode,false)) then begin
+              ExportOrder;
+            end;
+          end;   
+          CloseFile;
+          
+          filename = H_AllEksportBl.ExportPath & "//bookings.csv";
+          CreateFile(filename);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(CompaniesRec,i,comprw);
+            if (SetCompanyCode(comprw.CompCode,false)) then begin
+              ExportBooking;
+            end;
+          end;   
+          CloseFile;
+          
+         filename = H_AllEksportBl.ExportPath & "//delivery.csv";
+          CreateFile(filename);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(CompaniesRec,i,comprw);
+            if (SetCompanyCode(comprw.CompCode,false)) then begin
+              ExportDelivery;
+            end;
+          end;   
+          CloseFile;
+          BlockStore(H_AllEksportBl);
+
+        end;  
+      end;
+      end;  
+    end;
+    ResetCompany(curcomp);
+  end;
+
+  return;
+end; 
+

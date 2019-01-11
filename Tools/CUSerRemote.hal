@@ -1,0 +1,71 @@
+external inner procedure NextM4Number(string,var string);
+
+procedure NextM4Number2(string laststr,var string newstr)
+begin
+  string 1 lastchr;
+  string 20 tstr;
+
+  lastchr = right(laststr,1);
+  if (lastchr=="9") then begin
+    tstr = left(laststr,len(laststr)-1);
+    NextM4Number2(tstr,tstr);
+    newstr = tstr & "0";
+    goto LSkip;
+  end;
+  NextM4Number(laststr,newstr);
+LSkip:;
+  return;
+end;
+
+global
+procedure FirstCUSerNr(var string invnr,date td,var integer fromrow)
+begin
+  record CUVc CUr;
+  record OBS_CUSerBlock CUSerBl;
+  row OBS_CUSerBlock CUSerrw;
+  string 20 nextstr,laststr;
+  string 20 tstr;
+  integer rw,rwc;
+  date tds;
+  boolean rowf,testf;
+
+  BlockLoad(CUSerbl);
+  rwc = MatRowCnt(CUSerbl);
+  tds = td;
+  if (blankdate(td)) then begin
+    tds = CurrentDate;
+  end;
+  for (rw = fromrow; rw< rwc; rw = rw +1) begin
+    MatRowGet(CUSerbl,rw,CUSerrw);
+    CUr.Code = CUSerrw.TSerStr & CUSerrw.TSerEnd;
+    rowf = true;
+    laststr = "";
+    testf = readlastkey("Code",Cur,1,false);
+    if (Cur.Code == CUSerrw.TSerStr & CUserrw.TSerEnd) then begin
+      rowf = false;
+    end else begin
+      if (Cur.Code < CUSerrw.TSerStr & CUSerrw.TSerStart) then begin
+        laststr = "";
+        invnr = CUSerrw.TSerStr & CUSerrw.TSerStart;
+        fromrow = rw;
+        rw = rwc;
+        rowf = false;
+      end else begin
+        if (CUr.Code < CUSerrw.TSerStr & CUSerrw.TSerEnd) then begin
+          laststr = Cur.Code;
+        end else begin
+          rowf = false;
+        end;
+      end;
+    end;
+    if (rowf) then begin
+      if (laststr <> "") then begin
+        NextM4Number2(laststr,nextstr);
+        invnr = nextstr;
+        fromrow = rw;
+        rw = rwc;
+      end;
+    end;
+  end;
+  return;
+end;

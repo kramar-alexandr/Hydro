@@ -1,0 +1,14 @@
+global
+procedure CurUserFields()
+begin
+  record UserVc Userr;
+
+  Userr.Code = CurrentUser;
+  if ReadFirstMain(Userr,1,true) then begin
+    OUTFORMFIELD("F_CURUSER",Userr.Code);
+    OUTFORMFIELD("F_CURUSERNAME",Userr.Name);
+    OUTFORMFIELD("F_CURUSERPHONE1",Userr.Phone1);
+    OUTFORMFIELD("F_CURUSERPHONE2",Userr.Phone2);
+    OUTFORMFIELD("F_CURUSEREMAILADDR",Userr.emailAddr);
+  end;
+end;

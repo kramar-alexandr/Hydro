@@ -1,0 +1,334 @@
+external  function string 255 GetCurrentStoreName();
+external  function Boolean CompaniesInClientMode();
+external  function Boolean ProductInDemoMode();
+remote function string 255 GetCompanyShortCode(string);
+external  function Boolean AnyModuleAvailable(); 
+external  function Boolean IsCloudControllerClient();
+external  function Boolean AcceptanceStatusColumnTest(string);
+external  function Integer FlipCharCode(Integer,Integer);
+external  procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external  function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external  function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external  function Boolean TouchScreenLookVertical();
+external  procedure SysEClass_Tool(Integer,var real,var real);
+external  procedure GTransEClass_Tool(Integer,var real,var real);
+external  procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external  procedure GBaseEClass_Tool(Integer,var real,var real);
+external  procedure TransGenVClass_Tool(Integer,var real,var real);
+external  procedure GetCurUser(var record UserVc);
+external  procedure JobRClass_LIT();
+external  function string 60 UserDefined(string,string);
+external  outer function string 255 MasterBannerURL();
+external  procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external  function Boolean AllowedInCountry(integer);
+external  function Integer ResourceWindowResourceType();
+external  function Boolean ResPlan_Rental();
+external  function Boolean ResPlan_ProdOperations();
+//remote function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external  function Boolean TouchScreenLook();
+external  procedure ExtractObj(string,var Integer,var string);
+external  function Boolean IsSessionOpen(string,string,Date,Time);
+external  procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external  function Boolean CheckOffLineRecords(Boolean);
+external  function string 60 TileUserDefined(string,Integer,var Integer);
+external  function Boolean CUVATNrColumn;
+external  function Integer GetInternetEnablerCountry();
+external  function Integer CntVarietyCode(Integer,var Array string);
+external  function Boolean UseTaxTemplatesforTaxCalc();
+remote procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external  function string 20 GetMenuCode(string);
+external  procedure DrawModifierButtons(var Integer);
+remote procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external  function Boolean DisplayLoginButtons();
+external  function Integer LoginShortcutsLines(Integer);
+external  function Integer LoginShortcutsPos(Real,Integer);
+
+external  procedure DefineTTRRowTypes(Integer);
+external  function real ItemButtons(string,Integer);
+external  procedure HWStoreWClassAddProducts(Integer);
+external  function Boolean HasCharts();
+external  function Boolean HasNewRegistration();
+external  function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external  function Integer LoginShortcuts();
+external  function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external  function Boolean DefCustCodeSetup();
+
+external  function Boolean HasInAppsAvailable();
+external  function Integer CountCountries();
+
+external  function Boolean IsStandardUnused();
+external  function Boolean IsEnterprise();
+external  function Boolean StandardHansa();
+external  function Boolean HasATOL();
+
+
+// Language functions LIT
+external  function Boolean DisplayLoginKeyPad_LIT();
+external  function string 255 VATZoneEditFieldLabelLIT(Integer);
+external  function real VATZoneButtonsLabelsLIT(real,real,real,real);
+external  procedure LoginButtons2_LIT(Real,Real);
+external  procedure FORMDEF_LIT();
+external  function string 255 DemoMsgWClassTitle_LIT(Boolean,Boolean);
+external  procedure TBEClassDef_LIT();
+external  function string 255 VATZoneNameLIT();
+external  procedure TSERW_LIT();
+external  procedure TSERWNT_LIT();
+external  procedure TSERWTouch_LIT();
+external  procedure TSERWTEST_LIT();
+external  procedure INVFORM_LIT(Boolean);
+external  procedure DisplayRecordDetails_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external  procedure DrawPOSInterface_LIT(string,string,record POSButtonsVc,Integer,string,Integer);
+external  procedure DisplayRecordDetailsCustDisplay_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
+external  function string 255 ResDayWClassWindowTitle_LIT();
+external  function string 255 ResMonWClassWindowTitle_LIT();
+external  function string 255 RTMonWClassWindowTitle_LIT();
+external  procedure SetupNightAuditWindowControls_LIT(Boolean);
+external  procedure CURClassDefinitionLIT();
+external  function real DrawPaymentModesButtons_IV_LIT(real);
+external  function real FunctionButtons_LIT(string);
+external  procedure CreditCardWindowHeader_LIT(Boolean,Boolean,Real);
+external  procedure CreditCardWindowButtons_LIT(string,string,real);
+external  procedure CreditCardWindowInvoiceDetail_LIT(Real);
+external  procedure CreditCardWindowDeliveryDetail_LIT(Real);
+external  function real DrawPaymentModesButtons_LIT();
+external  procedure DrawBarMenuTiles_LIT(string);
+external  procedure DrawRestPMOtherPay_LIT();
+external  procedure DisplayRecordDetailsRA_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,LongInt,Date,string,LongInt,string);
+external  procedure DrawModifierButtons2_LIT(var integer,var integer);
+external  procedure OKCancel_LIT();
+external  procedure DefineElearningURLCacheLClass_LIT();
+external  procedure DefineElearningURLCacheDClass_LIT();
+external  function real TravelLogDeductions_LIT(real,real);
+external  procedure LoginButtons_LIT(Real);
+external  procedure FORMDEF2_LIT();
+external  procedure FORMDEF3_LIT();
+external  procedure ARS2RClass_LIT();
+external  procedure ALLVATRClass_LIT();
+
+external  function Boolean HasAccPeriods();
+external  function Boolean HasAccessGroups();
+external  function Boolean HasAddFee();
+external  function Boolean HasApprovals();
+external  function Boolean HasCCPayments();
+external  function Boolean HasAdvancedAccounting();
+external  function Boolean HasAdvancedCRM();
+external  function Boolean HasAdvancedPricing();
+external  function Boolean HasAdvancedProduction();
+external  function Boolean HasAdvancedStock();
+external  function Boolean HasAged();
+external  function Boolean HasBar();
+external  function Boolean HasBase2();
+external  function Boolean HasBranch();
+external  function Boolean HasBuyBack();
+external  function Boolean HasCategories();
+//external  function Boolean HasConsigmentStock();
+external  function Boolean HasCommunicator();
+external  function Boolean HasConsignmentStock();
+external  function Boolean HasContactClassification();
+external  function Boolean HasContactRelations();
+external  function Boolean HasConsolidation();
+external  function Boolean HasCountryPerCustomer();
+external  function Boolean HasCreditLimit();
+external  function Boolean HasCustItem();
+external  function Boolean HasCustomerSearchKey();
+external  function Boolean HasDownpayments();
+external  function Boolean HasDefineColumns();
+external  function Boolean HasDeliveryAddress();
+external  function Boolean HasDepartments();
+external  function Boolean HasETaxDocuments();
+external  function Boolean HasEInvoicing();
+external  function Boolean HasEndorsedChecks();
+external  function Boolean HasExtraNLComment();
+external  function Boolean HasExtTax();
+external  function Boolean HasFavouriteActTypes();
+external  function Boolean HasFiscalPrinter();
+external  function Boolean HasFormEditor();
+external  function Boolean HasFreightAdvanced();
+external  function Boolean HasHideCostPrice();
+external  function Boolean HasHotelInterface();
+external  function Boolean HasGuestUserDefined();
+external  function Boolean HasJewelleryInterface();
+external  function Boolean HasIncomeAndExpenseBook();
+external  function Boolean HasIOUChecks();
+external  function Boolean HasItemClassification();
+external  function Boolean HasItemGroups();
+external  function Boolean HasKPIs();
+external  function Boolean HasLanguages();
+external  function Boolean HasLimitedAccess();
+external  function Boolean HasLocalMachines();
+external  function Boolean HasLoyaltyCards();
+external  function Boolean HasMailTags();
+external  function Boolean HasMainPartner();
+external  function Boolean HasMultiCurrency();
+external  function Boolean HasMultiLocations();
+external  function Boolean HasNLBudget();
+external  function Boolean HasNLBudgetClass();
+external  function Boolean HasObjects();
+external  function Boolean HasInvoiceOfficialSerNr();
+external  function Boolean HasOfficialSerNr();
+external  function Boolean HasOrderClasses();
+external  function Boolean HasPreferedOfficialSerNr();
+external  function Boolean HasNumberSeries();
+external  function Boolean HasPersons();
+external  function Boolean HasPocketScreen();
+external  function Boolean HasPositions();
+external  function Boolean HasPrepayments();
+external  function Boolean HasProjects();
+external  function Boolean HasPriceLists();
+external  function Boolean HasQualityControl();
+external  function Boolean HasReconLevel2();
+external  function Boolean HasReminderLevel();
+external  function Boolean HasRemoteBackup();
+external  function Boolean HasResourceDisplayGroups();
+external  function Boolean HasRussianPrepayment();
+external  function Boolean HasRetGoodsToSupp();
+external  function Boolean HasReturnedGoods();
+external  function Boolean HasRoute();
+external  function Boolean HasSalesman();
+external  function Boolean HasSalesmanBonus();
+external  function Boolean HasSalesGroup();
+external  function Boolean HasSecondQuantity();
+external  function Boolean HasSerialNumbers();
+external  function Boolean HasServerInCloud();
+external  function Boolean HasSettlementDiscount();
+external  function Boolean HasSimulations();
+external  function Boolean hasSimAccruals();
+external  function Boolean HasSkypeConnection();
+external  function Boolean HasSIPServerConnection();
+external  function Boolean HasStrAsSignFType();
+external  function Boolean HasTouchScreenDevice();
+external  function Boolean HasTaxMatrix();
+external  function Boolean HasTestFeatures();
+external  function Boolean HasMetroTestFeatures();
+external  function Boolean HasWorkOrders();
+external  function Boolean HasThrouLocation();
+external  function Boolean HasTouchScreenLook();
+external  function Boolean HasTREO();
+external  function Boolean HasVarieties();
+external  function Boolean HasVATZone();
+external  function Boolean HasWithholdingTax();
+external  function Boolean HasWithholdingTaxAdvanced();
+external  function Boolean HasWorkOrders();
+
+external  function Boolean HasStandardCRM();
+external  function Boolean HasStandardOrganizer();
+external  function Boolean HasStandardCommunicator();
+
+external  function Boolean HasEMail();
+external  function Boolean HasExternalEMail();
+
+external  function Boolean HasModAT2();
+external  function Boolean HasModBA();
+external  function Boolean HasModCheck();
+external  function Boolean HasModCL();
+external  function Boolean HasModCO();
+external  function Boolean HasModCons();
+external  function Boolean HasModCourses();
+external  function Boolean HasModCredMan();
+external  function Boolean HasModCRM();
+external  function Boolean HasModEDI();
+external  function Boolean HasModExp();
+external  function Boolean HasModHotel();
+external  function Boolean HasModHRM();
+external  function Boolean HasModIN();
+external  function Boolean HasModIntStock();
+external  function Boolean HasModNL();
+external  function Boolean HasPaymentGateway();
+external  function Boolean HasModPO();
+external  function Boolean HasModPOS();
+external  function Boolean HasModPL();
+external  function Boolean HasModPOProg();
+external  function Boolean HasModPP();
+external  function Boolean HasModProd();
+external  function Boolean HasModQT();
+external  function Boolean HasModRent();
+external  function Boolean HasModRest();
+external  function Boolean HasModRsrt();
+external  function Boolean HasModSO();
+external  function Boolean HasModSL();
+external  function Boolean HasModSVO();
+external  function Boolean HasModTS();
+external  function Boolean HasModWHM();
+external  function Boolean HasModDI();
+external  function Boolean UsePostOKButton();
+external  function Boolean HasBankImport();
+
+procedure dummy()//##ii
+begin//##ii
+  SetLangMode(LangLithuanian,"LIT",0);//##ii
+  return;//##ii
+end;//##ii
+//##ii
+
+window CountryDClass:2
+  wtag("language","LIT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,hx,v,vs;
+  WindowBegin("alis",CountryDClass,CGview,CountryView);
+  SetWRect(64,80,509,380);
+  UseView(CountryVc);
+  v = 10; vs = 20; h = 120; h2 = 290;
+  Tile(0,160,false,"",Code);
+  EditField(h-50,v, 55,"Kodas",Normal,Code,false,0); //cust
+ //cust start
+  EditField(h+120,v, 20,"IC1 (D1AQCD)",Normal,D1AQCD,false,0);
+  EditField(h+260,v, 20,"IC2 (D2ARCD)",Normal,D2ARCD,false,0);
+  //cust end
+  EditField(h,v+=vs,240,"Tekstas",Normal,Comment,false,0);
+  if (IsEnterprise) then begin
+  	EditField(h,v+=vs,240,"Muit÷ kodai",Normal,DutiesCodes,false,ChargesSClass);
+    EditField(h,v+=vs,70,"Regionas",Normal,Region,false,CountryRegionSClass);
+    hx = h2;
+  end else begin  
+    hx = h;
+    v = v + vs;
+  end;
+  EditField(hx,v,70,"Tautyb˜",Normal,Nationality,false,0); 
+  if (HasMultiCurrency or HasBase2) then begin
+  EditField(h,v+=vs,70,"Valiuta",Normal,CurncyCode,false,CurncyCodeSClass);
+  EditField(h2,v,70,"ISO kodas",Normal,ISOCode,false,0); 
+  end;
+  if (IsEnterprise) then begin
+  EditField(h,v+=vs,70,"Mok. kd.",Normal,TaxOfficeCode,false,0); 
+    EditField(h2,v,70,"#VAT Reg. No.#",Normal,DefaultVATNr,false,0); //!!TRANSLATE
+  end;
+  if (HasFreightAdvanced or HasPriceLists or HasObjects) and (StandardHansa==false) then begin
+  TileButton(1,"Tekstas");
+  TileButton(2,"Web registracija");
+  Tile(1,200,true,"1",Math);
+  end;
+  if (HasLanguages) then begin
+  MatrixBegin(4,v=10,-25,-10,INTextRowType,99);
+  MatCol(1,24,"Kalba",0,LangCode,false,LangSClass);
+  MatCol(1,84,"Tekstas",0,Text,false,0);
+  EndMatrix;
+  end;
+  if (HasFreightAdvanced or HasPriceLists or HasObjects) and (StandardHansa==false) then begin
+  Tile(2,120,false,"2",FreightCode);
+    v = 6;
+    if (HasFreightAdvanced) then begin
+      EditField(h,v,50,"Frachto kodas",Normal,FreightCode,false,WebFreightSClass); 
+      v = v + vs;
+    end;      
+    if (HasPriceLists) then begin    
+      EditField(h,v,50,"Kainoraätis",Normal,PLCode,false,PLDefSClass); 
+  EditField(h,v+=vs,50,"Nuolaid÷ lentel˜",Normal,RebCode,false,RebSClass);
+      v = v + vs;
+    end;
+    if (HasObjects) then begin    
+      EditField(h,v,120,"Pardavim÷ objektas",Normal,Objects,false,ObjSClass); 
+    end;
+    if (IsEnterprise) then begin
+  CheckBox(h,v+=30,0,"Rodyti puslapyje",ShowOnWeb);
+    end;
+    if (HasVATZone) then begin
+      v = VATZoneButtonsLabelslit(270,20,170,16);
+    end;
+  end;
+  EndWindow;
+end;

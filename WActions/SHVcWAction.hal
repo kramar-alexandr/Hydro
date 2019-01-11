@@ -1,0 +1,37 @@
+function Boolean SHDClassTransportNumber(Integer wn,Boolean changedf)
+begin
+  record SHVc SHr;
+  Boolean res;
+  val t;
+
+  res = true;
+  if (changedf) then begin
+    GetWindowRecord(wn,SHr);
+    if (nonblank(SHr.TransportNumber)) then begin
+      t = StringToVal(SHr.TransportNumber,M45Val);
+      if (StringToVal(SHr.TransportNumber,M45Val)==0) then begin
+        SHr.TransportNumber = "";
+      end else begin
+        SHr.TransportNumber = ValToString(t,M45Val,"",",",0);
+      end;
+    end;
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassTransportNumber = res;
+  return;
+end;
+ 
+global
+function Boolean SHDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+begin
+  Boolean res;
+
+  res = inner.SHDClassAfterEditField(wn,fieldname,fn,rownr,changed);
+
+  switch (fieldname) begin
+    case "TransportNumber": res = SHDClassTransportNumber(wn,changed!=0);
+  end;
+  SHDClassAfterEditField = res;
+  return;
+end;
+

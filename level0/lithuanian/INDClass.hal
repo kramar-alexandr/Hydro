@@ -1,0 +1,708 @@
+external procedure SetupColumWithKeypadWindow(var real,var real,var real,var real,var real,var real,var real);
+external function Integer POSFontSize();
+external function string 255 F_Label(string);
+external procedure SplitButton(LongInt,LongInt,LongInt,LongInt,LongInt,string,string,string,string,LongInt);
+external procedure POSKeyPad(LongInt,LongInt,LongInt,LongInt,LongInt,string,LongInt);
+external function string 255 GetChangePaswordLink();
+remote function UUID GetServerUUIDRemote();
+external function string 255 RemainingEinvoicesQuantity;
+external function Boolean DisplayAdditionalFields();
+remote function Integer MailAcceptanceStatus(LongInt);
+external function Boolean IsMoveToCloud(record SetupStatusBlock);
+external function Boolean IsMoveToCloudB();
+external outer function Boolean IsCloudControllerClient();
+external function string 255 GetCurrentStoreName();
+external function Boolean CompaniesInClientMode();
+external function Boolean ProductInDemoMode();
+remote function string 255 GetCompanyShortCode(string);
+external function Boolean AnyModuleAvailable(); 
+external function Boolean AcceptanceStatusColumnTest(string);
+external function Integer FlipCharCode(Integer,Integer);
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external function Boolean TouchScreenLookVertical();
+external procedure SysEClass_Tool(Integer,var real,var real);
+external procedure GTransEClass_Tool(Integer,var real,var real);
+external procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external procedure GBaseEClass_Tool(Integer,var real,var real);
+external procedure TransGenVClass_Tool(Integer,var real,var real);
+external procedure GetCurUser(var record UserVc);
+external function string 60 UserDefined(string,string);
+external function string 60 RestPMCashModePayMode();
+external outer function string 255 MasterBannerURL();
+external procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external function Boolean AllowedInCountry(integer);
+external function Integer ResourceWindowResourceType();
+external function Boolean ResPlan_Rental();
+external function Boolean ResPlan_ProdOperations();
+external function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc);
+external function Boolean ReadNPTSWindowData(string,string,longint,string,string,Date,Time,var Boolean,var string,var string,var string,var record POSButtonsVc);
+external function Boolean TouchScreenLook();
+external procedure ExtractObj(string,var Integer,var string);
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external function Boolean CheckOffLineRecords(Boolean);
+external function string 60 TileUserDefined(string,Integer,var Integer);
+external function Boolean CUVATNrColumn;
+external function Integer GetInternetEnablerCountry();
+external function Integer CntVarietyCode(Integer,var Array string);
+external function Integer VarietyMatMax(Integer);
+external function Boolean UseTaxTemplatesforTaxCalc();
+remote procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external function string 20 GetMenuCode(string);
+external procedure DrawModifierButtons(var Integer);
+remote procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external function Boolean DisplayLoginButtons();
+external function Integer LoginShortcutsLines(Integer);
+external function Integer LoginShortcutsPos(Real,Integer);
+
+external procedure DefineTTRRowTypes(Integer);
+external function real ItemButtons(string,Integer);
+external procedure HWStoreWClassAddProducts(Integer);
+external function Boolean HasYodlee();
+external function Boolean HasAvalara();
+external function Boolean HasCharts();
+external function Boolean HasDetailedCharts();
+external function Boolean HasNewRegistration();
+external function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external function Integer LoginShortcuts();
+external function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external function Boolean DefCustCodeSetup();
+
+external function Boolean HasInAppsAvailable();
+external function Integer CountCountries();
+
+// Language functions LIT
+external function Boolean DisplayLoginKeyPad_LIT();
+external function string 255 VATZoneEditFieldLabel_LIT(Integer);
+external function real VATZoneButtonsLabelsLIT(real,real,real,real);
+external procedure LoginButtons2_LIT(Real,Real);
+external procedure FORMDEF_LIT();
+external function string 255 DemoMsgWClassTitle_LIT(Boolean,Boolean);
+external procedure TBEClassDef_LIT();
+external function string 255 VATZoneNameLIT();
+external procedure TSERW_LIT();
+external procedure TSERWNT_LIT();
+external procedure TSERWTouch_LIT();
+external procedure TSERWTEST_LIT();
+external procedure INVFORM_LIT(Boolean);
+external procedure DisplayRecordDetails_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external procedure DrawPOSInterface2_LIT(string,string,record POSButtonsVc,string,Integer,Integer);
+external procedure DisplayRecordDetailsCustDisplay_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
+external function string 255 ResDayWClassWindowTitle_LIT();
+external function string 255 ResMonWClassWindowTitle_LIT();
+external function string 255 RTMonWClassWindowTitle_LIT();
+external procedure SetupNightAuditWindowControls_LIT(Boolean);
+external procedure CURClassDefinitionLIT();
+external function real DrawPaymentModesButtons_IV_LIT(real);
+external function real FunctionButtons_LIT(string);
+external procedure CreditCardWindowHeader_LIT(Boolean,Boolean,Real);
+external procedure CreditCardWindowButtons_LIT(string,string,real);
+external procedure CreditCardWindowInvoiceDetail_LIT(Real);
+external procedure CreditCardWindowDeliveryDetail_LIT(Real);
+external function real DrawPaymentModesButtons_LIT();
+external procedure DrawBarMenuTiles_LIT(string);
+external procedure DrawRestPMOtherPay_LIT();
+external procedure DisplayRecordDetailsRA_LIT(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,LongInt,Date,string,LongInt,string);
+external procedure DrawModifierButtons2_LIT(var integer,var integer);
+external procedure OKCancel_LIT();
+external procedure DefineElearningURLCacheLClass_LIT();
+external procedure DefineElearningURLCacheDClass_LIT();
+external function real TravelLogDeductions_LIT(real,real);
+external procedure LoginButtons_LIT(Real);
+external procedure FORMDEF2_LIT();
+external procedure FORMDEF3_LIT();
+external procedure ARS2RClass_LIT();
+external procedure ALLVATRClass_LIT();
+
+external function Boolean IsStandardUnused();
+external function Boolean IsEnterprise();
+external function Boolean StandardHansa();
+external function Boolean HasATOL();
+
+external function Boolean HasAccPeriods();
+external function Boolean HasAccessGroups();
+external function Boolean HasAddFee();
+external function Boolean HasApprovals();
+external function Boolean HasCCPayments();
+external function Boolean HasAdvancedAccounting();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasAdvancedProduction();
+external function Boolean HasAdvancedStock();
+external function Boolean HasAged();
+external function Boolean HasBar();
+external function Boolean HasBase2();
+external function Boolean HasBranch();
+external function Boolean HasBuyBack();
+external function Boolean HasCategories();
+//external function Boolean HasConsigmentStock();
+external function Boolean HasCommunicator();
+external function Boolean HasConsignmentStock();
+external function Boolean HasContactClassification();
+external function Boolean HasContactRelations();
+external function Boolean HasConsolidation();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasCreditLimit();
+external function Boolean HasCustItem();
+external function Boolean HasCustomerSearchKey();
+external function Boolean HasCustomerStatusReport();
+external function Boolean HasDownpayments();
+external function Boolean HasDefineColumns();
+external function Boolean HasDeliveryAddress();
+external function Boolean HasDepartments();
+external function Boolean HasETaxDocuments();
+external function Boolean HasEInvoicing();
+external function Boolean HasEndorsedChecks();
+external function Boolean HasExtraNLComment();
+external function Boolean HasExtTax();
+external function Boolean HasFavouriteActTypes();
+external function Boolean HasFiscalPrinter();
+external function Boolean HasFormEditor();
+external function Boolean HasFreightAdvanced();
+external function Boolean HasHideCostPrice();
+external function Boolean HasHotelInterface();
+external function Boolean HasGuestUserDefined();
+external function Boolean HasJewelleryInterface();
+external function Boolean HasIncomeAndExpenseBook();
+external function Boolean HasIOUChecks();
+external function Boolean HasItemClassification();
+external function Boolean HasItemGroups();
+external function Boolean HasKPIs();
+external function Boolean HasLanguages();
+external function Boolean HasLimitedAccess();
+external function Boolean HasLocalMachines();
+external function Boolean HasLoyaltyCards();
+external function Boolean HasMailTags();
+external function Boolean HasMainPartner();
+external function Boolean HasMultiCurrency();
+external function Boolean HasMultiLocations();
+external function Boolean HasNLBudget();
+external function Boolean HasNLBudgetClass();
+external function Boolean HasObjects();
+external function Boolean HasInvoiceOfficialSerNr();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasOrderClasses();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasNumberSeries();
+external function Boolean HasPersons();
+external function Boolean HasPocketScreen();
+external function Boolean HasPositions();
+external function Boolean HasPrepayments();
+external function Boolean HasProjects();
+external function Boolean HasPriceLists();
+external function Boolean HasQualityControl();
+external function Boolean HasReconLevel2();
+external function Boolean HasReminderLevel();
+external function Boolean HasRemoteBackup();
+external function Boolean HasResourceDisplayGroups();
+external function Boolean HasRussianPrepayment();
+external function Boolean HasRetGoodsToSupp();
+external function Boolean HasReturnedGoods();
+external function Boolean HasRoomPackages();
+external function Boolean HasRoomTypes();
+external function Boolean HasRoute();
+external function Boolean HasSalesman();
+external function Boolean HasSalesmanBonus();
+external function Boolean HasSalesGroup();
+external function Boolean HasSecondQuantity();
+external function Boolean HasSerialNumbers();
+external function Boolean HasServerInCloud();
+external function Boolean HasSettlementDiscount();
+external function Boolean HasSimulations();
+external function Boolean hasSimAccruals();
+external function Boolean HasSkypeConnection();
+external function Boolean HasSIPServerConnection();
+external function Boolean HasStrAsSignFType();
+external function Boolean HasTouchScreenDevice();
+external function Boolean HasTaxMatrix();
+external function Boolean HasTestFeatures();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasWorkOrders();
+external function Boolean HasThrouLocation();
+external function Boolean HasTouchScreenLook();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasVATZone();
+external function Boolean HasWithholdingTax();
+external function Boolean HasWithholdingTaxAdvanced();
+external function Boolean HasWorkOrders();
+external function Boolean HasWorkflowOverview();
+
+external function Boolean HasStandardCRM();
+external function Boolean HasStandardOrganizer();
+external function Boolean HasStandardCommunicator();
+
+external function Boolean HasEMail();
+external function Boolean HasExternalEMail();
+
+external function Boolean HasModAT2();
+external function Boolean HasModBA();
+external function Boolean HasModCheck();
+external function Boolean HasModCL();
+external function Boolean HasModCO();
+external function Boolean HasModCons();
+external function Boolean HasModCourses();
+external function Boolean HasModCredMan();
+external function Boolean HasModCRM();
+external function Boolean HasModEDI();
+external function Boolean HasModExp();
+external function Boolean HasModHotel();
+external function Boolean HasModHRM();
+external function Boolean HasModIN();
+external function Boolean HasModIntStock();
+external function Boolean HasModNL();
+external function Boolean HasPaymentGateway();
+external function Boolean HasModPO();
+external function Boolean HasModPOS();
+external function Boolean HasModPL();
+external function Boolean HasModPOProg();
+external function Boolean HasModPP();
+external function Boolean HasModProd();
+external function Boolean HasModQT();
+external function Boolean HasModRent();
+external function Boolean HasModRest();
+external function Boolean HasModRsrt();
+external function Boolean HasModSO();
+external function Boolean HasModSL();
+external function Boolean HasModSVO();
+external function Boolean HasModTS();
+external function Boolean HasModWHM();
+external function Boolean HasModDI();
+external function Boolean UsePostOKButton();
+external function Boolean HasBankImport();
+external function Boolean HasPLIntegratedWithNL();
+external function Boolean HasSLIntegratedWithNL();
+external function Boolean HasIntegratedNL();
+external function Boolean HasConsStockMoveInvoices();
+
+procedure dummy()//##ii
+begin//##ii
+  SetLangMode(LangLithuanian,"LIT",2);//##ii
+  return;//##ii
+end;//##ii
+//##ii
+window INDClass:8
+  wtag("language","LIT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  integer tilenr;
+  real h,h1,h2,h3,h4,h5,h6,v,vm,vs;
+  string 255 label;
+  record CYBlock CYb;
+  LongInt bm,lt,rt,tp;
+  
+  BlockLoad(CYb);
+  WindowBegin("Prekė",INDClass,CGview,-);
+  SetWRect(20,80,830,400);
+  Sizeable(-1,-1,-1,0);
+  DynamicWindow;
+  UseView(INVc);
+  if (GuiType==kGuiAndroid) then begin
+    ToolBar;
+    PushButton(-110,5,-10,25,ToolImagePicker,"Paveiksliukas");
+    EndToolBar;
+  end;
+
+  if (HasJewelleryInterface) then begin
+    Tile(0,107,false,"",Code); 
+  end else begin
+  Tile(0,87,false,"",Code);
+  end;
+  v = 6; vs = 20; h = 155; h1 = 300; h2 = 385; h3 = 395; h4 = 285; h5 = 433;
+  EditField(h,v, 150,"Nr.",Normal,Code,false,0);
+  EditField(h2,v,80,"Grupė",Normal,Group,false,ITSClass);
+  EditField(h,v+=vs,-40,"Aprašymas",Normal,Name,false,0);
+  if (HasJewelleryInterface) then begin
+    EditField(h,v+=vs,150,"Alternatyvus kodas",Normal,AlternativeCode,false,0); 
+  end;
+  tilenr = 1;
+  TileButton(tilenr,"Kainos"); tilenr = tilenr + 1;
+  if (HasJewelleryInterface) then begin
+    TileButton(tilenr,"Juvelyrika"); tilenr = tilenr + 1; 
+    TileButton(tilenr,"Laikrodis"); tilenr = tilenr + 1;  //!!Sd;
+  end;
+  TileButton(tilenr,"Atsargos"); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+  TileButton(tilenr,"Sandėlis"); tilenr = tilenr + 1;
+  end;
+  if (UserCanAction("ViewCostPrice",true)) then begin
+  TileButton(tilenr,"Savikaina"); tilenr = tilenr + 1;
+  end;
+  TileButton(tilenr,"Gamyba"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Sąsk."); tilenr = tilenr + 1;
+  if (GuiType==kGuiiPhone) then begin
+    TileButton(tilenr,"Paveiksliukas"); tilenr = tilenr + 1; 
+  end;
+  TileButton(tilenr,"Įvairovės"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Tekstas"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Savik. sk."); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+  TileButton(tilenr,"Vart. laukai"); tilenr = tilenr + 1;
+  end;
+    TileButton(tilenr,"Žinutės"); tilenr = tilenr + 1;
+  if (HasCharts) then begin
+  TileButton(tilenr,"BI"); tilenr = tilenr + 1;  
+  end;
+  tilenr = 1;
+  CheckBox(h,v+=vs,0,"Uždaryta",Terminated);
+  CheckBox(h2,v,0,"Neparduodama",NotForSales);
+  if (GuiType==kGuiiPhone) then begin
+    GetScreenSize(CurWindow,tp,lt,bm,rt);
+    Pict_Field(5,v+=20,rt-10,bm-10,""); 
+  end;
+  Tile(tilenr,209,false,tilenr,Unittext); tilenr = tilenr + 1;
+  EditField(h,v=6 ,100,"Vienetas",Normal,Unittext,false,UnitSClass);
+  if (HasJewelleryInterface) and (UserCanAction("ViewCostPrice",true)) then begin
+    EditField(h,v+=vs,100,"Savikaina",Normal,InPrice,true,0);  
+  end;
+  EditField(h,v+=vs,100,"Kaina",Normal,UPrice1,true,0);
+  EditField(h,v+=vs,100,"Kainos pasikeitimas",ViewOnly,LastBasePriceChange,true,0);
+  EditField(h,v+=vs,100,"Kainos faktorius",Normal,PriceFactor,true,0);
+  EditField(h,v+=vs,100, "Prekės formulė",Normal,CalcPrice,false,CPMSClass);
+  EditField(h,v+=vs,100,"Antkainio %",Normal,Markup,true,0);
+  EditField(h,v+=vs,100,"Premijos %",Normal,Bonus,true,0);
+  EditField(h,v+=vs,-240,"Objektai",Normal,Objects,false,ObjSClass);
+  if (HasItemClassification) then begin
+  EditField(h,v+=vs,-240,"Klasės",Normal,DispGroups,false,DISClass);
+  end;
+  if (StandardHansa==false) then begin
+  ButtonFrame(h1,v=24,120,4,"Prekės tipas");
+  end else begin
+    ButtonFrame(h1,v=24,120,3,"Prekės tipas"); 
+  end;
+  RadioButton(h1,v,kItemTypePlain,0,"Paprasta",ItemType);
+  RadioButton(h1,v+=16,kItemTypeStocked,0,"Sandėliuojama",ItemType);
+  RadioButton(h1,v+=16,kItemTypeStructured,0,"Struktūrinė",ItemType);
+  if (StandardHansa==false) then begin
+  RadioButton(h1,v+=16,kItemTypeService,0,"Paslauga",ItemType);
+  end;
+  EndFrame;
+  
+  Pict_Field(-205,8,-35,178,"");
+  if (GuiType==kGuiCocoa) then begin
+    PushButton(-160,182,-80,202,ToolImagePicker,"Pridėti pav.");  
+  end;
+  if (StandardHansa==false) then begin
+  CheckBox(h1,v+=32,0,"Prekė - projekto medžiaga",ItemMaterial);
+  end;
+  if (HasJewelleryInterface) then begin
+    Tile(tilenr,110,false,tilenr,Metal); tilenr = tilenr + 1;
+    EditField(h,v=6, 140,"Metalas",Normal,Metal,false,0);  
+    EditField(h,v+=vs, 140,"Svoris",Normal,RowWeight,false,0);  
+    EditField(h,v+=vs, 140,"Dydis",Normal,Size,false,0);  
+    EditField(h,v+=vs, 140,"Ilgis",Normal,Length,false,0);  
+    EditField(h,v+=vs, 140,"Nuoroda",Normal,Reference,false,0);  
+    v = 6; 
+    EditField(h5,v, 140,"Pagr. akmens info",Normal,MajStoneDet,false,0);  
+    EditField(h5,v+=vs, 140,"Spalva",Normal,Colour,false,0); 
+    EditField(h5,v+=vs, 140,"Ryškumas",Normal,Clarity,false,0);  
+    EditField(h5,v+=vs, 140,"Sertifikatas",Normal,Cert,false,0);  
+    EditField(h5,v+=vs, 140,"Pap. akmens info",Normal,MinStoneDet,false,0);  
+    Tile(tilenr,90,false,tilenr,WatchBrand); tilenr = tilenr + 1;
+    EditField(h,v=6, 140,"Gamintojas",Normal,WatchBrand,false,0);  
+    EditField(h,v+=vs, 140,"Stilius",Normal,StyleName,false,0);  
+    EditField(h,v+=vs, 140,"Metalas",Normal,WatchMetal,false,0);  
+    EditField(h,v+=vs, 140,"Judėjimas",Normal,Movement,false,0);  
+    v = 6; 
+    EditField(h5,v, 140,"Dirželis",Normal,BrcStr,false,0); 
+    EditField(h5,v+=vs, 140,"Lytis",Normal,Gender,false,0);  
+    EditField(h5,v+=vs, 140,"Kita",Normal,Other,false,0);  
+    EditField(h5,v+=vs, 140,"Kita 2",Normal,Other2,false,0);  
+  end;
+  Tile(tilenr,170,false,tilenr,MinLevel);  tilenr = tilenr + 1; // Need to clean this Tile up!
+  v = 6;
+  vm = v;
+  ButtonFrame(h1,v+=24,143,3,"Serijinio nr. kontrolė");
+  RadioButton(h1,v,0,0,"Nėra",SerNrf);
+  RadioButton(h1,v+=16,1,0,"Vnt.",SerNrf);
+  RadioButton(h1,v+=16,2,0,"Siuntos",SerNrf);
+    CheckBox(h1+200,v,0,"Nereikalauti siuntos nr. POS faktūrose",DonotRequireBatchNrOnIVCash);
+  EditField(h,v=6,100,"Min. lygis",Normal,MinLevel,true,0);
+  EditField(h,v+=vs,100,"Maks. lygis",Normal,MaxLevel,true,0);
+  EditField(h,v+=vs  ,100,"Skyrius",Normal,Department,false,DepSClass);
+  EditField(h,v+=vs  ,100,"Lentynos kodas",Normal,InvCode,false,0);
+  EditField(h,v+=vs,100,"Šaltinis, nenur. kitaip",Normal,DefaultSource,false,SourceSClass);
+  EditField(h5,v ,50,"Aplinkos aps. mokestis/kg.",Normal,RepaPricePerWeight,true,0);
+  EditField(h6=650,v ,80,"Pagrindinis Užsk. tipas",Normal,DefOrderType,false,SetSClass);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Rizikos lygis",Normal,HazLevCode,false,HazLevSClass);
+  EditField(h5,v ,50,"Alkoholio %",Normal,AlcPrc,true,0);
+    if (HasLocalization("PRT")) then begin
+    EditField(h6,v, 80,"Atsargų prek. tipas",Normal,StockItemType,false,SetSClass);
+    end;
+  end;
+  EditField(h,v+=vs ,100,"Vnt. 2",Normal,Unittext2,false,UnitSClass);
+  EditField(h5,v ,50,"Konversija 1",Normal,Conversion1,true,0);
+  EditField(h,v+=vs,100,"Vnt. koeficientas",Normal,UnitCoefficient,true,0);
+  EditField(h5,v ,50,"Konversija 2",Normal,Conversion2,true,0);
+  if (StandardHansa==true) then begin
+    EditField(h,v+=vs ,50,"Prekės plotis",Normal,Width,true,0); 
+    EditField(h4,v ,50,"Aukštis",Normal,Height,true,0); 
+    EditField(h5,v ,50,"Gylis",Normal,Depth,true,0); 
+    EditField(h,v+=vs ,50,"Prekės tūris",Normal,Volume,true,0); 
+    EditField(h4,v ,50,"Tankumas",Normal,Density,true,0); 
+    EditField(h5,v ,50,"Svoris",Normal,Weight,true,0); 
+  end;
+  if (StandardHansa==false) then begin
+  Tile(tilenr,170,false,tilenr,LocArea);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6) ,100,"Pagrindinė paletės prekė",Normal,DefPalletItem,true,INSClass);
+  EditField(h5,v ,80,"Pakrovimo sritis",Normal,PickArea,false,LocAreaSClass);
+  EditField(h,v+=vs ,100,"Pagr. patalpos sritis",Normal,LocArea,false,LocAreaSClass);
+  EditField(h5,v ,50,"Palečių pakrov. srityje",Normal,PalletsInPickArea,true,0);
+  EditField(h,v+=vs ,50,"Maks. kiekis paletėje",Normal,QtyonPallet,true,0);
+  EditField(h4,v ,50,"Paletės sl.",Normal,PalletLayers,true,0);
+  EditField(h5,v ,50,"Kiekis sluoksnyje",Normal,QtyonPalletLayer,true,0);
+  EditField(h,v+=vs ,50,"Pal. plotis",Normal,PalletWidth,true,0);
+  EditField(h4,v ,50,"Pal. aukštis",Normal,PalletHeight,true,0);
+  EditField(h5,v ,50,"Pal. gylis",Normal,PalletDepth,true,0);
+  EditField(h,v+=vs ,50,"Viet. plotis",Normal,DefPosWidth,true,0);
+  EditField(h4,v ,50,"Viet. aukštis",Normal,DefPosHeight,true,0);
+  EditField(h5,v ,50,"Viet. gylis",Normal,DefPosDepth,true,0);
+  EditField(h,v+=vs ,50,"Plotis",Normal,Width,true,0);
+  EditField(h4,v ,50,"Aukštis",Normal,Height,true,0);
+  EditField(h5,v ,50,"Gylis",Normal,Depth,true,0);
+  EditField(h,v+=vs ,50,"Tūris",Normal,Volume,true,0);
+  EditField(h4,v ,50,"Tankis",Normal,Density,true,0);
+  EditField(h5,v ,50,"Neto svoris",Normal,NetWeight,true,0);
+  EditField(h5,v+=vs ,50,"Svoris",Normal,Weight,true,0);
+  end;
+  if (UserCanAction("ViewCostPrice",true)) then begin
+  Tile(tilenr,190,false,tilenr,InPrice);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),100,"Savikaina",Normal,InPrice,true,0);
+  if (StandardHansa==false) then begin
+  EditField(h5,v,70,"Savik. pasikeitimas",ViewOnly,LastPriceChange,true,0);
+  end else begin
+    EditField(h3,v,70,"Savik. pasikeitimas",ViewOnly,LastPriceChange,true,0); 
+  end;
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Savik. bazine val. 2",Normal,InPriceB2,true,0);
+  ButtonFrame(h1,v+=24,200,4,"Savik. atnaujinimas po gavimo");
+  end else begin
+    ButtonFrame(h1,v+=40,210,4,"Savik. atnaujinimas po gavimo"); 
+  end;
+  RadioButton(h1,v,0,0,"Nėra",UpdateCost);
+  RadioButton(h1,v+=16,1,0,"Paskutinio pirkimo kaštai(su pap. kašt.)",UpdateCost);
+  RadioButton(h1,v+=16,2,0,"Svertinis vidurkis",UpdateCost);
+  RadioButton(h1,v+=16,3,0,"Paskutinio pirkimo kaštai(be pap. kašt.)",UpdateCost);
+  ButtonFrame(h5=540,v=v-3*16,200,3,"Atnaujinti savik. Sand. perkainavimuose");
+  RadioButton(h5,v,0,0,"Neatnaujinti",SRUpdateCost);
+  RadioButton(h5,v+=16,1,0,"Paskutinio perkainavimo savik.",SRUpdateCost);
+  RadioButton(h5,v+=16,2,0,"Svert. vidurkis",SRUpdateCost);
+  if (StandardHansa==false) then begin
+  EditField(h,v=vm+2*vs,100,"Papildomi kaštai",Normal,ExtraCost,true,0);
+  end else begin
+    EditField(h,v=vm+vs,100,"Papildomi kaštai",Normal,ExtraCost,true,0); 
+  end;
+  EditField(h,v+=vs ,100,"Svertinis vid.",Normal,WeighedAvPrice,true,0);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Svertinis vid. bazine val. 2",Normal,WeighedAvPriceB2,true,0);
+  end;
+  EditField(h,v+=vs ,100,"Pask. pirkimo kaštai(su pap. kašt.)",Normal,LastPurchPrice,true,0);
+  EditField(h,v+=vs ,100,"Pask. pirkimo kaina(be. pap. kašt.)",Normal,LastPurchPrice2,true,0);
+  EditField(h,v+=vs ,100,"Pask. pirkimo val.",Normal,LastPurchCurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+=vs ,100,"Fiksuotas frachtas",Normal,FixedFreight,true,0);
+  CheckBox(h1,v,0,"Įtraukti fiksuotą prekės frachtą",InclItemFreight);
+  CheckBox(h5,v,0,"Turi akcizą",HasExcise);   
+  end;
+  Tile(tilenr,170,false,tilenr,Recepy);  tilenr = tilenr + 1;
+  EditField(h,v=6 ,120,"Ruošinys",Normal,Recepy,false,RecSClass);
+  CheckBox(h1,v,0,"Rodyti komponentus dokumentuose",ExplodeRec); // "Show components on documents" is better English but VERY confusing
+  EditField(h,v+=vs ,120,"Faktūros ruošinys",Normal,InvRecepy,false,RecSClass);
+  EditField(h2,v,150,"Brūkšn. kodas",Normal,BarCode,false,0);
+  EditField(h,v+=vs ,120,"Kontrakto prekė",Normal,ContractItem,false,INSClass);
+  EditField(h2,v,150,"Nomenklatūros kod.",Normal,EUCodex,false,CommoditySClass);
+  v = v + vs;
+  if (StandardHansa==false) then begin
+    EditField(h,v,120,"Nuomos faktūravimas",Normal,RentalItem,false,INSClass); 
+  end;
+  EditField(h2,v,150,"ECN kodas",Normal,EKNCode,false,0); // i think it is same as Commodity Code
+  if (StandardHansa==false) then begin
+    EditField(h2,v+=vs,150,"Produktų ir paslaugų klasės",Normal,CPSCode,false,0);
+  end;
+  if (HasLocalization("LVA")) then begin
+    EditField(h,v+=vs,55,"Fiskalinis Departamentas",Normal,FiscalDep,false,0); 
+  end;
+  EditField(h,v+=vs ,120,"Garantija mėn.",Normal,WarrantyLength,true,0);
+  EditField(h2,v,150,"Spalva",Normal,colnr,false,SetSClass);
+  EditField(h,v+=vs,120,"Rūšiav, kodas",Normal,SortCode,true,0);
+  EditField(h,v+=vs,-40,"Alt. kodas",Normal,AlternativeCode,false,0);
+  EditField(h,v+=vs,-40,"Perspėjimas",Normal,WarnText1,false,0);
+  Tile(tilenr,170,false,tilenr,SalesAcc);  tilenr = tilenr + 1;
+  v = 6;
+  vm = v;
+  EditField(h,vm,55,"Vietinė pard. sąsk.",Normal,SalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,VATZoneNameLIT & "Pardavimų sąsk.",Normal,EUSalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,"Ne ES pard. sąsk.",Normal,ExpSalesAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,55,"Pasl. fakt. pard sąsk.",Normal,SVOInvbleSalesAcc,false,AccSClass); 
+//     EditField(h,v+=vs,55,"Serv. Warranty Sales A/C",Normal,SVOWarrantySalesAcc,false,AccSClass);
+//     EditField(h,v+=vs,55,"Serv. Contract Sales A/C",Normal,SVOContractSalesAcc,false,AccSClass);
+//     EditField(h,v+=vs,55,"Serv. Goodwill Sales A/C",Normal,SVOGoodwillSalesAcc,false,AccSClass);
+  end;
+  EditField(h,v+=vs,55,"Komponentų panaudojimas",Normal,CompUsage,false,AccSClass);
+  EditField(h,v+=vs,55,"Proj. medžiagų pan. sąsk.",Normal,ProjMaterialsUsageAcc,false,AccSClass); 
+
+  EditField(h2=360,v=vm,55,"Viet. savik. sąsk.",Normal,CostAcc,false,AccSClass);
+ EditField(h2,v+=vs,55,VATZoneNameLIT & "Savikainos sąsk.",Normal,EUCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Ne ES savik. sąsk.",Normal,ExpCostAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+  EditField(h2,v+=vs,55,"Pasl. fakt. savik. sąsk.",Normal,SVOInvbleCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Pasl. garant. savik. sąsk.",Normal,SVOWarrantyCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Pasl. sut. savik. sąsk.",Normal,SVOContractCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Pasl. Goodwill savik. sąsk.",Normal,SVOGoodwillCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Viešb. WIP sąsk.",Normal,HotelWIPAcc,false,AccSClass); 
+  end;
+  EditField(h2=540,v=vm,20,"Viet. PVM kd.",Normal,VATCode,false,VATCodeSClass);
+  EditField(h2,v+=vs,20,VATZoneEditFieldLabel_LIT(1) & "PVM kd.",Normal,VATCodeEU,false,VATCodeSClass);
+  EditField(h2,v+=vs,20,"Ne ES PVM kd.",Normal,VATCodeExp,false,VATCodeSClass);
+  if (HasExtTax) then begin
+  CheckBox(h2,v+=20,0,"Skaičiuoti percepc.mokesčius",Perceptions);
+  end;
+  if (StandardHansa==false) then begin
+    if (HasWithholdingTax) then begin
+   CheckBox(h2,v+=16,0,"Skaičiuoti sulaikymo mokesčius",Withholdings);
+    end;
+    if (CYb.UseTaxTemplatesforTaxCalc!=0) then begin
+  EditField(h2=670,v=vm,50,"Viet. mok. šabl.",Normal,TaxTemplateCode,false,TaxTemplateSClass);
+      EditField(h2,v+=vs,50,VATZoneEditFieldLabel_LIT(1) & "Mok. šabl.",Normal,TaxTemplateCodeEU,false,TaxTemplateSClass);
+  EditField(h2,v+=vs,50,"Eksp. mok. šabl.",Normal,TaxTemplateCodeExp,false,TaxTemplateSClass);
+    end;
+    v = vm; h2=680;
+    if (HasLocalization("GBR,LTU,POL,LVA")) then begin
+      EditField(h2,v,20,"Reversinis PVM kodas",Normal,RvrsVATCode,false,VATCodeSClass); v = v + vs;
+    end;
+    if (HasLocalization("SWE")) then begin
+      EditField(h2,v,20,"Cheminis mokesčių kodas",Normal,ChemicalTaxCode,false,ChemicalTaxCodeSClass); v = v + vs;
+    end;
+  end;
+  if (GuiType==kGuiiPhone or GuiType==kGuiAndroid) then begin
+    Tile(tilenr,70,false,tilenr,-);  tilenr = tilenr + 1;
+    AttachmentDisplay(10,10,200,200);
+//    PushButton(30,10,-80,40,ToolImagePicker,"Take picture");
+//    ControlLabel(0,0,0,0,"Take picture","SystemFont",17,kTextStyleBold,AdjCenter,patM4ReportsTextBlue);
+  end;
+  Tile(tilenr,70,false,tilenr,VARMask);  tilenr = tilenr + 1;
+  EditField(h,v=6,-40,"Įvairovių šablonas",Normal,VARMask,false,VARMasksSClass);
+  EditField(h,v+=vs,-40,"Ataskaitos eilė",Normal,VARRepOrder,false,VARMasksSClass);
+  EditField(h,v+=vs,-40,"Poaibiai",Normal,VARSubsets,false,VARSubsetsSClass);
+  Tile(tilenr,120,true,tilenr,Math);  tilenr = tilenr + 1;
+  v = 24;
+  MatrixBegin(4,v,-32,-40,-,99);
+  MatCol(1,24,"Kalba",0,LangCode,false,LangSClass);
+  MatCol(1,94,"Tekstas",0,Text,false,0);
+  EndMatrix;
+  //cust start
+  EditField(85,-21,50,"Perimeter",Normal,Perimeter,true,0);
+  EditField(225,-21,50,"Length",Normal,Spread,true,0);
+  EditField(335,-21,80,"PG1",Normal,PG1,false,0);
+  EditField(510,-21,80,"PG2",Normal,PG2,false,0);
+  //cust end
+  Tile(tilenr,220,false,tilenr,CostPerc);  tilenr = tilenr + 1;
+  ButtonFrame(h=100,vm=(v=20),230,6,"Pirminis savikainos modelis");
+  RadioButton(h,v,0,0,"Pagal nutylėjimą",PrimaryCostModel);
+  RadioButton(h,v+=16,1,0,"Įsigijimo kaina",PrimaryCostModel);
+  RadioButton(h,v+=16,2,0,"% _nuo bazinės kainos",PrimaryCostModel);
+  EditField(h+150,v,55,"%",Normal,CostPerc,true,0);
+  RadioButton(h,v+=16,3,0,"Svertinis vidurkis",PrimaryCostModel);
+  RadioButton(h,v+=16,4,0,"Eilė",PrimaryCostModel);
+  RadioButton(h,v+=16,kCostModelNoneItem,0,"Jokio",PrimaryCostModel);
+  ButtonFrame(h,v+=40,230,3,"Eilės savikainos modelis");
+  RadioButton(h,v,0,0,"Pagal nutylėjimą",QueuedCostModel);
+  RadioButton(h,v+=16,1,0,"F_IFO",QueuedCostModel);
+  RadioButton(h,v+=16,2,0,"LIFO",QueuedCostModel);
+
+  ButtonFrame(h2=380,v=vm,200,3,"Savikaina serijiniams nr.");
+  RadioButton(h2,v,0,0,"Pagal nutylėjimą",FIFOPerSerialNr);
+  RadioButton(h2,v+=16,1,0,"Savikaina ne serijiniams nr.",FIFOPerSerialNr);
+  RadioButton(h2,v+=16,2,0,"Savikaina serijiniams nr.",FIFOPerSerialNr);
+  ButtonFrame(h2,v+=40,200,3,"Eilės modelis pagal patalpą");
+  RadioButton(h2,v,0,0,"Pagal nutylėjimą",FIFOPerLocation);
+  RadioButton(h2,v+=16,1,0,"Eilė ne pagal patalpą",FIFOPerLocation);
+  RadioButton(h2,v+=16,2,0,"Eilė pagal patalpą",FIFOPerLocation);
+  ButtonFrame(h2,v+=40,200,3,"Svertinis vid. pagal patalpą");
+  RadioButton(h2,v,0,0,"Pagal nutylėjimą",WAPerLocation);
+  RadioButton(h2,v+=16,1,0,"Svert. vid. ne pagal patalpą",WAPerLocation);
+  RadioButton(h2,v+=16,2,0,"Svert. vid. pagal patalpą",WAPerLocation);
+/*5.3
+  ButtonFrame(h2,v+=40,200,3,"Savikaina patalpai");
+  RadioButton(h2,v,0,0,"Pagal nutylėjimą",CostPricePerLocation);
+  RadioButton(h2,v+=16,1,0,"Savikaina ne pagal patalpą",CostPricePerLocation);
+  RadioButton(h2,v+=16,2,0,"Savikaina patalpai",CostPricePerLocation);
+*/
+  if (StandardHansa==false) then begin
+    Tile(tilenr,240,false,tilenr,-); tilenr = tilenr + 1;
+  h = 180; v = 6;
+  label = UserDefined("INVc","UserStr1");
+  if (nonblank(label)) then begin
+    EditField(h,v=6 ,-40,label,Normal,UserStr1,false,0);
+  end;
+  label = UserDefined("INVc","UserStr2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr2,false,0);
+  end;
+  label = UserDefined("INVc","UserStr3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr3,false,0);
+  end;
+  label = UserDefined("INVc","UserStr4");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr4,false,0);
+  end;
+  label = UserDefined("INVc","UserStr5");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr5,false,0);
+  end;
+  label = UserDefined("INVc","UserVal1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal1,true,0);
+  end;
+  label = UserDefined("INVc","UserVal2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal2,true,0);
+  end;
+  label = UserDefined("INVc","UserVal3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal3,true,0);
+  end;
+  label = UserDefined("INVc","UserDate1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate1,true,PasteCurDate);
+  end;
+  label = UserDefined("INVc","UserDate2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate2,true,PasteCurDate);
+  end;
+  label = UserDefined("INVc","UserDate3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate3,true,PasteCurDate);
+  end;
+  end;
+  Tile(tilenr,400,false,tilenr,Math2); tilenr = tilenr + 1;
+  StaticText(50,v=20,"Žinutė",true);
+  TextField(60,v-5,-20,370,Math2,0);
+  if (HasCharts) then begin
+    Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
+    ChartArea(10,6,-10,390,"$INDCLass_BIChart");
+  end;
+  if (UserCanReport("INInfoRn","",true)) then begin 
+  SpecialMenu("Prekės būklės ataskaita",'I',0,"INStatusINDsm");
+  end;
+//  SpecMenuItem("Perskaičiuoti kainoraštį",' ',2);
+  if (UserCanReport("INrsRn","INrsRClass",true)) then begin 
+    SpecialMenu("Prekės istorija",'h',3,"INrsRn_INSm");//CMD H DOES HIDE HANSA
+  end;
+  SpecialMenu("Prekės patalpoje būklė",' ',4,"LocItemStatDsm");
+  if (HasJewelleryInterface) and (UserCanReport("INInfoRn","",true)) then begin 
+    SpecialMenu("Prekės būklė per alt. kodą",'S',5,"ItemStatusAltINDsm"); 
+  end;
+  SpecMenuGroup("",kSpecMenuGroupTypeExtendedPlusMenu,0);
+  SpecialMenu("Sukurti perkamą prekę",' ',1,"PIFromINDsm");
+  SpecialMenu("Sukurti ruošinį",' ',2,"RecFromINDsm");
+  EndWindow;
+end;

@@ -1,0 +1,93 @@
+external inner procedure SHVc_DelAddrSClass(Integer,Integer);
+external inner procedure ORVc_DelAddrSClass(Integer,Integer);
+external inner procedure IVVc_DelAddrSClass(Integer,Integer);
+external inner procedure QTVc_DelAddrSClass(Integer,Integer);
+external inner procedure AgreementVc_DelAddrSClass(Integer,Integer);
+external inner procedure RetPUVc_DelAddrSClass(Integer,Integer);
+external inner procedure M4PadString(string,Integer,string,Boolean,var string);
+
+procedure DelAddrSClassOnOpen(Integer wn,string custcode)
+begin
+  Boolean found;
+  string 255 tstr;
+  record DelAddrVc DelAddrr;
+
+  found = true;
+  DelAddrr.CustCode = custcode;
+  while (LoopKey("CustCode",DelAddrr,1,found)) begin
+    if (DelAddrr.CustCode==custcode) then begin
+      M4PadString(DelAddrr.DelCode,10," ",false,tstr);
+      tstr = tstr & DelAddrr.Comment;
+      SetListString(wn,len(tstr),tstr,false);
+    end else begin
+      found = false;
+    end;
+  end;
+  found = true;
+  ResetLoop(DelAddrr);
+  DelAddrr.CustCode = "";
+  while (LoopKey("CustCode",DelAddrr,1,found)) begin
+    if (blank(DelAddrr.CustCode)) then begin
+      M4PadString(DelAddrr.DelCode,10," ",false,tstr);
+      tstr = tstr & DelAddrr.Comment;
+      SetListString(wn,len(tstr),tstr,false);
+    end else begin
+      found = false;
+    end;
+  end;
+  return;
+end;
+
+global
+procedure SHJRClass_DelAddrSClass(Integer wn,Integer mwn)
+begin
+
+  record RcVc RepSpec;
+
+  GetWindowRecord(mwn,RepSpec);
+  DelAddrSClassOnOpen(wn,RepSpec.f2);
+
+  return;
+end;
+
+global
+function Boolean DelAddrSClassOnOpenWindow(Integer wn)
+begin
+  boolean res;
+  Integer mwn;
+
+  mwn = MotherWindow(wn);
+  switch (GetWindowClass(mwn)) begin
+    case "SHJRClass": SHJRClass_DelAddrSClass(wn,mwn);
+    otherwise 
+       res = inner.DelAddrSClassOnOpenWindow(wn);
+  end;
+  DelAddrSClassOnOpenWindow = false;
+  return;
+end;
+
+/*
+global
+function Boolean DelAddrSClassOnOpenWindow(Integer wn)
+begin
+
+  Integer mwn;
+
+  mwn = MotherWindow(wn);
+  switch (GetWindowFileName(mwn)) begin
+    case "IVVc": IVVc_DelAddrSClass(wn,mwn);
+    case "ORVc": ORVc_DelAddrSClass(wn,mwn);
+    case "SHVc": SHVc_DelAddrSClass(wn,mwn);
+    case "QTVc": QTVc_DelAddrSClass(wn,mwn);
+    case "AgreementVc": AgreementVc_DelAddrSClass(wn,mwn);
+    case "RetPUVc": RetPUVc_DelAddrSClass(wn,mwn);
+    otherwise
+      switch (GetWindowClass(mwn)) begin
+        case "SHJRClass": SHJRClass_DelAddrSClass(wn,mwn);
+        otherwise ;
+      end;
+  end;
+  DelAddrSClassOnOpenWindow = false;
+
+  return;
+end;

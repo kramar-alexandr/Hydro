@@ -1,0 +1,128 @@
+external function string 20 CheckArtCodeTreatments(string,val,val,val);
+
+//temp
+/*
+global
+updating function LongInt ORVcRecordImport(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+  
+  res = inner.ORVcRecordImport(ORr,OR2r,stat,long4);
+  ORr.SapaDate = CurrentDate;
+
+  ORVcRecordImport = res;
+  return;
+end;
+*/
+
+global
+updating function LongInt ORVcRecordSave(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+  
+  res = inner.ORVcRecordSave(ORr,OR2r,stat,long4);
+  ORr.SapaDate = CurrentDate;
+
+  ORVcRecordSave = res;
+  return;
+end;
+
+global
+updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  res = inner.ORVcRecordUpdate(ORr,OR2r,stat,long4);
+  ORr.SapaDate = CurrentDate;
+
+  ORVcRecordUpdate = res;
+  return;
+end;
+
+global
+updating function LongInt ORVcRecordCheck(record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
+begin
+  row ORVc ORrw;
+  record ORVc secORr;
+  string 20 TreatmentErr;
+  integer i,rw;
+  longint res;
+  record CUVc CUr;
+
+  res = inner.ORVcRecordCheck(ORr,OR2r,stat,long4);
+  if (res!=-1) then begin 
+    rw = MatRowCnt(ORr);
+    for(i=0;i<rw;i=i+1)begin
+      MatRowGet(ORr,i,ORrw);
+      TreatmentErr = CheckArtCodeTreatments(ORrw.ArtCode,ORrw.Anod,ORrw.Powd,ORrw.Mec);
+      if nonblank(TreatmentErr) then begin
+        RecordCheckError(1,"Ievadiet " & TreatmentErr,i,TreatmentErr);
+        res = -1;
+        goto LORVcRecordCheck;
+      end;
+    end;  
+    if blank(ORr.SalesMan) then begin
+      RecordCheckError(1000001,"",-1,"SalesMan"); 
+      res = -1; 
+      goto LORVcRecordCheck;
+    end;
+    if blank(ORr.InvCountry) then begin
+      RecordCheckError(1000002,"",-1,"InvCountry"); 
+      res = -1; 
+      goto LORVcRecordCheck;
+    end;
+    CUr.Code = ORr.CustCode;
+    if ReadFirstMain(CUr,1,true) then begin 
+      if (ORr.SalesMan!=CUr.SalesMan) and nonblank(CUr.SalesMan) then begin 
+        RecordCheckError(1000010,CUr.SalesMan,-1,"SalesMan"); 
+        res = -1; 
+        goto LORVcRecordCheck;
+      end;  
+      if blank(CUr.SalesMan) then begin 
+        RecordCheckError(1000007 ,"",-1,"SalesMan"); 
+        res = -1; 
+        goto LORVcRecordCheck;
+      end;  
+      if (ORr.InvCountry!=CUr.CountryCode) and nonblank(CUr.CountryCode) then begin 
+        RecordCheckError(1000011,CUr.CountryCode,-1,"InvCountry"); 
+        res = -1; 
+        goto LORVcRecordCheck;
+      end;  
+      if blank(CUr.CountryCode) then begin 
+        RecordCheckError(1000008 ,"",-1,"InvCountry"); 
+        res = -1; 
+        goto LORVcRecordCheck;
+      end;  
+    end;
+    if blankdate(ORr.DespatchDate)  then begin
+      RecordCheckError(1058,"",-1,"DespatchDate");      
+      res = -1;
+      goto LORVcRecordCheck;
+    end;
+  
+    if (nonblank(ORr.CustOrdNr)) then begin
+      secORr.CustOrdNr = ORr.CustOrdNr;
+      if ReadFirstKey("CustOrdNr",secORr,1,true) then begin
+        MessageBox(1547," - kliendi tellimuse number.");
+      end;
+    end;
+  end;
+
+LORVcRecordCheck:;
+  ORVcRecordCheck = res;
+  return;
+end;
+
+global
+function LongInt ORVcRecordDuplicate(var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
+begin
+  LongInt res;
+
+  res = inner.ORVcRecordDuplicate(ORr,OR2r,long3,long4);
+  
+  ORr.Sorting = "";
+
+  ORVcRecordDuplicate = res;
+  return;
+end;
+

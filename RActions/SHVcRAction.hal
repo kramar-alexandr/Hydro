@@ -1,0 +1,36 @@
+global
+updating function LongInt SHVcRecordCheck(var record SHVc SHp,record SHVc SH2p,LongInt stat,LongInt check)
+begin
+  LongInt res;
+  record CUVc CUr;
+
+  CUr.Code = SHp.CustCode;
+  if (ReadFirstMain(CUr,1,true)) then begin
+    if (SetInSet("LL",CUr.Classification)==true) then begin
+      if (SHp.OKFlag!=0) then begin
+        if (blank(SHp.ShipMode)) then begin
+          RecordCheckError(1854,"",-1,"ShipMode");
+          res = -1;
+          goto LSHVcRecordCheck;
+        end;
+      end;
+      if (blank(SHp.Region)) then begin
+        RecordCheckError(1854,"",-1,"Region");
+        res = -1;
+        goto LSHVcRecordCheck;
+      end;
+      if (blank(SHp.TransportNumber)) then begin
+        RecordCheckError(1854,"",-1,"TransportNumber");
+        res = -1;
+        goto LSHVcRecordCheck;
+      end;
+    end;
+  end;
+
+  res = inner.SHVcRecordCheck(SHp,SH2p,stat,check);
+
+ LSHVcRecordCheck:;
+  SHVcRecordCheck = res;
+  return;
+end;
+

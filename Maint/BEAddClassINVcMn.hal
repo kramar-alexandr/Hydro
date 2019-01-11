@@ -1,0 +1,149 @@
+//ok
+external inner function Boolean SetInSet2(string,string);
+external inner procedure ItemGetDateTurnover(string,string,string,string,string,record INVc,string,Date,Date,var val,Integer);
+
+function boolean RemClass(string custclass,var string  oldstring)
+begin
+
+  boolean res;
+  integer i,l,fr,tt;
+  string 1 onesymbol;
+  string 5 klass;
+  string 100 newstring;
+
+  l = Len(oldstring);
+  fr = 0;
+  res = false;
+  tt = 1;
+  for (i=1;i<=l;i=i+1) begin
+    if (Mid(oldstring,i,1) == ",") or (i ==l)then begin
+      if tt<>0 then begin
+        klass = Mid(oldstring,fr,tt);
+        if klass <> custclass then begin
+          if blank(newstring) then begin
+            newstring = klass;
+          end else begin
+            newstring = newstring & "," & klass;
+          end;
+        end else begin
+          res = true;
+        end;
+        fr = i+1;
+        tt = 0;
+      end;
+    end else begin
+      tt = tt +1;
+    end;
+  end;
+  oldstring = newstring;
+  RemClass = res;
+
+  return;
+end;
+
+
+global
+updating procedure BEAddINVcMn(Record RcVc RepSpec)
+begin
+
+  record INVc INr,oldINr;
+  record ItemHistVc IHr;
+  string 255 newstr,tstr1;
+  boolean TrHs,TrHs1;
+  Boolean itemfound;
+  val q;
+
+  if (blank(RepSpec.f6)) then begin
+    goto L99;
+  end;
+  TrHs = true;
+  INr.Group  = RepSpec.f1;
+  while LoopKey("Group",INr,1,TrHs) begin
+    if (TrHs) then begin
+      if (nonblank(RepSpec.f1)) then begin
+        if (INr.Group <> RepSpec.f1) then begin
+          TrHs = false;
+        end;
+      end;
+    end;
+    if (TrHs) then begin
+      itemfound = false;
+      if (RepSpec.flags[1] == 1) then begin
+        ItemGetDateTurnover(INr.Code,"","","","",INr,"quant",RepSpec.sStartDate,RepSpec.sEndDate,q,RepSpec.basecurncy);
+        if (q<>0) then begin
+          itemfound = true;
+        end;
+      end;
+      if ((RepSpec.flags[2]==1) or (RepSpec.flags[3]==1) or (RepSpec.flags[4]==1) or (RepSpec.flags[5]==1)) then begin
+        if (itemfound == false) then begin
+          IHr.ArtCode = INr.Code;
+          IHr.TransDate = RepSpec.sStartDate;
+          TrHs1 = true;
+          ResetLoop(IHr);
+          while LoopKey("ArtCode",IHr,2,TrHs1) begin
+            if (IHr.ArtCode<>INr.Code) then begin
+              TrHs1 = false;
+            end;
+            if (DateInRange(IHr.TransDate,RepSpec.sStartDate,Repspec.sEndDate)==false) then begin
+              TrHs1 = false;
+            end;
+            if (itemfound) then begin
+              TrHs1 = false;
+            end;
+            if (TrHs1 == true) then begin
+              if (RepSpec.flags[2] == 1) and (IHr.FileName == "StockMovVc") then begin
+                itemfound = true;
+              end;
+              if (RepSpec.flags[3] == 1) and (IHr.FileName == "SDVc")then begin
+                itemfound = true;
+              end;
+              if (RepSpec.flags[4] == 1) and (IHr.FileName == "PUVc") then begin
+                itemfound = true;
+              end;
+              if (RepSpec.flags[5] == 1) and (IHr.FileName == "SHVc")then begin
+                itemfound = true;
+              end;
+            end;
+
+          end;
+        end;
+      end;
+
+      RecordCopy(oldINr,INr);
+      if (itemfound==true) then begin
+        // to remove
+        if (SetInSet(RepSpec.f6,INr.DispGroups)==true) then begin
+          newstr = INr.DispGroups;
+          if (RemClass(RepSpec.f6,newstr) == true) then begin
+            INr.DispGroups= newstr;
+            if (RecordUpdate(oldINr,INr,false)==0) then begin
+            end;
+          end;
+        end;
+        tstr1 = "," & RepSpec.f6;
+        if (tstr1 == INr.DispGroups) then begin
+          INr.DispGroups= "";
+          if (RecordUpdate(oldINr,INr,false)==0) then begin
+          end;
+        end;
+      end else begin
+        // to add
+        if (SetInSet(RepSpec.f6,INr.DispGroups)==false) then begin
+          if nonblank(INr.DispGroups) then begin
+            newstr = INr.DispGroups & "," & RepSpec.f6;
+          end else begin
+            newstr =  RepSpec.f6;
+          end;
+          INr.DispGroups =  newstr;
+          if (RecordUpdate(oldINr,INr,false)==0) then begin
+          end;
+        end;
+      end;
+
+    end;
+ end;
+ L99:;
+
+ return;
+end;
+

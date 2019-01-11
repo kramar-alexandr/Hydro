@@ -1,0 +1,119 @@
+external inner procedure CheckFlush(var Integer,Integer);
+external inner function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
+
+external inner procedure IVSumup(var record IVVc,Boolean);
+external inner procedure IVDchsum(var record IVVc,Integer);
+external inner procedure QTSumup(var record QTVc);
+external inner procedure QTDchsum(record QTVc,Integer);
+external inner procedure ORSumup(var record ORVc);
+external inner procedure ORDchsum(var record ORVc,Integer);
+
+global
+updating procedure RecalcTotQtyMn(record RcVc RepSpec)
+BEGIN
+  Integer flushcnt;
+  Boolean found;
+  record IVVc IVr,oldIVr;
+  row IVVc IVrw;
+  record QTVc QTr,oldQTr;
+  row QTVc QTrw;
+  record ORVc ORr,oldORr;
+  row ORVc ORrw;
+  record INVc INr;
+  integer i,rwcnt;
+  val s1,s2; 
+ 
+  if (RepSpec.flags[0]==1) then begin
+    found = true;
+    IVr.TransDate = RepSpec.sStartDate;
+    while (LoopKey("TransDate",IVr,1,found)) begin
+      if (DateInRange(IVr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin 
+        found = false;
+      end;
+      if (found) then begin
+        RecordCopy(oldIVr,IVr);
+        s1 = 0;
+        s2 = 0;
+        rwcnt = MatRowCnt(IVr);
+        for (i=0;i<rwcnt;i=i+1) begin
+          MatRowGet(IVr,i,IVrw);
+          if (IVrw.stp==1 and nonblank(IVrw.ArtCode)) then begin
+            if (ReadFirstItem(IVrw.ArtCode,INr,false,false)) then begin
+              IVrw.Unit2Qty = IVrw.Quant*INr.UnitCoefficient;
+              IVrw.Unit2Code = INr.Unittext2;
+              MatRowPut(IVr,i,IVrw);
+            end;
+            s1 = s1 + IVrw.Quant;
+            s2 = s2 + IVrw.Unit2Qty;
+          end;
+        end;
+        IVr.TotUnit1Qty = s1;
+        IVr.TotUnit2Qty = s2;
+        if (RecordUpdate(oldIVr,IVr,false)==0) then begin end;
+        CheckFlush(flushcnt,10);
+      end;
+    end;
+  end;
+  if (RepSpec.flags[1]==1) then begin
+    found = true;
+    ORr.OrdDate = RepSpec.sStartDate;
+    while (LoopKey("OrdDate",ORr,1,found)) begin
+      if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin 
+        found = false;
+      end;
+      if (found) then begin
+        RecordCopy(oldORr,ORr);
+        s1 = 0;
+        s2 = 0;
+        rwcnt = MatRowCnt(ORr);
+        for (i=0;i<rwcnt;i=i+1) begin
+          MatRowGet(ORr,i,ORrw);
+          if (ORrw.stp==1 and nonblank(ORrw.ArtCode)) then begin
+            if (ReadFirstItem(ORrw.ArtCode,INr,false,false)) then begin
+              ORrw.Unit2Qty = ORrw.Quant*INr.UnitCoefficient;
+              ORrw.Unit2Code = INr.Unittext2;
+              MatRowPut(ORr,i,ORrw);
+            end;
+            s1 = s1 + ORrw.Quant;
+            s2 = s2 + ORrw.Unit2Qty;
+          end;
+        end;
+        ORr.TotUnit1Qty = s1;
+        ORr.TotUnit2Qty = s2;
+        if (RecordUpdate(oldORr,ORr,false)==0) then begin end;
+        CheckFlush(flushcnt,10);
+      end;
+    end;
+  end;   
+  if (RepSpec.flags[2]==1) then begin
+    found = true;
+    QTr.QTDate = RepSpec.sStartDate;
+    while (LoopKey("QTDate",QTr,1,found)) begin
+      if (DateInRange(QTr.QTDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin 
+        found = false;
+      end;
+      if (found) then begin
+        RecordCopy(oldQTr,QTr);
+        s1 = 0;
+        s2 = 0;
+        rwcnt = MatRowCnt(QTr);
+        for (i=0;i<rwcnt;i=i+1) begin
+          MatRowGet(QTr,i,QTrw);
+          if (QTrw.stp==1 and nonblank(QTrw.ArtCode)) then begin
+            if (ReadFirstItem(QTrw.ArtCode,INr,false,false)) then begin
+              QTrw.Unit2Qty = QTrw.Quant*INr.UnitCoefficient;
+              MatRowPut(QTr,i,QTrw);
+            end;
+            s1 = s1 + QTrw.Quant;
+            s2 = s2 + QTrw.Unit2Qty;
+          end;
+        end;
+        QTr.TotUnit1Qty = s1;
+        QTr.TotUnit2Qty = s2;
+        if (RecordUpdate(oldQTr,QTr,false)==0) then begin end;
+        CheckFlush(flushcnt,10);
+      end;
+    end;
+  end;   
+  RETURN;
+END;

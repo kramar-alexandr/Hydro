@@ -1,0 +1,144 @@
+#ifdef HAL
+
+//- ostureskontro mooduli eksportide alla lisatud valik 'Pangafail';
+//- ostureskontro mooduli seadistuste alla lisatud valik 'Pangafailid'
+// (kõige lõpus) kus siis esimesele väljale tuleks sisestada vastav number 16
+// või 18, sõltuvalt millisesse panka fail saadetakse.
+//16 - TeleHansa
+//18 - Ühispank
+
+event startup
+begin
+
+  SetLangMode(LangEstonian, "EST", 1);
+
+  //Export("Pangafail",MPEClass,MPEn,modPL);
+  Export("Pangafail",DoSomethingEnEClass,DoSomethingEn,modPL);
+  Setting("Pangafailid",BankFileTClass,modPL);
+  Report("Loading list",LListRClass,LListRn,0,modIN);
+
+  return;
+end;
+
+external inner function string 60 UserDefined(string,string);
+
+event DefineWindows
+begin
+
+  Real i,h,h1,h2,h3,h4,h5,v,vm,hs,l,vs,f,t,v2,h6;
+  string 255 label;
+
+  SetLangMode(LangEstonian, "EST", 0);
+
+  WindowBegin("MŠŠra pangafail",DoSomethingEnEClass,CGEcW,RcType);
+  SetWRect(20,80,450,450);
+  h = 150; vs = 16; h2 = 240; h3 = 70;
+  EditFieldTL(h,v=6,150,"Tasumise number",M4UStr,Normal,30,f1,false,0);
+  EditFieldTL(h,v+=20,80,"Ainult saadetud valuutas",M4Code,Normal,5,CurncyCode,false,CurncyCodeSClass);
+  ButtonFrame(h3,vm=(v+=45),150,3,"Tasumise meetod");
+  RadioButton(h3,v,0,0,"Tavaline",flags[3]);
+  RadioButton(h3,v+=vs,1,0,"Kiirmaksena",flags[3]);
+  RadioButton(h3,v+=vs,2,0,"Ekspress",flags[3]);
+  ButtonFrame(h3,v+=45,150,3,"Teenustasud");
+  RadioButton(h3,v,0,0,"Tasume meie",flags[4]);
+  RadioButton(h3,v+=vs,1,0,"Tasub hankija",flags[4]);
+  RadioButton(h3,v+=vs,2,0,"Jagatud",flags[4]);
+  ButtonFrame(h3,v+=45,210,3,"Meie suhe hankijasse");
+  RadioButton(h3,v,2,0,"Meie oleme tŸtarettev›te",flags[6]);
+  RadioButton(h3,v+=vs,1,0,"Meie oleme emaettev›te",flags[6]);
+  RadioButton(h3,v+=vs,0,0,"Muu",flags[6]);
+  CheckBox(h3,v+=30,0,"Tasu tŠhtajal",flags[0]);
+  CheckBox(h3,v+=vs,0,"DOS formaat",ArtMode);
+  CheckBox(h3,v+=vs,0,"VŠlismaksekorraldus",flags[2]);
+  CheckBox(h3,v+=vs,0,"†ks maksekorraldus hankija kohta",flags[5]);
+  ButtonFrame(h2,v=vm,150,2,"Hetkeseis");
+  RadioButton(h2,v,0,0,"Ainult eksportimata",OnlyUnprntd);
+  RadioButton(h2,v+=vs,1,0,"Kõik",OnlyUnprntd);
+  ButtonFrame(h2,v+=61,150,3,"Esitus");
+  RadioButton(h2,v    ,0,0,"Arveldusarve 1",flags[1]);
+  RadioButton(h2,v+=vs,1,0,"Arveldusarve 2",flags[1]);
+  EditFieldTL(h2+100,v+=20,50,"Prod. nr.",M4Str,Normal,1 ,Stext,false,0);//??
+  EndWindow;
+
+  WindowBegin("Pangafail",BankFileTClass,CGSbl,BankFileType);
+  SetBlid(BankFileBlock);
+  SetWRect(64,80,509,440);
+  v = 6; h = 250;
+  Tile(0,50,false,"",Bank);
+  EditField(50,v,-150,"Pank",Normal,Bank,false,SetSClass);
+  TileButton(1,"Rootsi/Taani");
+  TileButton(2,"Norra");
+  TileButton(3,"OCR");
+  TileButton(4,"Kasutajatunnused");
+  Tile(1,200,false,"1",PayType);
+  v = 6; vs = 20;
+  ButtonFrame(50,v=26,350,4,"Rootsi tasumised");
+  EditField(h,v,20,"Fin meetod (I,V,T)",Normal,PayType,false,0);
+  //  EditField(h,v+=vs,50,"Betalningsrubrik (0-4)",Normal,PayHeader,false,0);
+  EditField(h,v+=vs,80,"Leping",Normal,ContractNumer,false,0);
+  EditField(h,v+=vs,80,"Kohalik val.",Normal,LocCurncyCode,false,CurncyCodeSClass);
+  ButtonFrame(50,v+=50,350,4,"Tasumised Taanile");
+  EditField(h,v,20,"Fin meetod (J,N)",Normal,PayType,false,0);
+  //  EditField(h,v+=vs,50,"Betalningsrubrik (0-4)",Normal,PayHeader,false,0);
+  EditField(h,v+=vs,80,"Leping",Normal,ContractNumer,false,0);
+  EditField(h,v+=vs,80,"Kohalik valuuta",Normal,LocCurncyCode,false,CurncyCodeSClass);
+  Tile(2,220,false,"2",LastDate);
+  v = 6;
+  ButtonFrame(50,v=26,350,6,"Norra tasumised");
+  EditField(h,v,50,"Viimane ülekande kp.",Normal,LastDate,true,0);
+  EditField(h,v+=vs,20,"Viimane tas. nr.",Normal,LastSerNr,true,0);
+  EditField(h,v+=vs,20,"Viimane rea nr.",Normal,RowSerNr,true,0);
+  EditField(h,v+=vs,100,"Kasutaja",Normal,User,false,0);
+  EditField(h,v+=vs,80,"Kohalik valuuta",Normal,LocCurncyCode,false,CurncyCodeSClass);
+  Tile(3,90,false,"3",ReceiptBank);
+  EditField(120,v=6,140,"Pank",Normal,ReceiptBank,false,SetSClass);
+  EditField(120,v+=vs,100,"Kliendikood (OCR)",Normal,ClientNr,false,0);
+  ButtonFrame(h+50,v,100,2,"OCR kood");
+  RadioButton(h+50,v,0,0,"Mod 10",KIDMod);
+  RadioButton(h+50,v+=16,1,0,"Mod 11",KIDMod);
+  Tile(4,155,false,"4",BankIP);
+  EditField(h=120,v=6,150,"Panga IP aadress",Normal,BankIP,false,0);
+  EditField(h,v+=20,150,"Panga port",Normal,BankPort,false,0);
+  EditField(h,v+=20,150,"Kohalik port",Normal,BankLocalPort,false,0);
+  EditField(h,v+=20,150,"Kasutajatunnus",Normal,BankUser,false,0);
+  EditField(h,v+=20,150,"Salasõna",Normal,BankPass,false,0);
+  EditField(h,v+=20,150,"KrŸpteerimise v›ti",Normal,BankEnqKey,false,0);
+  EndWindow;
+
+
+  WindowBegin("MŠŠra lähetuste nimekiri",SHJRClass,CGRcW,RcType);
+  SetWRect(20,80,400,300);
+  vs = 20; h = 120; v = 6-vs;
+  EditFieldTL(h,v+=vs, 150,"LŠhetuse nr.",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Periood");
+  EditFieldTL(h,v+=vs ,150,"Klient",M4UStr,Normal,60,f2,false,CUSClass);
+  EditFieldTL(h,v+=vs ,150,"LŠhetusaadress",M4UStr,Normal,20,f5,false,DelAddrSClass);
+  EditFieldTL(h,v+=vs ,150,"Tellimuse nr.",M4Str,Normal,20,TransStr,false,0);
+  EditFieldTL(h,v+=vs ,150,"LŠhetusviis",M4UStr,Normal,30,f3,false,DMSClass);
+  EditFieldTL(h,v+=vs ,150,"Ladu",M4UStr,Normal,30,f4,false,LocationSClass);
+  ButtonFrame(h=60,vm=(v+=40),123,2,"Esitus");
+  RadioButton(h,v,0,0,"Kokkuvõte",ArtMode);
+  RadioButton(h,v+=16,1,0,"Detailne",ArtMode);
+  ButtonFrame(h+=148,v = vm,123,2,"Vali");
+  CheckBox(h,v,0,"Kinnita_mata",flags[1]);
+  CheckBox(h,v+=16,0,"Ki_nnitatud",flags[2]);
+  CheckBox(h=60,v+=35,0,"Igale kliendile uus lk.",flags[3]);
+  CheckBox(h=60,v+=vs,0,"Sorteeri LŠhetusaadressi järgi",flags[4]);
+  EndWindow;
+
+  WindowBegin("MŠŠra Loading List aruanne",LListRClass,CGRcW,RcType);
+  SetWRect(20,80,400,180);
+  vs = 20; h = 150; v = 6-vs;
+  //  EditFieldTL(h,v+=vs, 150,"Lähetuse nr.",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Periood");
+  EditFieldTL(h,v+=vs ,150,"Klient",M4UStr,Normal,60,f1,false,CUSClass);
+  EditFieldTL(h,v+=vs ,70,"Kliendi klassifikaator",M4UStr,Normal,30,f4,false,CClassSClass);
+  //  EditFieldTL(h,v+=vs, 100,"Kuupäev",M4Date,Normal,0,d1,false,PasteCurDate);
+  EditFieldTL(h,v+=vs,50,"Loendur (Delivery number)",M4Int,Normal,0,flags[1],false,0);
+  EndWindow;
+
+  return;
+end;
+
+#endif
+

@@ -1,0 +1,713 @@
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external function real VATZoneButtonsLabelsLAT(real,real,real,real);
+external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external function Boolean TouchScreenLookVertical();
+external procedure SysEClass_Tool(Integer,var real,var real);
+external procedure GTransEClass_Tool(Integer,var real,var real);
+external procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external procedure GBaseEClass_Tool(Integer,var real,var real);
+external procedure TransGenVClass_Tool(Integer,var real,var real);
+external procedure GetCurUser(var record UserVc);
+external procedure JobRClass_EST();
+external function string 60 UserDefined(string,string);
+external function string 255 MasterBannerURL();
+external procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external function Boolean AllowedInCountry(integer);
+external function Integer ResourceWindowResourceType();
+external function Boolean ResPlan_Rental();
+external function Boolean ResPlan_ProdOperations();
+remote   function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean TouchScreenLook();
+external procedure ExtractObj(string,var Integer,var string);
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote   procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external function Boolean CheckOffLineRecords(Boolean);
+external function string 60 TileUserDefined(string,Integer,var Integer);
+external function Boolean CUVATNrColumn;
+external function Integer GetInternetEnablerCountry();
+external function Integer CntVarietyCode(Integer,var Array string);
+external function Boolean UseTaxTemplatesforTaxCalc();
+remote   procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external function string 20 GetMenuCode(string);
+external procedure DrawModifierButtons(var Integer);
+remote   procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external function Boolean DisplayLoginButtons();
+external function Integer LoginShortcutsLines(Integer);
+external function Integer LoginShortcutsPos(Real,Integer);
+
+external procedure DefineTTRRowTypes(Integer);
+external function real ItemButtons(string,Integer);
+external procedure HWStoreWClassAddProducts(Integer);
+external function Boolean HasCharts();
+external function Boolean HasNewRegistration();
+external function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external function Integer LoginShortcuts();
+external function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external function Boolean DefCustCodeSetup();
+// in-apps
+external function Boolean HasInAppsAvailable();
+external function Integer CountCountries();
+
+external function Boolean IsEnterprise();
+external function Boolean StandardHansa();
+external function Boolean HasATOL();
+
+external function Boolean HasAccessGroups();
+external function Boolean HasApprovals();
+external function Boolean HasCCPayments();
+external function Boolean HasAdvancedAccounting();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasAdvancedStock();
+external function Boolean HasBar();
+external function Boolean HasBase2();
+external function Boolean HasBranch();
+external function Boolean HasCategories();
+external function Boolean HasCommunicator();
+external function Boolean HasConsignmentStock();
+external function Boolean HasContactClassification();
+external function Boolean HasContactRelations();
+external function Boolean HasConsolidation();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasCustItem();
+external function Boolean HasCustomerSearchKey();
+external function Boolean HasDefineColumns();
+external function Boolean HasDeliveryAddress();
+external function Boolean HasDepartments();
+external function Boolean HasETaxDocuments();
+external function Boolean HasEInvoicing();
+external function Boolean HasEndorsedChecks();
+external function Boolean HasExtraNLComment();
+external function Boolean HasExtTax();
+external function Boolean HasFavouriteActTypes();
+external function Boolean HasFormEditor();
+external function Boolean HasFreightAdvanced();
+external function Boolean HasHideCostPrice();
+external function Boolean HasHotelInterface();
+external function Boolean HasGuestUserDefined();
+external function Boolean HasJewelleryInterface();
+external function Boolean HasIncomeAndExpenseBook();
+external function Boolean HasIOUChecks();
+external function Boolean HasItemClassification();
+external function Boolean HasItemGroups();
+external function Boolean HasKPIs();
+external function Boolean HasLanguages();
+external function Boolean HasLimitedAccess();
+external function Boolean HasLocalMachines();
+external function Boolean HasMainPartner();
+external function Boolean HasMultiCurrency();
+external function Boolean HasMultiLocations();
+external function Boolean HasLoyaltyCards();
+external function Boolean HasObjects();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasNumberSeries();
+external function Boolean HasPersons();
+external function Boolean HasPocketScreen();
+external function Boolean HasPositions();
+external function Boolean HasProjects();
+external function Boolean HasPriceLists();
+external function Boolean HasQualityControl();
+external function Boolean HasReconLevel2();
+external function Boolean HasReminderLevel();
+external function Boolean HasRemoteBackup();
+external function Boolean HasResourceDisplayGroups();
+external function Boolean HasRussianPrepayment();
+external function Boolean HasRoute();
+external function Boolean HasSalesman();
+external function Boolean HasSecondQuantity();
+external function Boolean HasSerialNumbers();
+external function Boolean HasSettlementDiscount();
+external function Boolean HasSimulations();
+external function Boolean hasSimAccruals();
+external function Boolean HasSkypeConnection();
+external function Boolean HasSIPServerConnection();
+external function Boolean HasTaxMatrix();
+external function Boolean HasTestFeatures();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasTouchScreenDevice();
+external function Boolean HasTouchScreenLook();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasVATZone();
+external function Boolean HasWithholdingTax();
+external function Boolean HasWithholdingTaxAdvanced();
+external function Boolean HasStandardCRM();
+external function Boolean HasStandardOrganizer();
+external function Boolean HasStandardCommunicator();
+
+external function Boolean HasEMail();
+external function Boolean HasexternalEMail();
+
+external function Boolean HasModAT2();
+external function Boolean HasModCheck();
+external function Boolean HasModCL();
+external function Boolean HasModCO();
+external function Boolean HasModCourses();
+external function Boolean HasModCredMan();
+external function Boolean HasModCRM();
+external function Boolean HasModExp();
+external function Boolean HasModHotel();
+external function Boolean HasModHRM();
+external function Boolean HasModIN();
+external function Boolean HasModNL();
+external function Boolean HasModPO();
+external function Boolean HasModPOS();
+external function Boolean HasModPL();
+external function Boolean HasModPP();
+external function Boolean HasModProd();
+external function Boolean HasModQT();
+external function Boolean HasModRent();
+external function Boolean HasModRest();
+external function Boolean HasModRsrt();
+external function Boolean HasModSO();
+external function Boolean HasModSL();
+external function Boolean HasModSVO();
+external function Boolean HasModTS();
+external function Boolean HasModWHM();
+external function Boolean HasModDI();
+
+window CUDClass:14
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,h5,l,v,vm,vs;
+  string 255 label;
+  record CUVc CUr;
+  Integer wn,tilenr;
+  
+  SetLangMode(LangLatvian,"LAT",2);
+  
+  WindowBegin("Kontakts",CUDClass,CGview,-);
+  DynamicWindow;
+  SetWRect(20,80,750,441);
+  Sizeable(-1,-1,0,0);
+  UseView(CUVc);
+  FormName(PrintCUD);  
+  
+  wn = CurWindow;
+  if (wn>0) then begin
+    if (GetWindowClass(wn)=="CUDClass") then begin 
+      GetWindowRecord(wn,CUr);
+    end;
+  end;
+  
+  if (HasLocalization("EST,GBR,LVA")) then begin  
+  ActiveFieldOnNew("Code"); //dont change, otherwise automatic address lookup helper window wont show automatically //wns
+                              // this should not be based on localization, but rather on if the
+                              // address lookup is enabled, erik
+  end else begin
+    ActiveFieldOnNew("Name");
+  end;
+  if (HasMetroTestFeatures or GUIType!=kGUIMetro) then begin
+  CommunicateButton;
+  end;
+  if (HasJewelleryInterface) then begin
+    Tile(0,155,false,"",Code); 
+  end else begin
+    if (TestEnablerFile("EnMarketplace")) then begin  
+      Tile(0,135,false,"",Code);  
+    end else begin
+  Tile(0,95,false,"",Code);
+    end;
+  end;
+  v = 6; h = 130; l=223; vs = 20; h1=410; h2 = 350; h3 = 430; h4 = 580; h5 = 460;
+  EditField(h,v ,   95,"Nr.",Normal,Code,false,OBS_CUSerSetSClass); //OBS changed SClass window
+  EditField(h1,v,50,"Klienta kategorija",Normal,CustCat,false,CCatSClass);
+  EditField(h,v+=vs,95,"Kods",Normal,SearchKey,false,0);
+  EditField(h1,v,50,"Piegādātāja kategorija",Normal,VECat,false,VGSClass);
+  if (HasJewelleryInterface) then begin
+    EditField(h,v+=vs,95,"Uzruna 1",Normal,Salutation1,false,0); 
+    EditField(h1,v,50,"Sufikss",Normal,ANACode,false,0); 
+    EditField(h,v+=vs,h1-h+50,"Uzruna 2",Normal,Salutation2,false,0); 
+    EditField(h,v+=vs,h1-h+50,"Uzruna 3",Normal,Salutation3,false,0); 
+  EditField(h,v+=vs,h1-h+50,"Nosaukums",Normal,Name,false,0);
+  end else begin
+    EditField(h,v+=vs,h1-h+50,"Nosaukums",Normal,Name,false,0);
+  end;
+  if (TestEnablerFile("EnMarketplace")) then begin  
+    EditField(h,v+=vs,150,"Veikala lietotājs",Normal,MarketUserName,false,0);  
+    EditField(h1+210,v,100,"Norēķinu veids",Normal,BillingTypePreference,false,SetSClass);  
+    EditField(h,v+=vs,115,"Attālin. rez. kopijas adrese",Normal,RemoteBackupsAddress,false,0);  
+    EditField(h1,v,50,"Attālin. rez. kopijas ports",Normal,RemoteBackupsPort,false,0);  
+    EditField(h1+210,v,100,"Attālin. rez. kopijas parole",Normal,RemoteBackupsPassword,false,0);  
+  end;
+  CheckBox(h1+80,v=6,0,"K_lients",CUType);
+  CheckBox(h1+80,v+=16,0,"P_iegādātājs",VEType);
+  if (HasModHotel) then begin
+  CheckBox(h1+80,v+=16,0,"Viesis",GuestType);
+  end;
+  if (HasJewelleryInterface) then begin
+    CheckBox(h1+80,v+=16,0,"Bez masu vēstulēm",NoLetterPosting);  
+    CheckBox(h1+80,v+=16,0,"Bez masu e-pastiem",NoMailPosting);  
+    EditField(h1+120,v+=20,100,"Aģents",Normal,SalesMan,false,UserSClass);  
+  end;
+  v=6;
+  if (HasModHRM) then begin
+    CheckBox(h1+180,v,0,"Darbinieks",EmployeeType); v = v + 16;
+  end;
+  if (StandardHansa==false) then begin
+    CheckBox(h1+180,v,0,"Partneris",DealerType);  
+  end;
+//  HalPushButton(h1+170,v=10,h1+170+100,v+20,"CreditInfoCUDsm","Credit Info");
+//  HalPushButton(h1+170,v=10,h1+170+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
+  tilenr = 1;
+  TileButton(tilenr,"Kontaktinf."); tilenr = tilenr + 1;  
+  TileButton(tilenr,"Piegāde"); tilenr = tilenr + 1;  
+  TileButton(tilenr,"Nosac."); tilenr = tilenr + 1;  
+  TileButton(tilenr,"Cenas"); tilenr = tilenr + 1;  
+  TileButton(tilenr,"Kompānija"); tilenr = tilenr + 1;  
+  TileButton(tilenr,"Konti"); tilenr = tilenr + 1;  
+  if (StandardHansa==false) then begin
+    TileButton(tilenr,"Web"); tilenr = tilenr + 1;  
+  end;
+  TileButton(tilenr,"Komentārs"); tilenr = tilenr + 1;  
+  if (HasModHotel) then begin
+    TileButton(tilenr,"Viesis"); tilenr = tilenr + 1;  
+  end;
+  if (StandardHansa==false) then begin
+    if (GuiType==kGuiMetro) then begin//UGLY
+      TileButton(tilenr,"Cits"); tilenr = tilenr + 1;  
+    end else begin
+      TileButton(tilenr,"Liet. def."); tilenr = tilenr + 1;  
+    end;
+  end;
+  TileButton(tilenr,"Piezīmes"); tilenr = tilenr + 1;  
+  if (CUr.CUType!=0 and HasCharts) then begin
+    TileButton(tilenr,"BI"); tilenr = tilenr + 1;  
+  end;
+  tilenr = 1;
+  Tile(tilenr,290,true,tilenr,InvAddr0); tilenr = tilenr + 1;
+  v=6;
+  HalPushButton(h+120,v,h+120+100,v+20,"UpdCustomerAddressCUDsm","Atjaunot adresi");
+  v=v+10;
+  StaticText(h,v+13,"Rēķina adrese",false);
+  label = UserDefined("CUVc","InvAddr0");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr0,false,0);
+  label = UserDefined("CUVc","InvAddr1");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr1,false,0);
+  label = UserDefined("CUVc","InvAddr2");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr2,false,0);
+  label = UserDefined("CUVc","InvAddr3");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr3,false,0);
+  label = UserDefined("CUVc","InvAddr4");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs,50,"Valsts",Normal,CountryCode,false,CountrySClass);//tsp-101118
+  if (HasLocalization("BRA")) then begin   
+    EditField(h2-159,v,214,"",ViewOnly,InvCountryName,false,0);  
+    v = v + vs;
+  end;  
+  EditField(h1,v,-20,"Departaments",Normal,Department,false,0);
+  EditField(h,v+=vs,150,"Tālrunis 1",Normal,Phone,false,0);
+  EditField(h1,v,-20,"Fakss",Normal,Fax,false,0);
+  EditField(h,v+=vs,150,"Tālrunis 2",Normal,AltPhone,false,0);
+  EditField(h1,v,-20,"Mobilais tel.",Normal,Mobile,false,0);
+  EditField(h,v+=vs,150,"Skype vārds",Normal,SkypeName,false,0);
+  EditField(h1,v,-20,"SIP vārds",Normal,SIPCode,false,0);
+  EditField(h,v+=vs,150,"E-pasts",Normal,eMail,false,0);  
+  EditField(h1,v,-20,"Paplašinājums",Normal,Extension,false,0);
+  EditField(h,v+=vs,150,"Sazināties ar",Normal,Person,false,ContactSClass);
+  EditField(h1,v,-20,"Interneta lapa",Normal,wwwAddr,false,0);
+  EditField(h,v+=vs,-20,"Klasifikācija",Normal,Classification,false,CClassSClass);
+  if (HasLocalization("CHN")) then begin  
+    EditField(h,v+=vs,150,"QQ Account Number",Normal,QQName,false,0);  
+    EditField(h1,v,-20,"Weibo Account Number",Normal,WeiboName,false,0);  
+  end;
+  RecordList2(10,v+=40,-30,-39,"ContactRelVc");
+  RlColKey(4,4,"Kods",ContactCode,false,ActCustContactCode);
+  RlCol(55,55,"Amats",ContactTitle,false);
+  RlColKey(105,105,"Vārds",ContactName,false,ActCustContactName);
+  RlCol(235,235,"Tālr.",ContactPhone,false);
+  RlCol(335,335,"Mobilais",ContactMobile,false);
+  RlCol(435,435,"Profesija",JobTitle,false);
+  RlCol(535,535,"E-pasts",ContacteMail,false);
+  //  RlCol(-1,-1,"",Invalid,true);
+  Tile(tilenr,240,false,tilenr,DelAddr0); tilenr = tilenr + 1;
+  v=6;
+  if (HasLocalization("GBR,LVA,EST,SWE")) then begin  
+  HalPushButton(h+120,v,h+120+100,v+20,"UpdDeliveryAddressCUDsm","Atjaunot adresi");
+  end;
+  v=v+12;
+  StaticText(h,v+13,"Piegādes adrese",false);
+  label = UserDefined("CUVc","DelAddr0");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr0,false,0);
+  label = UserDefined("CUVc","DelAddr1");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr1,false,0);
+  label = UserDefined("CUVc","DelAddr2");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr2,false,0);
+  label = UserDefined("CUVc","DelAddr3");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr3,false,0);
+  label = UserDefined("CUVc","DelAddr4");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr4,false,0);  
+  EditField(h,v+=vs,50,"Valsts",Normal,DelCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin   
+    EditField(h2-159,v,203,"",ViewOnly,DelCountryName,false,0);  
+    v = v + vs;
+  end;    
+  EditField(h2+50,v,-20,"Pasūt. komentārs",Normal,OrderComment,false,0);
+  EditField(h,v+=vs,120,"Kravas Nr.",Normal,FreightNr,false,0);
+  EditField(h2+50,v,70,"Reģions",Normal,Region,false,RegionSClass); 
+  EditField(h,vm=(v+=vs),120,"Klienta nosūt. nosac.",Normal,ShipDeal,false,ShipDealSClass);
+  EditField(h2+50,v,70,"Nosūtīšanas tips",Normal,VEShipDeal,false,ShipDealSClass); 
+  EditField(h,v+=vs,120,"Klienta nosūt. veids",Normal,ShipMode,false,DMSClass);
+  EditField(h2+50,v,70,"Nosūtīšanas veids",Normal,VEShipMode,false,DMSClass); 
+  EditField(h,v+=vs,120,"Maršruts",Normal,Sorting,false,DelRouteSClass);
+/* these fields were used for securities trading, this module doesnt exist in hansa anymore */
+/* Two of these fields are used in Russia and Ukraine */
+//  EditField(h,vm=(v+=vs),120,"Securities Acc.",Normal,SecAccount,false,0);
+//  EditField(h,v+=vs,120,"Bank Account",Normal,BankAccount,false,0);//xx
+//  EditField(h,v+=vs,120,"Account Operator",Normal,AccOperator,false,BankSClass);//xx
+//##  EditField(h,v+=vs ,70, "Com. Matrix",Normal,ComCode,false,ComSClass);
+  ButtonFrame(h5+30,v=vm,150,2,"Nosūt. dat., pamatojoties uz");
+  RadioButton(h5+30,v,0,0,"Pašreizējo datumu",DeliveryBasedOn);
+  RadioButton(h5+30,v+=16,1,0,"Plānoto nosūt. datumu",DeliveryBasedOn);  
+  Tile(tilenr,190,false,tilenr,PayDeal); tilenr = tilenr + 1;
+  EditField(h,v=6,25,"Klienta sam. veids",Normal,PayDeal,false,PDSClass);
+  EditField(h,v+=vs,80,"Klienta kredītlimits",Normal,CreditLimit,true,0);
+  EditField(h,v+=vs,80,"Kl. kredītlimita dienas",Normal,CreditLimitDays,false,0);
+  EditField(h,v+=vs,80,"Klienta pieg. kods",Normal,TheirCode,false,0);  
+  EditField(h,v+=vs,80,"Rēķina adresāts",Normal,InvoiceToCode,false,CUSClass);
+  EditField(h,v+=vs,80,"ANA kods",Normal,ANACode,false,0);
+  EditField(h,v+=vs,80,"Soda %",Normal,IntRate,false,0);
+  EditField(h,v+=vs,80,"Izveides datums",ViewOnly,DateCreated,false,0);
+  EditField(h,v+=vs,80,"Galv. partneris",Normal,MainPartner,false,CUSClass);
+  EditField(h2,v=6,25,"Pieg. sam. term.",Normal,VEPayDeal,false,PDSClass);
+  EditField(h2,v+=vs,80,"Pieg. kredītlimits",Normal,VECreditLimit,true,0);
+  EditField(h2,v+=vs,80,"Pieg. kredītlimita dienas",Normal,VECreditLimitDays,false,0);
+  EditField(h2,v+=vs,80,"Pieg. klienta kods",Normal,VECustID,false,0);  
+  EditField(h2,v+=vs,80,"Rēķina adresāts",Normal,VEInvoiceToCode,false,VESClass);
+  EditField(h2,v+=vs,80,"Faktorings",Normal,VEFactoring,false,VESClass);
+  EditField(h2,v+=vs,80,"Min. pasūt. summa",Normal,MinOrdSum,false,0);
+  EditField(h2,v+=vs,80,"Atsauksme",Normal,RefStr,false,0);
+  EditField(h2,v+=vs,80,"Pēdējās izmaiņas",Normal,DateChanged,false,0);
+  CheckBox(h5,v=12,0,"Slēgts",blockedFlag);
+  CheckBox(h5,v+=16,0,"Darījumi apturēti",OnHoldFlag);
+  CheckBox(h5,v+=16,0,"Atgādinājumi",RemndrFlag);
+//  CheckBox(h5,v+=16,0,"Iekasēts",ColectionFlag);
+  CheckBox(h5,v+=16,0,"Soda nauda",InterestFlag);
+  CheckBox(h5,v+=16,0,"Priekšapmaksas",OnAccount);
+  if (StandardHansa==false) then begin
+  CheckBox(h5,v+=16,0,"Bez faktoringa",NoFactoringFlag);
+  CheckBox(h5,v+=16,0,"Bez papildnod.",NoTax1);
+  CheckBox(h5,v+=16,0,"Tikai apvien. rēķ.",GroupInv);
+  CheckBox(h5,v+=16,0,"Pašu rēķini",SelfBilling);
+  CheckBox(h4,v=12,0,"EGO klients",EGOFlag);
+  CheckBox(h4,v+=16,0,"EDI klients",EDIFlag);
+  CheckBox(h4,v+=16,0,"Atļaut pieslēgties",AllowLogin);
+//  CheckBox(h4,v+=16,0,"Atļaut pieslēgties FTP",FTPLogin);
+  CheckBox(h4,v+=16,0,"Tikai fiskālie čeki",FiscalFlag);
+  CheckBox(h4,v+=16,0,"Neiekļ. vēst. kopsar.",NoLetterPosting);
+  end else begin
+    CheckBox(h4,v=12,0,"Neiekļ. vēst. kopsar.",NoLetterPosting);  
+  end;
+  CheckBox(h4,v+=16,0,"Neiekļ. epasta kops.",NoMailPosting);
+  CheckBox(h4,v+=16,0,"Bez vides nodokļa",NoRepa);
+  if (StandardHansa==false) then begin
+  CheckBox(h4,v+=16,0,"Bez reģiona nodokļa",NoTax2);
+  end;
+  if (HasLocalization("SWE")) then begin  
+  CheckBox(h4,v+=16,0,"F-nodoklis (Zviedrija)",FTax);  
+  end;
+  Tile(tilenr,110,false,tilenr,PLCode); tilenr = tilenr + 1;
+  EditField(h,v=6,  80,"Real. valūta",Normal,CurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+=vs ,80, "Cenu lapa",Normal,PLCode,false,PLDefSClass);
+  EditField(h,v+=vs ,80, "Atlaižu matrica",Normal,RebCode,false,RebSClass);
+  if (HasSalesman) then begin
+  EditField(h,v+=vs,80,"Aģents",Normal,SalesMan,false,UserSClass);
+  end;
+  EditField(h,v+=vs,80,"Nokl. artikuli",Normal,CompItemCode,false,CompItemSClass);
+  EditField(h2,v=6,80,"Ieg. valūta",Normal,VECurncyCode,false,CurncyCodeSClass);
+  EditField(h2,v+=2*vs ,80, "Pieg. atl. matrica",Normal,VERebCode,false,RebSClass);
+  if (StandardHansa==false) then begin
+  EditField(h2,v+=vs,80,"Aģentu grupa",Normal,SalesGroup,false,SalesGroupSClass);
+  end;
+  ButtonFrame(h5,v=24,150,3,"Cenas pēc");
+  RadioButton(h5,v,0,0,"Pasūtījuma datuma",PriceBasedOn);
+  RadioButton(h5,v+=16,1,0,"Plānotā nosūtīšanas dat.",PriceBasedOn);
+  RadioButton(h5,v+=16,2,0,"Izvešanas datuma",PriceBasedOn);  
+  Tile(tilenr,180,false,tilenr,Comment); tilenr = tilenr + 1;
+  EditField(h,v=6,-20,"Komentārs",Normal,Comment,false,0);
+  EditField(h,v+=vs,-20,"Real. brīdinājums",Normal,WarnText1,false,0);
+  EditField(h,v+=vs,-20,"Pieg. brīdinājums",Normal,VEWarnText1,false,0);
+  EditField(h,v+=vs,120,"#PVN reģ. Nr.#",Normal,VATNr,false,0);  
+  EditField(h2-20,v,120,"Reģ. Nr.1",Normal,RegNr1,false,0);
+  ButtonFrame(h5+30,v+18,143,1,"Tips");  
+  RadioButton(h5+30,v+18,0,0,"Kompānija",CustType);  
+  RadioButton(h5+110,v+18,1,0,"Persona",CustType);  
+  v = v + vs;
+  if (HasLocalization("HRV,SVN")) then begin 
+    EditField(h,v,120,"Legal Form",Normal,LegalForm,false,CULegalFormSClass);
+  end;
+  EditField(h2-20,v,120,"#Reģ. Nr.2#",Normal,RegNr2,false,RegDefSClass);  
+  EditField(h,v+=vs,120,"#PVN Nr.# pārb. dat.",Normal,VATNrCheckDate,false,PasteCurDate);  
+  EditField(h2-20,v,120,"GLN",Normal,RecipientGLN,false,0);  
+  EditField(h,v+=vs,20,"Real. PVN kods",Normal,VATCode,false,VATCodeSClass);
+  if (HasTaxMatrix) then begin
+  EditField(h+125,v,50,"Real. nod.veidne",Normal,TaxTemplateCode,false,TaxTemplateSClass);
+  end;
+  HalPushButton(h2-20,v,h2-20+100,v+20,"UpdCustomerAddressCUDsm","Atjaunot adresi");
+  EditField(h,v+=vs,20,"Pieg. PVN kods",Normal,VEVATCode,false,VATCodeSClass);
+  if (HasTaxMatrix) then begin
+  EditField(h+125,v,50,"Pieg. nod.veidne",Normal,VETaxTemplateCode,false,TaxTemplateSClass);
+  end;
+  EditField(h,v+=vs,50,"Valoda",Normal,LangCode,false,LangSClass);  
+  if (HasLocalization("ARG")) then begin  
+    ButtonFrame(h+125,v+=20,143,3,"Tax Condition ");  
+    RadioButton(h+125,v,0,0,"Local",TaxCondition);  
+    RadioButton(h+125,v+=16,1,0,"Multilateral Agreement",TaxCondition);  
+    RadioButton(h+125,v+=16,2,0,"Unscripted",TaxCondition);  
+  end;  
+  if (HasLocalization("BRA")) then begin  
+    EditField(h,v+=vs,120,"SUFRAMA Reģ. Nr.",Normal,SuframaRegNr,false,0);  
+  end;
+//  EditField(h,v+=vs,120,"Kanāls",Normal,WebServiceChannel,false,SetSClass);
+  v = 130;
+  v = VATZoneButtonsLabelsLAT(h5+30,v,150,16);
+  Tile(tilenr,130,false,tilenr,AccAP); tilenr = tilenr + 1;
+  EditField(h,v=6,80,"Kreditoru konts",Normal,AccAP,false,AccSClass);
+  EditField(h,v+=vs,80,"Izmaksu konts",Normal,AccCost,false,AccSClass);
+  EditField(h,v+=vs,80,"Kred. priekš. konts",Normal,OnAccAccAP,false,AccSClass);
+  EditField(h,v+=vs,120,"Real. objekti",Normal,Objects,false,ObjSClass);
+  EditField(h,v+=vs,120,"Pieg. objekti",Normal,VEObjects,false,ObjSClass);  
+  EditField(h,v+=vs,50,"Maksājuma uzd. kods",Normal,PaymentCode,false,PaymentCodeSClass);  
+  if (HasLocalization("HUN")) then begin  
+  ButtonFrame(h,v+=40,150,3,"Grāmatot maksājuma #PVN#");  
+  RadioButton(h,v,0,0,"Noklusējuma",IPBookVAT);  
+  RadioButton(h,v+=16,1,0,"Grāmatot #PN#",IPBookVAT);  
+  RadioButton(h,v+=16,2,0,"Negrāmatot #PVN#",IPBookVAT);  
+  end;
+  EditField(h1,v=6,200,"IBAN kods",Normal,IBANCode,false,0);  
+  EditField(h1,v+=vs,-20,"Banka",Normal,AccOperator,false,BankSClass);  
+  EditField(h1,v+=vs,-20,"Bankas konts",Normal,BankAccount,false,0);  
+  EditField(h1,v+=vs,-20,"Bankas konts 2",Normal,Bank,false,0);  
+  EditField(h1,v+=vs,80,"Kārt. atsl.",Normal,SortCode,false,0);
+  if (HasWithholdingTax) then begin
+  EditField(h1,v+=vs,120,"Ieturējuma samaksas veidi",Normal,WithPayMode,false,PMSClass);
+  end;
+  if (HasLocalization("HUN")) then begin  
+  ButtonFrame(h1,v+=40,150,3,"Grāmatot maksājuma uzd. #PVN#");  
+  RadioButton(h1,v,0,0,"Noklusējuma",OPBookVAT);  
+  RadioButton(h1,v+=16,1,0,"Grāmatot #PVN#",OPBookVAT);  
+  RadioButton(h1,v+=16,2,0,"Negrāmatot #PVN#",OPBookVAT);  
+  end;  
+  if (StandardHansa==false) then begin
+    Tile(tilenr,70,false,tilenr,WebConf); tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),120,"Interneta konf.",Normal,WebConf,true,0);
+  EditField(h1,v,150,"Galvenā klasifikācija",Normal,MainDispGroup,false,WebNGProductCatSClass);
+  EditField(h,v+=vs,120,"Web sākuma lapa",Normal,WebStartPage,false,0);
+  EditField(h1,v,150,"Rādīt mājas lapā",Normal,WebDisplays,false,WebDisplaySClass);
+  EditField(h,v+=vs,120,"Piegādes kods",Normal,FreightCode,false,WebFreightSClass);
+  end;
+  Tile(tilenr,170,false,tilenr,Comment0); tilenr = tilenr + 1;
+  EditField(h,v=6,-20,"Komentārs",Normal,Comment0,false,0);
+  EditField(h,v+=vs,-20,"",Normal,Comment1,false,0);
+  EditField(h,v+=vs,-20,"",Normal,Comment2,false,0);
+  EditField(h,v+=vs,-20,"Tituls",Normal,Title,false,CourtesyTitlesSClass);
+  EditField(h,v+=vs,-20,"Amats",Normal,JobDesc,false,JobTitleSClass);
+  EditField(h,v+=vs,-20,"Uzruna 1",Normal,Salutation1,false,0);
+  EditField(h,v+=vs,-20,"Uzruna 2",Normal,Salutation2,false,0);
+  EditField(h,v+=vs,-20,"Uzruna 3",Normal,Salutation3,false,0);
+  if (HasModHotel) then begin
+    Tile(tilenr,250,false,tilenr,DocType); tilenr = tilenr + 1;
+  EditField(h,v=6,100,"Dok. tips",Normal,DocType,false,CUDocTypeSClass);
+  EditField(h2,v,-20,"ID",Normal,PassportNr,false,0);
+//  EditFieldTL(h,vm=(v+=20),100,"Nationality",M4StrSet,Normal,423,Nationality,false,StrSetSClass);
+  EditField(h,vm=(v+=20),100,"Tautība",Normal,Nationality,false,CountrySClass);
+    EditField(h,v+=20,100,"Dzimis",Normal,BirthDate,false,PasteCurDate);
+    EditField(h,v+=20,100,"Dzim. vieta",Normal,BirthPlace,false,0);  
+    EditField(h,v+=20,100,"Dzim. valsts",Normal,BirthCountry,false,CountrySClass);  
+  EditField(h,v+=20,100,"Profesija",Normal,Profesion,false,0);   
+  EditField(h,v+=20,100,"Avīze",Normal,Newspaper,false,NewspaperSClass);
+  EditField(h,v+=20,100,"Balss parole",Normal,Passphrase,false,0);
+  EditField(h,v+=vs,100,"Tūrisma firma",Normal,TourOperator,false,CUSClass);
+  EditField(h,v+=vs,100,"Aģents",Normal,Agent,false,CUSClass);
+  EditField(h,v+=vs,100,"Maksāšanas metode",Normal,DefGuestPayMode,false,PMSClass);
+  EditField(h,v+=vs,100,"Noklus. rezerv. avots",Normal,BookOrigin,false,BookOrgSClass);
+  EditField(h,v+=vs,300,"Uztura piezīmes",Normal,DietRemarks,false,0);
+  EditField(h,v+=vs,300,"Prasības",Normal,RequirementRemarks,false,0);
+
+  ButtonFrame(h2,v=vm+20,100,2,"Dzimums");
+  RadioButton(h2,v,0,0,"Vīrietis",Gender);
+  RadioButton(h2,v+=17,1,0,"Sieviete",Gender);
+
+  CheckBox(h2+130,v=vm+20,0,"Smēķētājs",Smoking);
+  CheckBox(h2+130,v+=17,0,"Melnajā sarakstā",Blacklist);
+
+  ButtonFrame(h2,vm=(v+=40),100,4,"Ģimenes stāvoklis");
+  RadioButton(h2,v,0,0,"Neprecējies",MarStatus);
+  RadioButton(h2,v+=17,1,0,"Precējies",MarStatus);
+  RadioButton(h2,v+=17,2,0,"Šķīries",MarStatus);
+  RadioButton(h2,v+=17,3,0,"Atraitnis",MarStatus);
+
+  ButtonFrame(h2=h2+130,v=vm,100,3,"Vecuma grupa");
+  RadioButton(h2,v,1,0,"Bērns",AgeStatus);
+  RadioButton(h2,v+=17,0,0,"Pieaugušais",AgeStatus);
+  RadioButton(h2,v+=17,2,0,"Pensionārs",AgeStatus);
+  end;
+  
+  if (StandardHansa==false) then begin
+    Tile(tilenr,270,false,tilenr,UserStr1); tilenr = tilenr + 1;
+  v=6;h=180;
+  label = UserDefined("CUVc","UserStr1");
+  if (nonblank(label)) then begin
+    EditField(h,v,-20,label,Normal,UserStr1,false,0);
+  end;
+  label = UserDefined("CUVc","UserStr2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr2,false,0);
+  end;
+  label = UserDefined("CUVc","UserStr3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr3,false,0);
+  end;
+  label = UserDefined("CUVc","UserStr4");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr4,false,0);
+  end;
+  label = UserDefined("CUVc","UserStr5");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr5,false,0);
+  end;
+  label = UserDefined("CUVc","UserVal1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserVal1,false,0);
+  end;
+  label = UserDefined("CUVc","UserVal2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserVal2,false,0);
+  end;
+  label = UserDefined("CUVc","UserVal3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserVal3,false,0);
+  end;
+  label = UserDefined("CUVc","UserDate1");
+  if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate1,false,PasteCurDate);
+  end;
+  label = UserDefined("CUVc","UserDate2");
+  if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate2,false,PasteCurDate);
+  end;
+  label = UserDefined("CUVc","UserDate3");
+  if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate3,false,PasteCurDate);
+  end;
+  
+  EditField(h,v+=vs,-20,"Adrešu saraksti",Normal,AddressBooks,false,0);
+  end;
+
+  Tile(tilenr,500,false,tilenr,Math2); tilenr = tilenr + 1;
+  StaticText(50,v=20,"Piezīmes",true);  
+  TextField(60,v-5,-20,370,Math2,0);
+  if (CUr.CUType!=0 and HasCharts) then begin
+    Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
+    ChartArea(10,6,-10,390,"$CUDCLass_BIChart");  
+  end;
+  
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    if (UserCanReport("CustPSRn","",true)) then begin 
+      SpecialMenu("Klienta statuss",'e',0,"CUStatusCUDsm"); 
+    end;
+    if (UserCanReport("VEPSRn","",true)) then begin 
+      SpecialMenu("Piegādātāja statuss",'u',4,"VEStatusVEDsm"); 
+    end;
+    SpecialMenu("Pievienot esošu kontaktpersonu",' ',1,"AddContactCUDsm"); 
+    SpecialMenu("Veidot jaunu kontaktpersonu",' ',1,"NewContactCUDsm"); 
+    SpecialMenu("Veidot aktivitāti",'c',2,"NewActCUDsm"); 
+  end else begin
+  if (UserCanReport("CustPSRn","",true)) then begin 
+  SpecialMenu("Klienta statuss",'e',0,"CUStatusCUDsm");
+  end;
+  SpecialMenu("Pievienot esošu kontaktpersonu",' ',1,"AddContactCUDsm");
+  SpecialMenu("Veidot jaunu kontaktpersonu",' ',1,"NewContactCUDsm");
+  SpecialMenu("Dzēst pievienotu kontaktpersonu",' ',1,"DelContactCUDsm");
+  SpecialMenu("Labot pievienotas kontaktpers. datus",' ',1,"EditContactCUDsm");
+  SpecialMenu("Veidot aktivitāti",'c',2,"NewActCUDsm");
+  SpecialMenu("Veidot gadījumatlases paroles paziņojumu",' ',3,"RandomPassMailCUDsm");
+  if (StandardHansa==false) then begin
+  SpecialMenu("Veidot e-pastu",'m',5,"NewMailCUDsm");
+  end;
+  if (TestEnablerFile("EnLiveHM") or TestEnablerFile("EnTestHM") or TestEnablerFile("EnDevHM")) then begin    
+    SpecialMenu("Veidot potenciālo klientu",' ',6,"CreateLeadCUDsm");   
+  end;
+  if (UserCanReport("VEPSRn","",true)) then begin 
+  SpecialMenu("Piegādātāja statuss",'u',4,"VEStatusVEDsm");
+  end;
+  SpecialMenu("Atjaunot kontaktpersonas",' ',6,"UpdContactAddrCUDsm");
+  if (GuiType==kGuiCocoa) then begin
+    SpecialMenu("Kopēt uz lokālo adrešu grāmatu",' ',7,"CopyToLocalAddressBookDsm");
+  end;
+  if (GuiType==kGuiiPhone) then begin
+    SpecialMenu("Mainīt paroli",' ',1,"ChangePasswdCUDsm");
+  end;
+  end;
+  EndWindow;
+end;
+
+window CULClass:10
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Kontakti",CULClass,CGmlist,-);
+  SpawnClass(CUDClass);
+  if (HasJewelleryInterface) then begin
+    SetWRect(20,80,880,300);
+  end else begin
+  SetWRect(20,80,760,300);
+  end;
+  Sizeable(-1,-1,0,0);
+  UseView(CUVc);
+//  FormName(CustRn);  // Crash in multiuser
+//  h = 20; HalPushButton(h,v=3,h=h+100,v+vs,"VEList","Suppliers");
+//  HalPushButton(h=h+50,v=3,h=h+100,v+vs,"CUList","Customers");
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"N_r.",Code,false,Code);
+  RlColKey(96,96,"K_ods",SearchKey,false,SearchKey);
+  RlColKey(145,140,"Kateg.",CustCat,false,Group);
+  RlColKey(190,190,"Nosaukums",Name,false,Name);
+  RlColKey(-470,-470,"Aǵents",SalesMan,false,SalesMan); //OBS
+  if (HasJewelleryInterface) then begin
+    RlColKey(-480,-480,"Tālrunis",Phone,false,Phone);  
+    RlColKey(-380,-380,"Mobilais",Mobile,false,Mobile);  
+    RlCol(-280,-280,"E-pasts",eMail,true);  
+    RlCol(-150,-150,"Adrese 1",InvAddr0,false);  
+  end else begin
+  RlColKey(-420,-420,"T_ālrunis",Phone,false,Phone);
+  RlColKey(-325,-325,"Kon_taktpers.",Person,false,Person);
+  RlColKey(-215,-215,"Departaments",Department,false,Department);
+   if (CUVATNrColumn) then begin
+    RlColKey(-125,-125,"PVN reģ. Nr.",VATNr,false,VATNr);
+  end else begin
+    RlColKey(-125,-125,"Reģ. Nr.",RegNr1,false,RegNr1);
+  end;
+    if (TestEnablerFile("EnMarketplace")) then begin  
+      RlColKey(-70,-70,"MarketUserName",MarketUserName,false,MarketUserName);  
+    end else begin
+  RlColKey(-50,-50,"Bankas N/K",BankAccount,false,BankAccount);
+    end;
+  end;
+  SearchField("Meklēt");
+  if (HasMetroTestFeatures or GUIType!=kGUIMetro) then begin
+  CommunicateButton;
+  end;
+  if (HasLimitedAccess) then begin 
+  BrowseSubsetButton(-40,-15);
+  end;
+  if (UserCanReport("CustPSRn","",true)) then begin
+    SpecialMenu("Klienta statuss",'e',0,"CUStatusCULsm");
+  end;
+  if (UserCanReport("VEPSRn","VendPSRClass",true)) then begin
+    SpecialMenu("Piegādātāja statuss",'u',2,"VEStatusLsm");
+  end;
+  SpecialMenu("Mainīt paroli",' ',1,"ChangePasswdCULsm");
+  SpecialMenu("Meklēt",'F',3,"CUSearchLsm");
+  SpecialMenu("Veidot aktivitāti",'c',4,"NewActCULsm");
+  if (GuiType==kGuiCocoa) then begin
+    SpecialMenu("Importēt adrešu grāmatu",' ',5,"ImportAddressbooksm");
+  end;
+  EndWindow;
+end;

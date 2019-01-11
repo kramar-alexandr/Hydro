@@ -1,0 +1,467 @@
+external function Boolean DisplayAdditionalFields();
+remote function Integer MailAcceptanceStatus(LongInt);
+external function Boolean IsMoveToCloud(record SetupStatusBlock);
+external function Boolean IsMoveToCloudB();
+external function Boolean IsCloudControllerClient();
+external function string 255 GetCurrentStoreName();
+external function Boolean CompaniesInClientMode();
+external function Boolean ProductInDemoMode();
+remote function string 255 GetCompanyShortCode(string);
+external function Boolean AnyModuleAvailable();
+external function Boolean AcceptanceStatusColumnTest(string);
+external function Integer FlipCharCode(Integer,Integer);
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external function Boolean TouchScreenLookVertical();
+external procedure SysEClass_Tool(Integer,var real,var real);
+external procedure GTransEClass_Tool(Integer,var real,var real);
+external procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external procedure GBaseEClass_Tool(Integer,var real,var real);
+external procedure TransGenVClass_Tool(Integer,var real,var real);
+external procedure GetCurUser(var record UserVc);
+external procedure JobRClass_EST();
+external function string 60 UserDefined(string,string);
+external outer function string 255 MasterBannerURL();
+external procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external function Boolean AllowedInCountry(integer);
+external function Integer ResourceWindowResourceType();
+external function Boolean ResPlan_Rental();
+external function Boolean ResPlan_ProdOperations();
+//remote function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean TouchScreenLook();
+external procedure ExtractObj(string,var Integer,var string);
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external function Boolean CheckOffLineRecords(Boolean);
+external function string 60 TileUserDefined(string,Integer,var Integer);
+external function Boolean CUVATNrColumn;
+external function Integer GetInternetEnablerCountry();
+external function Integer CntVarietyCode(Integer,var Array string);
+external function Integer VarietyMatMax(Integer);
+external function Boolean UseTaxTemplatesforTaxCalc();
+remote procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external function string 20 GetMenuCode(string);
+external procedure DrawModifierButtons(var Integer);
+remote procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external function Boolean DisplayLoginButtons();
+external function Integer LoginShortcutsLines(Integer);
+external function Integer LoginShortcutsPos(Real,Integer);
+
+external procedure DefineTTRRowTypes(Integer);
+external function real ItemButtons(string,Integer);
+external procedure HWStoreWClassAddProducts(Integer);
+external function Boolean HasCharts();
+external function Boolean HasNewRegistration();
+external function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external function Integer LoginShortcuts();
+external function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external function Boolean DefCustCodeSetup();
+// in-apps
+external function Boolean HasInAppsAvailable();
+external function Integer CountCountries();
+
+// Language functions EST
+external function Boolean DisplayLoginKeyPad_EST();
+external function string 255 VATZoneEditFieldLabel_EST(Integer);
+external function real VATZoneButtonsLabelsEST(real,real,real,real);
+external procedure LoginButtons2_EST(Real,Real);
+external procedure FORMDEF_EST();
+external function string 255 DemoMsgWClassTitle_EST(Boolean,Boolean);
+external procedure TBEClassDef_EST();
+external function string 255 VATZoneNameEST();
+external procedure TSERW_EST();
+external procedure TSERWNT_EST();
+external procedure TSERWTouch_EST();
+external procedure TSERWTEST_EST();
+external procedure INVFORM_EST(Boolean);
+external procedure DisplayRecordDetails_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external procedure DrawPOSInterface2_EST(string,string,record POSButtonsVc,string,Integer,Integer);
+external procedure DisplayRecordDetailsCustDisplay_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
+external function string 255 ResDayWClassWindowTitle_EST();
+external function string 255 ResMonWClassWindowTitle_EST();
+external function string 255 RTMonWClassWindowTitle_EST();
+external procedure SetupNightAuditWindowControls_EST(Boolean);
+external procedure CURClassDefinitionEST();
+external function real DrawPaymentModesButtons_IV_EST(real);
+external function real FunctionButtons_EST(string);
+external procedure CreditCardWindowHeader_EST(Boolean,Boolean,Real);
+external procedure CreditCardWindowButtons_EST(string,string,real);
+external procedure CreditCardWindowInvoiceDetail_EST(Real);
+external procedure CreditCardWindowDeliveryDetail_EST(Real);
+external function real DrawPaymentModesButtons_EST();
+external procedure DrawBarMenuTiles_EST(string);
+external procedure DrawRestPMOtherPay_EST();
+external procedure DisplayRecordDetailsRA_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,LongInt,Date,string,LongInt,string);
+external procedure DrawModifierButtons2_EST(var integer,var integer);
+external procedure OKCancel_EST();
+external procedure DefineElearningURLCacheLClass_EST();
+external procedure DefineElearningURLCacheDClass_EST();
+external function real TravelLogDeductions_EST(real,real);
+external procedure LoginButtons_EST(Real);
+external procedure FORMDEF2_EST();
+external procedure FORMDEF3_EST();
+external procedure ARS2RClass_EST();
+external procedure ALLVATRClass_EST();
+
+external function Boolean IsStandardUnused();
+external function Boolean IsEnterprise();
+external function Boolean StandardHansa();
+external function Boolean HasATOL();
+
+external function Boolean HasAccPeriods();
+external function Boolean HasAccessGroups();
+external function Boolean HasAddFee();
+external function Boolean HasApprovals();
+external function Boolean HasCCPayments();
+external function Boolean HasAdvancedAccounting();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasAdvancedProduction();
+external function Boolean HasAdvancedStock();
+external function Boolean HasAged();
+external function Boolean HasBar();
+external function Boolean HasBase2();
+external function Boolean HasBranch();
+external function Boolean HasBuyBack();
+external function Boolean HasCategories();
+//external function Boolean HasConsigmentStock();
+external function Boolean HasCommunicator();
+external function Boolean HasConsignmentStock();
+external function Boolean HasContactClassification();
+external function Boolean HasContactRelations();
+external function Boolean HasConsolidation();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasCreditLimit();
+external function Boolean HasCustItem();
+external function Boolean HasCustomerSearchKey();
+external function Boolean HasCustomerStatusReport();
+external function Boolean HasDownpayments();
+external function Boolean HasDefineColumns();
+external function Boolean HasDeliveryAddress();
+external function Boolean HasDepartments();
+external function Boolean HasETaxDocuments();
+external function Boolean HasEInvoicing();
+external function Boolean HasEndorsedChecks();
+external function Boolean HasExtraNLComment();
+external function Boolean HasExtTax();
+external function Boolean HasFavouriteActTypes();
+external function Boolean HasFiscalPrinter();
+external function Boolean HasFormEditor();
+external function Boolean HasFreightAdvanced();
+external function Boolean HasHideCostPrice();
+external function Boolean HasHotelInterface();
+external function Boolean HasGuestUserDefined();
+external function Boolean HasJewelleryInterface();
+external function Boolean HasIncomeAndExpenseBook();
+external function Boolean HasIOUChecks();
+external function Boolean HasItemClassification();
+external function Boolean HasItemGroups();
+external function Boolean HasKPIs();
+external function Boolean HasLanguages();
+external function Boolean HasLimitedAccess();
+external function Boolean HasLocalMachines();
+external function Boolean HasLoyaltyCards();
+external function Boolean HasMailTags();
+external function Boolean HasMainPartner();
+external function Boolean HasMultiCurrency();
+external function Boolean HasMultiLocations();
+external function Boolean HasNLBudget();
+external function Boolean HasNLBudgetClass();
+external function Boolean HasObjects();
+external function Boolean HasInvoiceOfficialSerNr();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasOrderClasses();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasNumberSeries();
+external function Boolean HasPersons();
+external function Boolean HasPocketScreen();
+external function Boolean HasPositions();
+external function Boolean HasPrepayments();
+external function Boolean HasProjects();
+external function Boolean HasPriceLists();
+external function Boolean HasQualityControl();
+external function Boolean HasReconLevel2();
+external function Boolean HasReminderLevel();
+external function Boolean HasRemoteBackup();
+external function Boolean HasResourceDisplayGroups();
+external function Boolean HasRussianPrepayment();
+external function Boolean HasRetGoodsToSupp();
+external function Boolean HasReturnedGoods();
+external function Boolean HasRoomPackages();
+external function Boolean HasRoomTypes();
+external function Boolean HasRoute();
+external function Boolean HasSalesman();
+external function Boolean HasSalesmanBonus();
+external function Boolean HasSalesGroup();
+external function Boolean HasSecondQuantity();
+external function Boolean HasSerialNumbers();
+external function Boolean HasServerInCloud();
+external function Boolean HasSettlementDiscount();
+external function Boolean HasSimulations();
+external function Boolean hasSimAccruals();
+external function Boolean HasSkypeConnection();
+external function Boolean HasSIPServerConnection();
+external function Boolean HasStrAsSignFType();
+external function Boolean HasTouchScreenDevice();
+external function Boolean HasTaxMatrix();
+external function Boolean HasTestFeatures();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasWorkOrders();
+external function Boolean HasThrouLocation();
+external function Boolean HasTouchScreenLook();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasVATZone();
+external function Boolean HasWithholdingTax();
+external function Boolean HasWithholdingTaxAdvanced();
+external function Boolean HasWorkOrders();
+external function Boolean HasWorkflowOverview();
+
+external function Boolean HasStandardCRM();
+external function Boolean HasStandardOrganizer();
+external function Boolean HasStandardCommunicator();
+
+external function Boolean HasEMail();
+external function Boolean HasExternalEMail();
+
+external function Boolean HasModAT2();
+external function Boolean HasModBA();
+external function Boolean HasModCheck();
+external function Boolean HasModCL();
+external function Boolean HasModCO();
+external function Boolean HasModCons();
+external function Boolean HasModCourses();
+external function Boolean HasModCredMan();
+external function Boolean HasModCRM();
+external function Boolean HasModEDI();
+external function Boolean HasModExp();
+external function Boolean HasModHotel();
+external function Boolean HasModHRM();
+external function Boolean HasModIN();
+external function Boolean HasModIntStock();
+external function Boolean HasModNL();
+external function Boolean HasPaymentGateway();
+external function Boolean HasModPO();
+external function Boolean HasModPOS();
+external function Boolean HasModPL();
+external function Boolean HasModPOProg();
+external function Boolean HasModPP();
+external function Boolean HasModProd();
+external function Boolean HasModQT();
+external function Boolean HasModRent();
+external function Boolean HasModRest();
+external function Boolean HasModRsrt();
+external function Boolean HasModSO();
+external function Boolean HasModSL();
+external function Boolean HasModSVO();
+external function Boolean HasModTS();
+external function Boolean HasModWHM();
+external function Boolean HasModDI();
+external function Boolean UsePostOKButton();
+external function Boolean HasBankImport();
+external function Boolean HasPLIntegratedWithNL();
+external function Boolean HasSLIntegratedWithNL();
+external function Boolean HasIntegratedNL();
+external function Boolean HasConsStockMoveInvoices();
+
+window USDClass:5
+  wtag("language","EST"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,v,vm,vs,tilenr;
+  WindowBegin("Isik",USDClass,CGview,UserView);
+  SetWRect(64,80,509,380);
+  Sizeable(-1,-1,0,0);
+  UseView(UserVc);
+  Tile(0,70,false,"",Code);
+  vs = 20; h=150; h2 = 290; h3 = 350;
+  EditField(h,v=6, 55,"Allkiri",St_i,Code,false,0);
+  EditField(h,v+=vs,300,"Nimi",Normal,Name,false,0);
+  EditField(h,v+=vs,300,"Sisenemise e-mail",Normal,LoginEmailAddr,false,0);
+  if (DisplayAdditionalFields) then begin
+    EditField(h,v+=vs,100,"Kehtiv kuni",ViewOnly,ExpiryDate,true,0);
+  end;
+  tilenr = 1;
+  TileButton(tilenr,"Õigused");  tilenr = tilenr + 1; 
+  TileButton(tilenr,"Numbriseeriad");  tilenr = tilenr + 1; 
+  TileButton(tilenr,"Müük");  tilenr = tilenr + 1; 
+  TileButton(tilenr,"Kontod");  tilenr = tilenr + 1; 
+  if (StandardHansa==false) then begin
+    TileButton(tilenr,"Projektiarvestus");  tilenr = tilenr + 1; 
+    TileButton(tilenr,"Veeb");  tilenr = tilenr + 1; 
+    TileButton(tilenr,"Aja sisestus");  tilenr = tilenr + 1; 
+  end;
+  TileButton(tilenr,"Formaadid");  tilenr = tilenr + 1;
+  if (HasSIPServerConnection) then begin
+    TileButton(tilenr,"Asterisk");  tilenr = tilenr + 1;
+  end;
+  CheckBox(h2,6,0,"Suletud",Closed);
+  CheckBox(h2+100,6,0,"Litsenseerimata",Unlicensed);
+  //if (IsCloudControllerClient) then begin // Cloud Controller Specific //##cc
+  //  CheckBox(h2+200,6,0,"SSH Closed",SSHClosed); //##cc
+  //end; //##cc
+  tilenr = 1;
+  Tile(tilenr,210,false,tilenr,AccessGroup);  tilenr = tilenr + 1;
+  EditField(h,v=6,300,"Kasutajagrupp",Normal,AccessGroup,false,AccessSClass);
+  EditField(h,v+=vs,100,"Alusta tasemest",Normal,StartLevel,false,SetSClass);  
+  if (HasSalesGroup) then begin
+  EditField(h,v+=vs,100,"Üksik funktsioon",Normal,OneFunction,false,OneFunctionSClass);
+  EditField(h,v+=vs,100,"Müügigrupp",Normal,SalesGroup,false,SalesGroupSClass);
+  end;
+  EditField(h,v+=vs,100,"Keel",Normal,LangCode,false,LangSClass);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,100,"Klientprogrammi piirang",Normal,CanUseOS,false,SetSClass);
+  end;
+  EditField(h,v+=vs,100,"Kontakt",Normal,CustCode,false,ContactCUSClass);
+  //cust start
+  EditField(h,v+=vs,20,"DV1",Normal,DV1,false,0);
+  EditField(h,v+=vs,20,"DV2",Normal,DV2,false,0);
+  EditField(h,v+=vs,20,"DV3",Normal,DV3,false,0);
+  //cust end
+  //if (IsCloudControllerClient) then begin // Cloud Controller Specific //##cc
+  //  EditField(h,v+=vs,100,"SSH kasutajatunnus",Normal,SSHUsername,false,0); //##cc
+  //end; //##cc
+//  EditField(h,v+=vs,100,"Allahindluse salasõna",Normal,OldPassWord,false,0);
+  if (StandardHansa==false) then begin
+  ButtonFrame(h2,v=44,165,3,"Kasutuspiirangud");
+  RadioButton(h2,v,kLimitedAccessNoLimitation,0,"Piiranguteta",limitedAccess);
+  RadioButton(h2,v+=16,kLimitedAccessGroupOnly,0,"Müügigrupi piires",limitedAccess);
+  RadioButton(h2,v+=16,kLimitedAccessUserOnly,0,"Kasutaja piires",limitedAccess);
+  end;
+if (HansaWorld) and (IsBooks==false) then begin //##cc
+  ButtonFrame(h2,v+=40,195,0,"Salasõna ei aegu");
+  RadioButton(h2,v,0,kTypeOfUserNamed,"Nimeline",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserConcurrent,0,"Samaaegne",TypeOfUser);
+//  RadioButton(h2,v+=16,kTypeOfUserBusinessCommunicator,0,"Business Communicator (nimel.)",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserTimekeeper,0,"Ajahalduse kasut.",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserPOS,0,"POS kasutaja",TypeOfUser);
+  EndFrame;
+  CheckBox(h2,v+=25,0,"Salasõna ei aegu",PasswordNeverExpires);
+ // if (!blankUUID(GetServerUUIDRemote)) then begin
+   CheckBox(h2,v+=16,0,"User is Admin",AdminFlag); 
+ // end;
+end;
+Pict_Field(-175,8,-5,178,"");
+  if (GuiType==kGuiCocoa) then begin
+    PushButton(-160,182,-80,202,ToolImagePicker,"Lisa pilt");   
+end;
+//  CheckBox(h2,v+=25,0,"Allow FTP Access",FTPLogin);
+//  CheckBox(h2,v+=vs,0,"Only Voice Login",OnlyVoiceLogin); // No code for this
+  Tile(tilenr,150,false,tilenr,LastOrdNr);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Tellimuse nr.",Normal,LastOrdNr,false,0);
+  EditField(h,v+=vs,65,"Lähetuse nr.",Normal,LastShipNr,false,0);
+  EditField(h,v+=vs,65,"Arve nr.",Normal,LastInvNr,false,0);
+  EditField(h,v+=vs,65,"Laosissetuleku nr.",Normal,LastPurNr,false,0);
+  EditField(h,v+=vs,65,"KSO nr.",Normal,LastCLInNr,false,0);
+  EditField(h,v+=vs,65,"POS arve nr.",Normal,LastIVCashNr,false,0);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,65,"Restoranitellimus",Normal,LastRestAccNr,false,0);
+  end;
+//  EditField(h,v+=vs,100,"Official Inv. No.",Normal,LastOfficialSerNr,false,0);
+  EditField(h3,v=vm,65,"Laekumise nr.",Normal,LastPayNr,false,0);
+  EditField(h3,v+=vs,65,"Kande nr.",Normal,LastTRNr,false,0);
+  EditField(h3,v+=vs,65,"Ostuarve nr.",Normal,LastVINr,false,0);
+  EditField(h3,v+=vs,65,"Tasumise nr.",Normal,LastOPNr,false,0);
+  EditField(h3,v+=vs,65,"Ostutellimuse nr.",Normal,LastPONr,false,0);
+  EditField(h3,v+=vs,65,"KVO nr.",Normal,LastCLOutNr,false,0);
+  EditField(h3,v+=vs,120,"Isikukood",Normal,IDCode,false,0);
+  Tile(tilenr,170,false,tilenr,Bonus);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Preemia",Normal,Bonus,true,0);
+  EditField(h3,v,120,"Meie esindaja",Normal,CurOurContact,false,0);
+  if (StandardHansa==false) then begin
+  EditField(h3+260,v,-20,"Miinimumhinnakiri",Normal,MinPLCode,false,PLDefSClass);
+  end;
+  EditField(h,v+=vs,65,"Ladu",Normal,Location,false,LocationSClass);
+  EditField(h3,v,120,"Osakond",Normal,Department,false,DepSClass);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,65,"Teenindusladu",Normal,ServLocation,false,LocationSClass);
+  EditField(h3,v,120,"Telefon 1",Normal,Phone1,false,0);
+  EditField(h,v+=vs,65,"Tell. reserv. ladu",Normal,ReservLocation,false,LocationSClass);
+  end else begin
+    EditField(h,v+=vs,120,"Telefon 1",Normal,Phone1,false,0); 
+  end;
+  EditField(h3,v,120,"Telefon 2",Normal,Phone2,false,0);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,-20,"Tell. reserv. õigus",Normal,ReservLocAccess,false,ReservLocAccessSClass);
+  end;
+  EditField(h,v+=vs,-20,"E-mail",Normal,emailAddr,false,0);
+  EditField(h,v+=vs,-20,"Kirjeldus",Normal,Spec,false,0);
+  EditField(h,v+=vs,-20,"Kommentaar",Normal,Comment,false,0);
+//  EditField(h,v+=vs,65,"Kulutuse konto",Normal,CostAcc,false,AccSClass);
+  Tile(tilenr,50,false,tilenr,PersAcc);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Konto",Normal,PersAcc,false,AccSClass);
+  EditField(h3,v,120,"Objekt",Normal,PersObjx,false,ObjSClass);
+  EditField(h,v+=vs,65,"Sorteerimiskood",Normal,SortCode,false,0); 
+  EditField(h3,v,120,"A/a | IBAN",Normal,BankAcc,false,0);  //Bk //##cc
+  EditField(h3,v+=vs,-20,"Panga nimi",Normal,BankName,false,BankSClass); 
+//  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+    Tile(tilenr,170,true,tilenr,JobGroup);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),55,"Töötajaklass",Normal,JobGroup,false,EGSClass);
+  EditField(h,v+=vs,100,"Amet",Normal,Job,false,0);
+  EditField(h,v+=vs,80,"Tunni kulu",Normal,CostPrHour,false,0);
+  EditField(h,vm=(v+=vs),80,"Tunni hind",Normal,PricePrHour,false,0);
+  EnterSkip(Math);
+  CheckBox(h2,v=20,0,"Lubatud ainult lühikoodid",DisAllowOther);
+//  CheckBox(h2,v,0,"Limited Access",limitedAccess);
+  v = v+50;
+  MatrixBegin(h-50,v=(vm+40),h+350,-7,-,99);
+  MatCol(1,24,"Lühikood",0,Code,false,0);
+  MatCol(1,110,"Projekt",0,PRCode,false,PRSClass);
+  MatCol(1,200,"Kommentaar",0,Comment,false,0);
+  EndMatrix;
+    Tile(tilenr,30,false,tilenr,WebConf);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Veebi konv.",Normal,WebConf,true,0);
+  EditField(h3,v,65,"Veebi esim.lk.",Normal,WebStartPage,false,0);
+    Tile(tilenr,50,false,tilenr,Supervisor);  tilenr = tilenr + 1;
+  v = 6;
+  EditField(h,vm=v,80,"Järelvaataja",Normal,Supervisor,false,UserSClass);
+  EditField(h,v+=20,80,"Koostamise kp.",ViewOnly,DateCreated,false,0);
+  CheckBox(h2,v=vm,0,"Nõua aja sisestust",ForceTimeEntry);
+  end;
+  Tile(tilenr,210,false,tilenr,LeadingZDay);  tilenr = tilenr + 1;
+  h = 70; h1 = h + 210; h2 = h + 330;
+  
+  if (GuiType==kGuiCocoa) then begin
+    CheckBox(h,v,0,"Kasuta isiku seadistusi",UserEditCtlf);
+  end else begin  
+    StaticText(190,v+=11,"Akna stiil",true);
+    DropDownMenu(200,v=6,282,"WindowType",320);
+    CheckBox(h,v+=20,0,"Kasuta isiku seadistusi",UserEditCtlf);
+  end;
+  ButtonFrame(h,vm=(v+=42),200,5,"Kuupäevaformaat");
+  RadioButton(h,v,0,0,"Kuu, päev, aasta",DateOrder);
+  RadioButton(h,v+=16,1,0,"Päev, kuu, aasta",DateOrder);
+  RadioButton(h,v+=16,2,0,"Aasta, kuu, päev",DateOrder);
+  if (StandardHansa==false and IsSberbankProduct==false) then begin
+    RadioButton(h,v+=16,m4_hijri,0,"Hijri",DateOrder); // We have some enum already in BCD that goes from 0 to 5.. 
+    RadioButton(h,v+=16,m4_persian_date,0,"Pärsia",DateOrder);
+  end;
+  EndFrame;
+  CheckBox(h,v+=24,0,"N_ull päeva ees",LeadingZDay);
+  CheckBox(h1,v,0,"Näita tuhandete eraldajat",thousSepf);
+  CheckBox(h,v+=16,0,"Nu_ll kuu ees",LeadingZMonth);
+  CheckBox(h,v+=16,0,"Sajandid",LeadingCentury);
+  EditField(h2,v=vm,20,"Kuupäeva eraldaja",Normal,DateSep,false,0);
+  EditField(h2,v+=20,20,"Kümnendike eraldaja",Normal,DecimalPt,false,0);
+  EditField(h2,v+=20,20,"Tuhandete eraldaja",Normal,ThousandSep,false,0);
+  if (HasSIPServerConnection) then begin
+    Tile(tilenr,210,false,tilenr,AstPBXConnection);  tilenr = tilenr + 1;
+    h=150;
+    CheckBox(h-22,v=6,0,"Kõnejärjekorra puudumine",ExcludeQueueFallbackf);
+    EditField(h,v+=vs,100,"PBX ühendus",Normal,AstPBXConnection,false,PBXConnectionSClass);
+    EditField(h,v+=vs,100,"Kasutajanimi",Normal,AstUserName,false,0);
+    EditField(h,v+=vs,100,"Salasõna",Normal,AstPassword,false,0);
+    EditField(h,v+=vs,100,"Helistaja ID",Normal,AstCallerIdNumber,false,0);
+  end;
+  SpecMenuGroup("",kSpecMenuGroupTypeExtendedPlusMenu,0);
+  SpecialMenu("Objekt",'o',1,"CreateObjUserDsm");
+  SpecialMenu("Valideerimise e-mail",'e',2,"ValidateUserEmailAddressDsm"); 
+  SpecialMenu("Kontrolli e-maili",' ',3,"CheckUserEmailAddressDsm");
+  EndWindow;
+end;

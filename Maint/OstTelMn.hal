@@ -1,0 +1,241 @@
+//ok
+external inner function val FindVAT(string,val,Integer,Integer);
+external inner function val DivRateToBase1(string,val,val,val,val,val,val,roundmode);
+
+function boolean CheckMatch(string swhere, string swhat)
+begin
+
+  integer i;
+  boolean est;
+
+  est = false;
+  for (i=1;i<=len(swhere);i=i+1) begin
+    if (CharacterMatch(swhere,swhat,i)) begin
+      est = true;
+    end;
+  end;
+  CheckMatch = est;
+
+  return;
+end;
+
+global
+updating procedure OstuMn(record RcVc RepSpec)
+begin
+
+  record POVc POr;
+  row POVc POrw;
+  record ORVc ORr;
+  row ORVc ORrw;
+  record INVc INr;
+  row INVc INrw;
+  record ERVc ERr;
+  record LangBlock Langr;
+  row LangBlock Langrw;
+  integer ilan,j;
+  // plo 30.11.2006: replaces all VEr to CUr! record VEVc VEr;
+  record CUVc CUr;
+  record LocationVc Locr;
+  boolean upf,itemfound;
+  LongInt nr;
+  integer rwcnt,i,k;
+  integer l,lcnt;
+  integer foren;
+
+  BlockLoad(Langr);
+  ilan = MatRowCnt(Langr);
+
+  CUr.Code = RepSpec.f1;
+  ResetLoop(CUr);
+  if (ReadFirstMain(CUr,1,true)) then begin
+    ResetLoop(ORr);
+    ORr.SerNr = RepSpec.f2;
+    if (ReadFirstMain(ORr,1,true)) then  begin
+      RecordNew(POr);
+      //POr.SerNr = nr;
+      POr.VECode = CUr.Code;
+      POr.TransDate = CurrentDate;
+      POr.SerNr = NextSerNr("POVc",CurrentDate,-1,false,"");
+      POr.PayDeal = CUr.PayDeal;
+      POr.ExportFlag = CUr.ExportFlag;
+      //POr.OKFlag
+      POr.Addr0 = CUr.Name;
+      POr.Addr1 = CUr.InvAddr0; // plo 30.11.2006: inv/del prefix added to addr fields here and below
+      POr.Addr2 = CUr.InvAddr1;
+      POr.Addr3 = CUr.InvAddr2;
+
+      // 10.03.2009, objektid hankija kaardilt
+      POr.Objects = CUr.VEObjects;
+
+      if (RepSpec.flags[1] == 1) then begin
+        //customer adr.
+        CUr.Code = ORr.CustCode;
+        if (ReadFirstMain(CUr,1,true)) then begin
+          POr.ShipAddr0 = CUr.Name;
+          POr.ShipAddr1 = CUr.DelAddr0;
+          POr.ShipAddr2 = CUr.DelAddr1;
+          POr.ShipAddr3 = CUr.DelAddr2;
+        end;
+      end;
+      if (RepSpec.flags[1] == 2) then begin
+        //stock adr.
+        Locr.Code = ORr.Location;
+        if (ReadFirstMain(Locr,1,true)) then begin
+          POr.ShipAddr0 = Locr.Name;
+          POr.ShipAddr1 = Locr.Addr0;
+          POr.ShipAddr2 = Locr.Addr1;
+          POr.ShipAddr3 = Locr.Addr2;
+        end;
+      end;
+
+      POr.VEContact = CUr.Person;
+      POr.OurContact = ORr.OurContact;
+      POr.ShipMode = CUr.ShipMode;
+      POr.CurncyCode = CUr.CurncyCode;
+      POr.PlanShip = ORr.PlanShip;
+      // to check ....
+      POr.OKPersons = CurrentUser;
+      POr.ShipDeal = CUr.ShipDeal;
+      POr.LangCode = CUr.LangCode;
+      POr.OrdNr = ORr.SerNr;
+
+      //POr.CostPerUnit
+      POr.PRCode = ORr.PRCode;
+      //POr.Printdf
+      POr.Comment = ORr.Comment;
+      //POr.InclVAT
+      POr.Location = ORr.Location;
+      //POr.InvoiceToCode
+      //POr.PUFlag
+      //POr.OSFlag
+      //POr.ExportedFlag
+
+      if nonblank(POr.CurncyCode) then begin
+        ResetLoop(ERr);
+        ERr.CurncyCode = POr.CurncyCode;
+        ERr.Date = POr.TransDate;
+        if (ReadLastMain(ERr,2,false)) then begin
+          if (ERr.CurncyCode == POr.CurncyCode) then begin
+            POr.FrRate 		= ERr.FrRate;
+            POr.ToRateB2 	= ERr.ToRate2;
+            POr.ToRateB1  = ERr.ToRate1;
+            //POr.BaseRate1
+            //POr.BaseRate2
+          end;
+        end;
+      end;
+
+      rwcnt = MatRowCnt(ORr);
+      k = 0;
+      for (i=0;i<rwcnt;i=i+1) begin
+        MatRowGet(ORr,i,ORrw);
+        if nonblank(ORrw.ArtCode) then begin
+          POrw.stp =1;
+          POrw.ovst = 0;
+          POrw.ArtCode = ORrw.ArtCode;
+          POrw.Quant = ORrw.Quant;
+          INr.Code = ORrw.ArtCode;
+          ResetLoop(INr);
+          if (ReadFirstMain(INr,1,true)) then begin
+            itemfound = true;
+            POrw.ArtCode   = INr.Code;
+            POrw.VEArtCode = INr.BarCode;
+            //  Language
+            POrw.Spec = INr.Name;
+            lcnt = MatRowCnt(INr);
+            foren = 0;
+            if nonblank(POr.LangCode) then begin
+              // other language name
+              for (l=0;l<lcnt;l=l+1) begin
+                MatRowGet(INr,l,INrw);
+                if (INrw.LangCode == POr.LangCode) then begin
+                  POrw.Spec = INrw.Text;
+                  foren = l+10;
+                  l=lcnt;
+                end;
+              end;
+            end;
+            if nonblank(POr.CurncyCode) then begin
+              POrw.Price = DivRateToBase1(POr.CurncyCode,INr.InPrice,POr.FrRate,POr.ToRateB1,POr.ToRateB2,POr.BaseRate1,POr.BaseRate2,DefaultCurRoundOff);
+              // curcv = DivWithRateToBase1(crncycode,TRr.TransDate,TRrw.CredVal,2);
+            end else begin
+              POrw.Price = INr.InPrice;
+            end;
+            POrw.Sum = POrw.Price * POrw.Quant;
+            POr.Sum1 = POr.Sum1 + POrw.Sum;
+            POrw.VATCode = CUr.VATCode; //INr.VATCode;
+            POr.Sum3 = POr.Sum3 + FindVAT(POrw.VATCode,POrw.Sum,POr.InclVAT,POr.NoTAXonVAT);
+          end else begin
+            itemfound = false;
+          end;
+          //POrw.Vrebate
+          //POrw.Objects
+          //POrw.Shipd2
+          //POrw.Shipd1
+          POrw.VEQuant = POrw.Quant;
+          //POrw.PIFActor
+          //POrw.PriceFactor
+          //POrw.VARList
+          POrw.PRCode = ORr.PRCode;
+          //POrw.WSNr
+          //POrw.Invd
+          POrw.CostAcc = INr.CostAcc;
+          MatRowPut(POr,k,POrw);
+          k=k+1;
+
+          // a few lines
+          if itemfound then begin
+            for (l=0;l< lcnt;l=l+1) begin
+              MatRowGet(INr,l,INrw);
+              if (blank(INrw.LangCode) and blank(POr.LangCode)) or (nonblank(INrw.LangCode) and (INrw.LangCode == POr.LangCode)) then begin
+                if foren <> (l+10) then begin
+                  ClearRow(POr,POrw,k);
+                  POrw.Spec = INrw.Text;
+                  POrw.stp =1;
+                  POrw.ovst = 0;
+                  MatRowPut(POr,k,POrw);
+                  k = k+1;
+                end;
+              end;
+            end;
+          end;
+
+          // PT koodid
+          if itemfound then begin
+            for (l=0;l<lcnt;l=l+1) begin
+              MatRowGet(INr,l,INrw);
+              if (Left(INrw.LangCode,2) == "PT") then begin
+                if (CheckMatch(INrw.Text,"/")==false) then begin
+                  for (j=0;j<ilan;j=j+1) begin
+                    MatRowGet(Langr,j,Langrw);
+                    if (Langrw.Code == INrw.LangCode) then begin
+                      ClearRow(POr,POrw,k);
+                      //POrw.Spec = Langrw.Comment & " " & INrw.Text;
+                      POrw.Spec = Langrw.Comment;
+                      POrw.Price = StringToVal(INrw.Text,M4Val);
+                      POrw.stp =1;
+                      POrw.ovst = 0;
+                      MatRowPut(POr,k,POrw);
+                      k = k+1;
+                      j = ilan;
+                    end;
+                  end;
+                end;
+              end;
+            end;
+          end;
+
+        end;
+      end;
+
+      POr.Sum4 = POr.Sum1 + POr.Sum3;
+      upf = RecordStore(POr,true);
+      UserTrace(POr.SerNr,0);
+    end;
+
+  end;
+  //EndJob;
+
+  return;
+end;
+

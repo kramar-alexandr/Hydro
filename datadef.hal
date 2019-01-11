@@ -1,0 +1,198 @@
+begin
+  SourceFile("halcust\\estonian",3);
+  SourceFile("halcust\\latvian",3);
+  SourceFile("halcust\\lithuanian",3);
+  SourceFile("halcust\\multi",3);
+  SourceFile("halcust\\english",3);
+  
+
+  SourceFile("halcust\\level0\\Documents", 0);
+  SourceFile("halcust\\level0\\Exports", 0);
+  SourceFile("halcust\\level0\\Reports", 0);
+  SourceFile("halcust\\level0\\Tools", 0);
+  SourceFile("halcust\\level0\\WActions", 0);
+  SourceFile("halcust\\level0\\estonian",0);
+  SourceFile("halcust\\level0\\latvian",0);
+  SourceFile("halcust\\level0\\lithuanian",0);
+  SourceFile("halcust\\level0\\english",0);
+  SourceFile("halcust\\level0\\RActions",0);
+
+  SourceFile("halcust\\ImportFr72", 3);
+  SourceFile("halcust\\Maint", 3);
+  SourceFile("halcust\\RActions", 3);
+  SourceFile("halcust\\Reports", 3);
+  SourceFile("halcust\\Tools", 3);
+  SourceFile("halcust\\WActions", 3);
+  SourceFile("halcust\\Exports", 3);
+  SourceFile("halcust\\Imports", 3);
+  SourceFile("halcust\\Documents", 3);
+  
+  BlockBegin(H_AllEksportBlock,-,"");
+  BlockInServer;
+  BlockForAllCompanies;
+  RecordField(ExportPath,M4Str,60,0);
+  RecordField(ExportTime,M4Time,0,0); 
+  RecordField(LastExportTime,M4Time,0,0)
+  RecordField(LastExportDate,M4Date,0,0);
+  EndBlock;
+  
+  BlockBegin(MetalPriceBlock,-,"");
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(StartDate,M4Date,0,0);
+  ArrayField(EndDate,M4Date,0,0);
+  ArrayField(MetalPrice,M4Val,0,0);
+  ArrayField(BilletPremium,M4Val,0,0);
+  EndArray;
+  EndBlock;
+ 
+  
+  RecordAddBegin(CountryVc,"sCountryVc");
+  RecordField(D1AQCD,M4Code,5,0);
+  RecordField(D2ARCD,M4Code,5,0);
+  EndRecordAdd;
+  
+  
+  RecordAddBegin(UserVc,"sapauser2");
+  RecordField(DV1,M4Code,5,0);
+  RecordField(DV2,M4Code,5,0);
+  RecordField(DV3,M4Code,5,0);
+  EndRecordAdd;
+  
+  RecordAddBegin(INVc,"sapaINVc");
+  RecordField(Perimeter,M4Val,0,0);
+  RecordField(Spread,M4Val,0,0);
+  RecordField(PG1,M4Str,10,0);
+  RecordField(PG2,M4Str,10,0);
+  EndRecordAdd;
+
+
+  RecordAddBegin(SHVc,"sapaSHVc");
+  // added
+  KeyBegin(CustDelAddr);
+  KeySegment(CustCode);
+  KeySegment(DelAddrCode);
+  KeySegment(SerNr);
+  EndRecordAdd;
+
+  RecordAddBegin(IVVc,"sapaIVVc");
+  RecordField(TotUnit1Qty,M4Val,0,0); //OBS
+  RecordField(TotUnit2Qty,M4Val,0,0); //OBS
+  RecordField(SExportDate,M4Date,0,0); //16.11.2016
+  ArrayField(Unit2Code,M4Code,5,0); //OBS
+  ArrayField(Unit2Qty,M4Val,0,0); //OBS
+  ArrayField(Anod,M4Val,0,0); //OBS
+  ArrayField(Powd,M4Val,0,0); //OBS
+  ArrayField(Mec,M4Val,0,0); //OBS
+  //cust start 20.03.2018
+  ArrayField(AnodPrice,M4Val,0,0);
+  //cust end 20.03.208  
+  EndRecordAdd;
+  
+  RecordAddBegin(ORVc,"sapaORVc");
+  RecordField(TotUnit1Qty,M4Val,0,0); //OBS
+  RecordField(TotUnit2Qty,M4Val,0,0); //OBS
+  //05.04.2018
+  RecordField(SapaDate,M4Date,0,0);
+  RecordField(SExportDate,M4Date,0,0);   
+  ArrayField(Unit2Code,M4Code,5,0); //OBS
+  ArrayField(Unit2Qty,M4Val,0,0); //OBS
+  ArrayField(Anod,M4Val,0,0); //OBS
+  ArrayField(Powd,M4Val,0,0); //OBS
+  ArrayField(Mec,M4Val,0,0); //OBS
+  //cust start 20.03.2018
+  ArrayField(AnodPrice,M4Val,0,0);
+  //cust end 20.03.208  
+  
+  SubsetKeyBegin2(SapaDate);
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(SapaDate);
+  KeySegment(SerNr);
+  EndRecordAdd;
+
+  RecordAddBegin(QTVc,"sapaQTVc");
+  RecordField(TotUnit1Qty,M4Val,0,0); //OBS
+  RecordField(TotUnit2Qty,M4Val,0,0); //OBS
+  ArrayField(Unit2Code,M4Code,5,0); //OBS
+  ArrayField(Unit2Qty,M4Val,0,0); //OBS
+  ArrayField(Anod,M4Val,0,0); //OBS
+  ArrayField(Powd,M4Val,0,0); //OBS
+  ArrayField(Mec,M4Val,0,0); //OBS
+  EndRecordAdd;
+  
+  RecordAddBegin(POVc,"sapaPOVc");
+  ArrayField(Anod,M4Val,0,0); //OBS
+  ArrayField(Powd,M4Val,0,0); //OBS
+  ArrayField(Mec,M4Val,0,0); //OBS
+  EndRecordAdd;
+  
+  RecordAddBegin(PUVc,"sapaPUVc");
+  RecordField(Fabrication,M4Val,0,0); 
+  ArrayField(Anod,M4Val,0,0); //OBS
+  ArrayField(Powd,M4Val,0,0); //OBS
+  ArrayField(Mec,M4Val,0,0); //OBS
+  ArrayField(FabricationRow,M4Val,0,0); 
+  EndRecordAdd;
+
+  //CUST
+  //new block for customer series, standart does not have series only numbers
+  BlockBegin(OBS_CUSerBlock,-,"");
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(TSerStr,M4UStr,20,0);
+  ArrayField(TSerStart,M4UStr,20,0);
+  ArrayField(TSerEnd,M4UStr,20,0);
+  ArrayField(TSerCom,M4Str,20,0);
+  EndArray;
+  EndBlock;
+  
+  BlockBegin(ExportAutoBlock,-,"");
+  RecordField(ExportCU,M4Int,0,0);
+  RecordField(ExportReport,M4Int,0,0);
+  RecordField(CULastExportDate,M4Date,0,0);
+  RecordField(CULastExportTime,M4Time,0,0); 
+  RecordField(RepLastExportDate,M4Date,0,0); 
+  RecordField(RepLastExportTime,M4Time,0,0)
+  RecordField(CUExportTime,M4Time,0,0);
+  RecordField(RepExportTime,M4Time,0,0);
+  RecordField(CUPath,M4Str,60,0);
+  RecordField(ReportPath,M4Str,60,0);
+  RecordField(CUStart,M4Str,5,0);
+  RecordField(RevenueBasic,M4Str,255,0);
+  RecordField(IC1,M4Code,5,0);
+  RecordField(IC2,M4Code,5,0);
+  RecordField(CSeparator,M4Int,0,0);
+  RecordField(DSeparator,M4Int,0,0);
+  RecordField(Test,M4Int,0,0);
+  RecordField(DefExpCodepage,M4Str,30,0);
+  RecordField(NrOfDays,M4Int,0,0);
+  RecordField(LC1,M4Code,5,0);
+  RecordField(LC2,M4Code,5,0);
+  //RecordField(PG1,M4Code,5,0);
+  //RecordField(PG2,M4Code,5,0);
+  RecordField(CheckPerimeter,M4Str,255,0); 
+  
+  //cust start 04.04.2018
+  RecordField(OSeparator,M4Int,0,0);
+  RecordField(ONrOfDays,M4Int,0,0);
+  RecordField(OExportTime,M4Time,0,0);
+  RecordField(OReportPath,M4Str,60,0);
+  RecordField(OLastExportDate,M4Date,0,0); 
+  RecordField(OLastExportTime,M4Time,0,0)
+  RecordField(ExportOrders,M4Int,0,0);
+
+  RecordField(BSeparator,M4Int,0,0);
+  RecordField(BNrOfDays,M4Int,0,0);
+  RecordField(BExportTime,M4Time,0,0);
+  RecordField(BReportPath,M4Str,60,0);
+  RecordField(BLastExportDate,M4Date,0,0); 
+  RecordField(BLastExportTime,M4Time,0,0)
+  RecordField(ExportBookings,M4Int,0,0);
+  //cust end 04.04.2018
+  EndBlock;
+
+  return;
+end;
+

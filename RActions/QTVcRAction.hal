@@ -1,0 +1,29 @@
+external function string 20 CheckArtCodeTreatments(string,val,val,val);
+
+global updating
+function LongInt QTVcRecordCheck(record QTVc QTr,record QTVc QT2r,LongInt stat,LongInt long4)
+begin
+  row QTVc QTrw;
+  string 20 TreatmentErr;
+  integer i,rw;
+  longint res;
+
+  res = 0;
+  rw = MatRowCnt(QTr);
+  for(i=0;i<rw;i=i+1)begin
+    MatRowGet(QTr,i,QTrw);
+    TreatmentErr = CheckArtCodeTreatments(QTrw.ArtCode,QTrw.Anod,QTrw.Powd,QTrw.Mec);
+    if nonblank(TreatmentErr) then begin
+      RecordCheckError(1,"Ievadiet " & TreatmentErr,i,TreatmentErr);
+      res = -1;
+      goto LQTVcRecordCheck;
+    end;
+  end;
+  if res<>-1 then begin
+    res = inner.QTVcRecordCheck(QTr,QT2r,stat,long4);
+  end;
+
+LQTVcRecordCheck:;
+  QTVcRecordCheck = res;
+  return;
+end;

@@ -1,0 +1,849 @@
+external function Boolean DisplayAdditionalFields();
+remote function Integer MailAcceptanceStatus(LongInt);
+external function Boolean IsMoveToCloud(record SetupStatusBlock);
+external function Boolean IsMoveToCloudB();
+external function Boolean IsCloudControllerClient();
+external function string 255 GetCurrentStoreName();
+external function Boolean CompaniesInClientMode();
+external function Boolean ProductInDemoMode();
+remote function string 255 GetCompanyShortCode(string);
+external function Boolean AnyModuleAvailable();
+external function Boolean AcceptanceStatusColumnTest(string);
+external function Integer FlipCharCode(Integer,Integer);
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external function Boolean TouchScreenLookVertical();
+external procedure SysEClass_Tool(Integer,var real,var real);
+external procedure GTransEClass_Tool(Integer,var real,var real);
+external procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external procedure GBaseEClass_Tool(Integer,var real,var real);
+external procedure TransGenVClass_Tool(Integer,var real,var real);
+external procedure GetCurUser(var record UserVc);
+external procedure JobRClass_EST();
+external function string 60 UserDefined(string,string);
+external outer function string 255 MasterBannerURL();
+external procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external function Boolean AllowedInCountry(integer);
+external function Integer ResourceWindowResourceType();
+external function Boolean ResPlan_Rental();
+external function Boolean ResPlan_ProdOperations();
+//remote function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean TouchScreenLook();
+external procedure ExtractObj(string,var Integer,var string);
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external function Boolean CheckOffLineRecords(Boolean);
+external function string 60 TileUserDefined(string,Integer,var Integer);
+external function Boolean CUVATNrColumn;
+external function Integer GetInternetEnablerCountry();
+external function Integer CntVarietyCode(Integer,var Array string);
+external function Integer VarietyMatMax(Integer);
+external function Boolean UseTaxTemplatesforTaxCalc();
+remote procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external function string 20 GetMenuCode(string);
+external procedure DrawModifierButtons(var Integer);
+remote procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external function Boolean DisplayLoginButtons();
+external function Integer LoginShortcutsLines(Integer);
+external function Integer LoginShortcutsPos(Real,Integer);
+
+external procedure DefineTTRRowTypes(Integer);
+external function real ItemButtons(string,Integer);
+external procedure HWStoreWClassAddProducts(Integer);
+external function Boolean HasCharts();
+external function Boolean HasNewRegistration();
+external function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external function Integer LoginShortcuts();
+external function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external function Boolean DefCustCodeSetup();
+// in-apps
+external function Boolean HasInAppsAvailable();
+external function Integer CountCountries();
+
+// Language functions EST
+external function Boolean DisplayLoginKeyPad_EST();
+external function string 255 VATZoneEditFieldLabel_EST(Integer);
+external function real VATZoneButtonsLabelsEST(real,real,real,real);
+external procedure LoginButtons2_EST(Real,Real);
+external procedure FORMDEF_EST();
+external function string 255 DemoMsgWClassTitle_EST(Boolean,Boolean);
+external procedure TBEClassDef_EST();
+external function string 255 VATZoneNameEST();
+external procedure TSERW_EST();
+external procedure TSERWNT_EST();
+external procedure TSERWTouch_EST();
+external procedure TSERWTEST_EST();
+external procedure INVFORM_EST(Boolean);
+external procedure DisplayRecordDetails_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external procedure DrawPOSInterface2_EST(string,string,record POSButtonsVc,string,Integer,Integer);
+external procedure DisplayRecordDetailsCustDisplay_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
+external function string 255 ResDayWClassWindowTitle_EST();
+external function string 255 ResMonWClassWindowTitle_EST();
+external function string 255 RTMonWClassWindowTitle_EST();
+external procedure SetupNightAuditWindowControls_EST(Boolean);
+external procedure CURClassDefinitionEST();
+external function real DrawPaymentModesButtons_IV_EST(real);
+external function real FunctionButtons_EST(string);
+external procedure CreditCardWindowHeader_EST(Boolean,Boolean,Real);
+external procedure CreditCardWindowButtons_EST(string,string,real);
+external procedure CreditCardWindowInvoiceDetail_EST(Real);
+external procedure CreditCardWindowDeliveryDetail_EST(Real);
+external function real DrawPaymentModesButtons_EST();
+external procedure DrawBarMenuTiles_EST(string);
+external procedure DrawRestPMOtherPay_EST();
+external procedure DisplayRecordDetailsRA_EST(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,LongInt,Date,string,LongInt,string);
+external procedure DrawModifierButtons2_EST(var integer,var integer);
+external procedure OKCancel_EST();
+external procedure DefineElearningURLCacheLClass_EST();
+external procedure DefineElearningURLCacheDClass_EST();
+external function real TravelLogDeductions_EST(real,real);
+external procedure LoginButtons_EST(Real);
+external procedure FORMDEF2_EST();
+external procedure FORMDEF3_EST();
+external procedure ARS2RClass_EST();
+external procedure ALLVATRClass_EST();
+
+external function Boolean IsStandardUnused();
+external function Boolean IsEnterprise();
+external function Boolean StandardHansa();
+external function Boolean HasATOL();
+
+external function Boolean HasAccPeriods();
+external function Boolean HasAccessGroups();
+external function Boolean HasAddFee();
+external function Boolean HasApprovals();
+external function Boolean HasCCPayments();
+external function Boolean HasAdvancedAccounting();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasAdvancedProduction();
+external function Boolean HasAdvancedStock();
+external function Boolean HasAged();
+external function Boolean HasBar();
+external function Boolean HasBase2();
+external function Boolean HasBranch();
+external function Boolean HasBuyBack();
+external function Boolean HasCategories();
+//external function Boolean HasConsigmentStock();
+external function Boolean HasCommunicator();
+external function Boolean HasConsignmentStock();
+external function Boolean HasContactClassification();
+external function Boolean HasContactRelations();
+external function Boolean HasConsolidation();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasCreditLimit();
+external function Boolean HasCustItem();
+external function Boolean HasCustomerSearchKey();
+external function Boolean HasCustomerStatusReport();
+external function Boolean HasDownpayments();
+external function Boolean HasDefineColumns();
+external function Boolean HasDeliveryAddress();
+external function Boolean HasDepartments();
+external function Boolean HasETaxDocuments();
+external function Boolean HasEInvoicing();
+external function Boolean HasEndorsedChecks();
+external function Boolean HasExtraNLComment();
+external function Boolean HasExtTax();
+external function Boolean HasFavouriteActTypes();
+external function Boolean HasFiscalPrinter();
+external function Boolean HasFormEditor();
+external function Boolean HasFreightAdvanced();
+external function Boolean HasHideCostPrice();
+external function Boolean HasHotelInterface();
+external function Boolean HasGuestUserDefined();
+external function Boolean HasJewelleryInterface();
+external function Boolean HasIncomeAndExpenseBook();
+external function Boolean HasIOUChecks();
+external function Boolean HasItemClassification();
+external function Boolean HasItemGroups();
+external function Boolean HasKPIs();
+external function Boolean HasLanguages();
+external function Boolean HasLimitedAccess();
+external function Boolean HasLocalMachines();
+external function Boolean HasLoyaltyCards();
+external function Boolean HasMailTags();
+external function Boolean HasMainPartner();
+external function Boolean HasMultiCurrency();
+external function Boolean HasMultiLocations();
+external function Boolean HasNLBudget();
+external function Boolean HasNLBudgetClass();
+external function Boolean HasObjects();
+external function Boolean HasInvoiceOfficialSerNr();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasOrderClasses();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasNumberSeries();
+external function Boolean HasPersons();
+external function Boolean HasPocketScreen();
+external function Boolean HasPositions();
+external function Boolean HasPrepayments();
+external function Boolean HasProjects();
+external function Boolean HasPriceLists();
+external function Boolean HasQualityControl();
+external function Boolean HasReconLevel2();
+external function Boolean HasReminderLevel();
+external function Boolean HasRemoteBackup();
+external function Boolean HasResourceDisplayGroups();
+external function Boolean HasRussianPrepayment();
+external function Boolean HasRetGoodsToSupp();
+external function Boolean HasReturnedGoods();
+external function Boolean HasRoomPackages();
+external function Boolean HasRoomTypes();
+external function Boolean HasRoute();
+external function Boolean HasSalesman();
+external function Boolean HasSalesmanBonus();
+external function Boolean HasSalesGroup();
+external function Boolean HasSecondQuantity();
+external function Boolean HasSerialNumbers();
+external function Boolean HasServerInCloud();
+external function Boolean HasSettlementDiscount();
+external function Boolean HasSimulations();
+external function Boolean hasSimAccruals();
+external function Boolean HasSkypeConnection();
+external function Boolean HasSIPServerConnection();
+external function Boolean HasStrAsSignFType();
+external function Boolean HasTouchScreenDevice();
+external function Boolean HasTaxMatrix();
+external function Boolean HasTestFeatures();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasWorkOrders();
+external function Boolean HasThrouLocation();
+external function Boolean HasTouchScreenLook();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasVATZone();
+external function Boolean HasWithholdingTax();
+external function Boolean HasWithholdingTaxAdvanced();
+external function Boolean HasWorkOrders();
+external function Boolean HasWorkflowOverview();
+
+external function Boolean HasStandardCRM();
+external function Boolean HasStandardOrganizer();
+external function Boolean HasStandardCommunicator();
+
+external function Boolean HasEMail();
+external function Boolean HasExternalEMail();
+
+external function Boolean HasModAT2();
+external function Boolean HasModBA();
+external function Boolean HasModCheck();
+external function Boolean HasModCL();
+external function Boolean HasModCO();
+external function Boolean HasModCons();
+external function Boolean HasModCourses();
+external function Boolean HasModCredMan();
+external function Boolean HasModCRM();
+external function Boolean HasModEDI();
+external function Boolean HasModExp();
+external function Boolean HasModHotel();
+external function Boolean HasModHRM();
+external function Boolean HasModIN();
+external function Boolean HasModIntStock();
+external function Boolean HasModNL();
+external function Boolean HasPaymentGateway();
+external function Boolean HasModPO();
+external function Boolean HasModPOS();
+external function Boolean HasModPL();
+external function Boolean HasModPOProg();
+external function Boolean HasModPP();
+external function Boolean HasModProd();
+external function Boolean HasModQT();
+external function Boolean HasModRent();
+external function Boolean HasModRest();
+external function Boolean HasModRsrt();
+external function Boolean HasModSO();
+external function Boolean HasModSL();
+external function Boolean HasModSVO();
+external function Boolean HasModTS();
+external function Boolean HasModWHM();
+external function Boolean HasModDI();
+external function Boolean UsePostOKButton();
+external function Boolean HasBankImport();
+external function Boolean HasPLIntegratedWithNL();
+external function Boolean HasSLIntegratedWithNL();
+external function Boolean HasIntegratedNL();
+external function Boolean HasConsStockMoveInvoices();
+
+window ORDClass:2
+  wtag("language","EST"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,t,v,vm,vs,h5,flipnr,width;
+  string 255 label;
+  Integer rn;
+  
+  WindowBegin("Tellimus",ORDClass,CGview,-);
+  //cust start
+  SetWRect(20,80,860,460);
+  //cust end
+  Sizeable(-1,-1,0,0);
+  UseView(ORVc);
+  ActiveFieldOnNew("CustCode");    
+  CommunicateButton;
+  Tile(0,74,false,"",CustCode);
+  EditField(75,vm=(v=6),95,"Nr.",Normal,SerNr,false,TSerSClass);
+  EditField(75,v+=20,80,"Klient",Normal,CustCode,false,CUSClass);//##cc
+  EnterSkip(PayDeal);
+  EditField(h=255,v=vm,-40,"Nimi",Normal,Addr0,false,0);
+  if (StandardHansa==false) then begin
+    EditField(h,vm=(v+=20),135,"Amet. ser.nr",Normal,OfficialSerNr,false,LegalInvNrSClass);
+  //cust start 
+  EditField(530,v,80,"Viimati muudetud",ViewOnly,SapaDate,false,0);
+  //cust  end
+  CheckBox(h4=-100,v,0,"Kinnita",OKFlag);
+  end else begin
+    CheckBox(h4=-100,vm=(v+=20),0,"Kinnita",OKFlag);
+  end;
+//  CheckBox(h+120,vm,0,"Closed",Closed);
+//  CheckBox(h+240,vm,0,"Reserved",Reserved);
+  TileButton(1,"Tingimused");
+  TileButton(2,"Artiklid");
+  TileButton(3,"Valuuta");
+  TileButton(4,"Läh.ting.");
+  TileButton(5,"Hinnakiri");
+  TileButton(6,"Arve aadress");
+  TileButton(7,"Lähetusaadress");
+  Tile(1,110,false,"1",OrdDate);
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,vm=(v=6),82,"Kuupäev",Normal,OrdDate,false,PasteCurDate);
+  EditField(h1,v+=vs,35,"Tasumistingimus",Normal,PayDeal,false,PDSClass);
+  EditField(h1,v+=vs,82,"Planeeritud lähetus",Normal,PlanShip,false,PasteCurDate);
+  EditField(h1,v+=vs,82,"Saatmise kuupäev",Normal,DespatchDate,false,PasteCurDate);
+  EditField(h1,v+=vs,82,"Saatmise aeg",Normal,DespatchTime,false,PasteCurTime);
+  EditField(h2,v=vm,135,"Meie esindaja",Normal,OurContact,false,0);
+  EditField(h2,v+=vs,135,"Kliendi esindaja",Normal,CustContact,false,ContactSClass);
+  EditField(h2,v+=vs,135,"Objektid",Normal,Objects,false,ObjSClass);
+  EditField(h2,v+=vs,135,"Viide",Normal,RefStr,false,0);
+  EditField(h2,v+=vs,135,"Kl. tell. nr.",Normal,CustOrdNr,false,0);
+  EditField(h3,v=vm,65,"Müügimees",Normal,SalesMan,false,UserSClass);//##cc
+  if (StandardHansa==false) then begin
+  EditField(h3,v+=vs,65,"Projekt",Normal,PRCode,false,PRSClass);//##cc
+  end;
+  EditField(h3,v+=vs,65,"Tellimuse klass",Normal,OrderClass,false,OrderClassSClass);//##cc
+  if (StandardHansa==false) then begin
+  EditField(h3,v+=vs,65,"Tellimuse tüüp",Normal,OrderType,false,SetSClass);//##cc
+  EditField(h3,v+=vs,65,"Müügileping",Normal,ORCONr,false,ORCOSClass);//##cc
+  end;
+  EnterSkip(Math); //##ii
+  if  (IsBooks==false)then begin //##ii
+  CheckBox(h4,v=6,0,"Suletud",Closed);
+  CheckBox(h4,v+=16,0,"Reserveeritud",Reserved);
+  end;//##ii
+  if (IsBooks) then begin //##ii
+  CheckBox(h4,v=6,0,"Eksporditud",OrderStatus); //Bk //##ii
+  CheckBox(h4,v+=20,0,"Reserveeritud",Reserved);//Bk //##ii
+  CheckBox(h4,v+=20,0,"Suletud",Closed);//Bk //##ii
+  end; //##ii
+  //EnterSkip(Math); //##cc
+  Tile(2,220,true,"2",Math);
+//  CheckBox(20,-20,0,"Kinnita",OKFlag);
+  EditField(55,-41,50,"Valuuta",Normal,CurncyCode,false,CurncyCodeSClass);
+  if (UseTaxTemplatesforTaxCalc==false) then begin
+  if (UserCanAction("ViewCostPrice",true)) then begin
+      EditField(160,-41,70,"MK %",Normal,GPProc,true,0);
+      EditField(160,-21,70,"Kokku MK",ViewOnly,TotGP,true,0);
+  end;
+    if (HasLocalization("GBR,LTU,POL,LVA")) then begin
+        EditField(310,-41,50,"Reverse #VAT#",ViewOnly,RvrsVAT,true,0);
+      EditField(290,-21,70,"Ext. Tax",ViewOnly,TAX1Sum,true,0);
+    end else begin
+  EditField(290,-41,70,"Maks2",ViewOnly,TAX2Sum,true,0);
+  EditField(290,-21,70,"Lisamaks",ViewOnly,TAX1Sum,true,0);
+    end;
+  EditField(410,-41,100,"KM",ViewOnly ,Sum3,true,0);
+  end else begin
+    if (UserCanAction("ViewCostPrice",true)) then begin
+      EditField(290,-41,70,"MK %",Normal,GPProc,true,0);
+      EditField(290,-21,70,"Kokku MK",ViewOnly,TotGP,true,0);
+    end;
+    EditField(410,-41,100,"Maks",ViewOnly ,Sum3,true,0); 
+  end;
+  EditField(410,-21,100,"Baas",ViewOnly,BaseSum4,true,0);
+  EditField(-150,-41,100,"Vahesumma",ViewOnly ,Sum1,true,0);
+  EditField(-150,-21,100,"Kokku",ViewOnly ,Sum4,true,0);
+  v = 24;
+  MatrixBegin(3,v,-50,-49,-,200);
+  MatTypedRow(stp);
+  flipnr = 0;
+  Flip(flipnr); flipnr = flipnr + 1;
+  MatText(t=9,32,"Vahesumma",true);
+  MatCol(t,100,"",0,Spec,false,0);
+  MatColTL(t,-80,"Summa",0,-1,ViewOnly,0,Sum,true,0);
+  MatText(t=17,32,"Päis",true);
+  MatCol(t,100,"",0,Spec,false,0);
+  MatCol(t=1,32,"Artikkel",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Var",0,VARList,true,VARSClass);
+//  MatCol(t,144,"Kog.",0,Quant,true,0);
+  t = 1;
+  if (HasVarieties) then begin
+  MatCol(t,94,"Kog1",0,Quant,true,MATVARINSClass);
+  end else begin
+    MatCol(t,94,"Kog1",0,Quant,true,0);
+  end;
+
+  //cust start
+  MatColTL(t,144,"Kog2",0,-1,ViewOnly,0,UnitFactQuant,true,0); 
+  //cust end
+  EnterSkip(ArtCode);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Artikkel",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Var",0,VARList,true,VARSClass);
+//  MatCol(t,144,"Qty",0,Quant,true,0);
+  if (HasVarieties) then begin
+  MatCol(t,94,"Kogus",0,Quant,true,MATVARINSClass);
+  end else begin
+    MatCol(t,94,"Kogus",0,Quant,true,0);
+  end;
+  EnterSkip(ArtCode);
+  MatText(t=10,32,"See ja kõik järgnevad read on väljatrükil varjatud",false);
+  MatText(t=kInvoiceRowTypePerceptionTax,32,"Regionaalne maks",true);
+  MatCol(t,132,"",0,Region,false,0);
+  MatCol(t,252,"",0,TAX2Prc,true,0);
+  MatCol(t,292,"",0,Sum,true,0);
+  MatCol(t,372,"",0,SalesAcc,false,0);
+  MatCol(t,452,"",0,Spec,false,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+//  MatCol(t=1,194,"Nimetus",0,Spec,false,0);
+  t = 1;
+    MatCol(t,194,"Kirjeldus",0,Spec,false,0);
+  //cust start
+  MatCol(t,-375,"Anod.hind/m2",0,AnodPrice,true,0);
+  //cust end
+  //cust start
+  MatCol(t,-285,"KG hind",0,UnitFactPrice,true,0);
+  //cust end
+  MatCol(t,-215,"Ühikuhind",0,Price,true,0); // use PL2SClass for filtered datalist
+ //cust MatCol(t,-215,"Ühik2 üh.hind",0,UnitFactPrice,true,0);//??
+
+  MatCol(t,-135,"%",0,vRebate,true,0);
+  MatCol(t,-100,"Summa",0,Sum,true,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  MatCol(t,-235,"Ühikuhind",0,Price,true,0);
+  MatCol(t,-135,"%",0,vRebate,true,0);
+  MatCol(t,-100,"Summa",0,Sum,true,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  if (UseTaxTemplatesforTaxCalc) then begin
+    MatCol(t,-284,"Kliendi art. kood",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-224,"Konto",0,SalesAcc,false,AccSClass); 
+    MatCol(t,-164,"Objekt",0,Objects,false,ObjSClass);
+    MatCol(t,-70,"MG-kd",0,TaxTemplateCode,false,TaxTemplateSClass);
+  end else begin
+    MatCol(t,-264,"Kliendi art. kood",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-184,"Konto",0,SalesAcc,false,AccSClass); 
+    MatCol(t,-124,"Objekt",0,Objects,false,ObjSClass);
+    if ((HasLocalization("GBR,LTU,POL") and IsEnterprise) or HasLocalization("LVA")) then begin
+      MatCol(t,-60,"#V-Cd#",0,VATCode,false,VATCodeSClass);
+      MatCol(t,-30,"Pöörd KM",0,RvrsVATCode,false,VATCodeSClass);
+    end else begin
+    MatCol(t,-30,"KM-kd",0,VATCode,false,VATCodeSClass);
+    end;
+  end;
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  if (UseTaxTemplatesforTaxCalc) then begin
+    MatCol(t,-284,"Kliendi art. kood",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-224,"Konto",0,SalesAcc,false,AccSClass); 
+    MatCol(t,-164,"Objekt",0,Objects,false,ObjSClass);
+    MatCol(t,-70,"MG-kd",0,TaxTemplateCode,false,TaxTemplateSClass);
+  end else begin
+    MatCol(t,-264,"Kliendi art. kood",0,CustArtCode,false,CUINSClass); 
+    MatCol(t,-184,"Konto",0,SalesAcc,false,AccSClass); 
+    MatCol(t,-124,"Objekt",0,Objects,false,ObjSClass);
+    if ((HasLocalization("GBR,LTU,POL") and IsEnterprise) or HasLocalization("LVA")) then begin
+      MatCol(t,-60,"#V-Cd#",0,VATCode,false,VATCodeSClass);
+      MatCol(t,-30,"Pöörd KM",0,RvrsVATCode,false,VATCodeSClass);
+    end else begin
+    MatCol(t,-30,"KM-kd",0,VATCode,false,VATCodeSClass);
+    end;
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  MatCol(t,344,"Tellimuse tüüp",0,OrderType,false,SetSClass);
+  if (UserCanAction("ViewCostPrice",true)) then begin
+    MatCol(t,-245,"Ühikuhind",0,Price,true,0); // use PL2SClass for filtered datalist
+    MatCol(t,-175,"%",0,vRebate,true,0);
+    MatCol(t,-140,"Ostuhind",0,BasePrice,true,0);
+    MatCol(t,-70,"Müügikate",0,rowGP,true,0);
+  end else begin
+    MatCol(t,-235,"Ühikuhind",0,Price,true,0); // use PL2SClass for filtered datalist
+    MatCol(t,-135,"%",0,vRebate,true,0);
+    MatCol(t,-100,"Summa",0,Sum,true,0);
+  end;
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  if (UserCanAction("ViewCostPrice",true)) then begin
+    MatCol(t,-245,"Ühikuhind",0,Price,true,0); // use PL2SClass for filtered datalist
+    MatCol(t,-175,"%",0,vRebate,true,0);
+    MatCol(t,-140,"Kulu",0,BasePrice,true,0);
+    MatCol(t,-70,"MK",0,rowGP,true,0);
+  end else begin
+    MatCol(t,-235,"Ühikuhind",0,Price,true,0); // use PL2SClass for filtered datalist
+    MatCol(t,-135,"%",0,vRebate,true,0);
+    MatCol(t,-100,"Summa",0,Sum,true,0);
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  MatCol(t,-300,"Müügimehed",0,Salesmen,false,UserSClass);
+  MatCol(t,-236,"Läh. 1",0,Shipd1,true,0);
+  MatCol(t,-184,"Läh. 2",0,Shipd2,true,0);
+  MatCol(t,-132,"Arveld.",0,Invd,true,0);
+  MatCol(t,-80,"Retsept",0,Recepy,false,RecSClass);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nim.",0,Spec,false,0);
+  MatCol(t,-290,"Läh. 1",0,Shipd1,true,0);
+  MatCol(t,-220,"Läh. 2",0,Shipd2,true,0);
+  MatCol(t,-150,"Arvega",0,Invd,true,0);
+  MatCol(t,-80,"Retsept",0,Recepy,false,RecSClass);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  MatCol(t,-290,"Seerianumber",0,SerialNr,false,SerialNrSClass);
+  MatCol(t,-150,"Plan.lähetus",0,PlanShipRow,true,PasteCurDate);
+  MatCol(t,-70,"Hinnafaktor",0,PriceFactor,true,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  MatCol(t,-290,"Seerianr.",0,SerialNr,false,SerialNrSClass);
+  MatCol(t,-150,"Plan. läh.",0,PlanShipRow,true,PasteCurDate);
+  MatCol(t,-70,"Hinnafaktor",0,PriceFactor,true,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  MatCol(t,-315,"Saateleht",0,ShipNote,false,0);
+  MatCol(t,-210,"Ladu",0,Location,false,LocationSClass);
+  if (StandardHansa==false) then begin
+  MatCol(t,-145,"Asukoht",0,Position,true,UsedPosSClass);
+  end;
+  MatCol(t,-90,"Tootja",0,Source,true,SourceSClass);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  MatCol(t,-315,"Saateleht",0,ShipNote,false,0);
+  MatCol(t,-210,"Ladu",0,Location,false,LocationSClass);
+  if (StandardHansa==false) then begin
+  MatCol(t,-145,"Asukoht",0,Position,true,UsedPosSClass);
+  end;
+  MatCol(t,-90,"Päritolu",0,Source,true,SourceSClass);
+  if (StandardHansa==false) and (IsBooks==False) then begin //##cc
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(t=1,144,"Kompl. kp.",0,PickingDate,false,PasteCurDate);//??
+  MatCol(t,-390,"Kompl. aeg",0,PickingTime,false,PasteCurTime);
+  MatCol(t,-320,"Lattu kp.",0,InloadingDate,true,PasteCurDate);
+  MatCol(t,-230,"Lattu aeg",0,InloadingTime,true,PasteCurTime);
+  MatCol(t,-160,"Saatm.kp.",0,DespatchRowDate,true,PasteCurDate);
+  MatCol(t,-70,"Saatm.aeg",0,DespatchRowTime,true,PasteCurTime);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Kompl. kp.",0,PickingDate,false,PasteCurDate);
+  MatCol(t,-390,"Kompl. aeg",0,PickingTime,false,PasteCurTime);
+  MatCol(t,-320,"Lattu kp.",0,InloadingDate,true,PasteCurDate);
+  MatCol(t,-230,"Lattu aeg",0,InloadingTime,true,PasteCurTime);
+  MatCol(t,-160,"Saatm. kp.",0,DespatchRowDate,true,PasteCurDate);
+  MatCol(t,-70,"Saatm. aeg",0,DespatchRowTime,true,PasteCurTime);
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Kirjeldus",0,Spec,false,0);
+  MatCol(t,-315,"Ühik",0,UnitCode,false,UnitSClass);
+  MatCol(t,-260,"Ühik2 kog.",0,UnitFactQuant,true,0);
+  MatCol(t,-200,"Laius",0,UnitXval,true,0);
+  MatCol(t,-160,"Kõrgus",0,UnitYval,true,0);
+  MatCol(t,-120,"Sügav.",0,UnitZval,true,0);
+  //cust start
+  MatCol(t,-80,"KG hind",0,UnitFactPrice,true,0);//??
+  //cust end
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nimetus",0,Spec,false,0);
+  MatCol(t,-315,"Ühik",0,UnitCode,false,UnitSClass);
+  MatCol(t,-260,"Ühik2 kogus",0,UnitFactQuant,true,0);
+  MatCol(t,-200,"Laius",0,UnitXval,true,0);
+  MatCol(t,-160,"Kõrgus",0,UnitYval,true,0);
+  MatCol(t,-120,"Sügavus",0,UnitZval,true,0);
+  //cust start
+  MatCol(t,-80,"KG hind",0,UnitFactPrice,true,0);
+  //cust end
+  InsertRowTest;
+  DeleteRowTest;
+  RowMenuBegin("");
+  RowMenuItem(0,"Artikli hetkeseis",'I','I',0,"ItemStatusORDsm");
+  if (StandardHansa==false) then begin
+    RowMenuItem(0,"Eelmised müügihinnad",' ',' ',0,"ORLastSPrsm");
+  end;
+  RowMenuItem(0,"Lisa päise rida",' ',' ',0,"ORAddHeaderLine");
+  RowMenuItem(0,"Lisa peidetud rida",' ',' ',0,"ORAddHidLine");
+  RowMenuItem(0,"Lisa vahesumma",' ',' ',0,"SubtotalORDsm");
+  if (StandardHansa==false) then begin
+    RowMenuItem(0,"Juhi autoriseering allahindluseks",' ',' ',0,"MgrsDiscOverrideORDsm");
+  end;
+  EndRowMenu;
+  EndMatrix;
+  vs = 20;
+  v = 18; VTab(-35,v,-16,v+vs,ToolFlip,1,"A");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,2,"B");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,3,"C");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,4,"D");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,5,"E");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,6,"F");
+  if (IsBooks) then begin //##ii
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,7,"G");
+  end; //##ii
+    if (StandardHansa==false) and (IsBooks==false) then begin //##ii
+      v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,7,"G");//Bk //##ii
+    end;//##ii
+    if (StandardHansa==false) and (IsBooks==false) then begin//##cc
+      v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,8,"H"); //##cc
+    end;//##cc
+  Tile(3,70,false,"3",FrRate);
+  vs = 20;
+  EditField(h=110,v=6,50,"Valuuta",Normal,CurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+vs,50,"Baasvaluuta 1",Normal,BaseRate1,true,0);
+  EditField(h,v+(vs*2),50,"Baasvaluuta 2",Normal,BaseRate2,true,0);
+  EditField(h2=295,v,50,"Kurss",Normal,FrRate,true,0); 
+  RateField(h3=360,v,50,":",Normal,"ToRateB1",true,h3+60,v+14,"Baasvaluuta 1",false);
+  RateField(h3,v+=vs,50,":",Normal,"ToRateB2",true,h3+60,v+14,"Baasvaluuta 2",false);
+  Tile(4,110,false,"4",ShipDeal);
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,v=6,75,"Lähetustingimused",Normal,ShipDeal,false,ShipDealSClass);//##cc
+  EditField(h1,v+=vs,75,"Lähetusviis",Normal,ShipMode,false,DMSClass);//##cc
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,75,"Teekond",Normal,Sorting,false,DelRouteSClass);//##cc
+  end;
+  EditField(h1,v+=vs,75,"Ladu",Normal,Location,false,LocationSClass);//##cc
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,75,"Filiaal",Normal,BranchID,false,AllCUSClass);//##cc
+  end;
+  EditField(h2,v=vm,80,"Kogus kokku",ViewOnly,TotQty,true,0);
+  EditField(h2,v+=vs,80,"Kaal kokku",ViewOnly,TotWeight,true,0);
+  EditField(h2,v+=vs,80,"Maht kokku",ViewOnly,TotVolume,true,0);
+  EditField(h2,v+=vs,80,"Transport",Normal,FrPrice,true,0);
+  EditField(h2,v+=vs,80,"Intr. kandekood",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass); 
+  if (StandardHansa==false) then begin
+  EditField(h3,v,80,"Transpordi KM-k",Normal,FrVATCode,true,VATCodeSClass);
+  end;
+  CheckBox(473,v=vm,0,"Arve enne lähetust",InvBeforeShip);
+  CheckBox(473,v+=16,0,"Lähetatud kogus 0",SHShipSetToZero);
+  Tile(5,130,false,"5",PriceList);
+  h3 = 530;
+  EditField(h1,v=vm,80,"Hinnakiri",Normal,PriceList,false,PLDefSClass);
+  EditField(h1,v+=vs,80,"Hinnaal. maatriks",ViewOnly,RebCode,false,0); 
+//  EditField(h2,v+=vs,80,"Disc %",ViewOnly,DiscPerc,false,0);
+//  EditField(h2,v+=vs,80,"Disc Amnt",ViewOnly,DiscSum,false,0);
+  EditField(h1,v+=vs,80,"Arve saaja",Normal,InvoiceToCode,false,CUSClass);
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,80,"Krediitkaart",Normal,CreditCard,false,CreditCardSClass);
+  EditField(h1,v+=vs,80,"Isikutuvastus",Normal,AuthorizationCode,false,0);
+  end;
+  EditField(h1,v+=vs,-20,"Kommentaar",Normal,Comment,false,0);
+  EditField(h1,v+=vs,-20,"#Licence#",Normal,Comment2,false,0);
+  EditField(h1,v+=vs,-20,"#Licence#",Normal,Comment3,false,0);
+  EditField(h1,v+=vs,-20,"#Licence#",Normal,Comment4,false,0);
+  EditField(h1,v+=vs,-20,"Konto Op.",Normal,BankCode,false,BankSClass);
+  v = vm;
+  if (HasSalesGroup) then begin
+    EditField(h2+20,v,80,"Müügigrupp",Normal,SalesGroup,false,SalesGroupSClass); //Bk //##cc
+    v = v + vs;
+  end;
+  EditField(h2+20,v,80,"Keel",Normal,LangCode,false,LangSClass); //Bk //##cc
+  if (StandardHansa==false) then begin
+    EditField(h2+20,v+=vs,80,"Komisjonitasu",Normal,Commision,true,0); //Bk //##cc
+    EditField(h2+20,v+=vs,80,"Kokku kom. tasuga",ViewOnly,SumIncCom,true,0); //Bk //##cc
+  end;
+  if (HasTREO) then begin
+  EditField(h3,v=vm,80,"TREO nr.",Normal,TREONr,false,0);
+  EditField(h3,v+=vs,80,"TREO kehtivuskp.",Normal,TREOExpDate,false,PasteCurDate);
+  end;
+  Tile(6,250,false,"6",Addr1);
+  label = UserDefined("CUVc","InvAddr0");
+  if (blank(label)) then begin label = "Arve"; end;
+  EditField(h=110,v=6,-20,label,Normal,Addr1,false,0);
+  label = UserDefined("CUVc","InvAddr1");
+  if (blank(label)) then begin label = "Aadress"; end;
+  EditField(h,v+=vs, -20,label,Normal,Addr2,false,0);
+  label = UserDefined("CUVc","InvAddr2");
+  EditField(h,v+=vs, -20,label,Normal,Addr3,false,0);
+  label = UserDefined("CUVc","InvAddr3");
+  EditField(h,v+=vs, -20,label,Normal,InvAddr3,false,0);
+  label = UserDefined("CUVc","InvAddr4");
+  EditField(h,v+=vs, -20,label,Normal,InvAddr4,false,0);
+  EditField(h,vm=(v+=vs),80,"Riik",Normal,InvCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin  
+    EditField(h2-89,v,232,"",ViewOnly,InvCountryName,false,0); 
+    h5 = -170;
+    width = 150;
+  end else begin
+    h5 = -270;
+    width = 135;
+  end;
+  if (HasApprovals) then begin
+    SoftEditField(h3=h+4,v=(vm+=40),123,"Kinnituse hetkeseis",ViewOnly,"AcceptanceStatusFlag",false,0,M4Str,255);
+/*  
+    ButtonFrame(h3=h+4,v=(vm+=40),123,6,"Kinnituse hetkeseis");
+  RadioButton(h3,v,kAcceptanceStateNotRequired,0,"Pole vajalik",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotStarted,0,"Alustamata",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotRequested,0,"Saatmata",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStatePending,0,"Ootel",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateApproved,0,"Kinnitatud",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateRejected,0,"Tagasi lükatud",AcceptanceStatus);
+*/    
+    v = VATZoneButtonsLabelsEST(h3=290,v=vm,170,16);
+  end else begin
+    v = VATZoneButtonsLabelsEST(h3=290,v=vm+20,170,16);
+  end;
+  EditField(h2=-170,v=vm,150,"Regioon",Normal,Region,false,RegionSClass); 
+  EditField(h2,v+=vs,150,"KMKR nr.",Normal,VATNr,false,0);
+  EditField(h2,v+=vs,150,"GLN",ViewOnly,RecipientGLN,false,0); 
+  EditField(h2,v+=vs,150,"Telefon",Normal,Phone,false,0);
+  EditField(h2,v+=vs,150,"Faks",Normal,Fax,false,0);
+  Tile(7,170,false,"7",ShipAddr0);
+  if (StandardHansa==false) then begin
+  EditField(h1,v=6,80,"Aadressi kood",Normal,DelAddrCode,false,DelAddr3SClass);
+  EditField(h1,v+=vs,-20,"Lähetus-",Normal,ShipAddr0,false,0);
+  end else begin
+    EditField(h1,v=6,-20,"Lähetus-",Normal,ShipAddr0,false,0); 
+  end;
+  EditField(h1,v+=vs,-20,"aadress",Normal,ShipAddr1,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,ShipAddr2,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,ShipAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr4,false,0);
+  EditField(h1,v+=vs,80,"Riik",Normal,DelCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin  
+    EditField(h1+91,v,232,"",ViewOnly,DelCountryName,false,0); 
+    h5 = -170;
+    width = -20;
+  end;  
+  EditField(h2,v,150,"Lähetuse GLN",ViewOnly,DelRecipientGLN,false,0); 
+//  EditField(h1+200,v,80,"#VAT Code#",Normal,CustVATCode,false,0);
+  EnterSkip(OrdDate);
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Tellimuse hetkeseis",'r',5,"ORInfoRnORDsm");
+    SpecialMenu("Artikli hetkeseis",'I',2,"ItemStatusORDsm");
+    SpecialMenu("Lähetus",'L',0,"SHFromORDsm");
+    SpecialMenu("Arve",'F',1,"IVFromORDsm"); 
+    SpecialMenu("Lisa vahesumma",' ',14,"SubtotalORDsm");
+/*
+email not working yet
+    SpecialMenu(" e-mail",'m',11,"CreateMailFromORDsm");
+*/    
+  end else begin
+  SpecialMenu("Arvuta allahindlus ümber",' ',11,"RecalcDiscountORDsm");
+  if (StandardHansa==false) then begin
+  SpecialMenu("Arvuta kaal ja maht",' ',10,"RecalculateWeightORDsm");
+  end;
+  if (HasLocalization("CAN,USA")) then begin
+    SpecialMenu("Get Tax Rates",' ',0,"ORGetTaxRates2Dsm");
+  end;
+
+  SpecialMenu("Arvuta ümber valuutahinnakirja artiklid",' ',7,"UpdatePricesORDsm");
+  SpecialMenu("Artikli otsing",'f',1,"ItemSearchDsm");
+  SpecialMenu("Vaata tellimuse hetkeseisu",'r',5,"ORInfoRnORDsm");
+  if (HasTaxMatrix) then begin
+    SpecialMenu("Ava maksude maatriks",' ',25,"OpenVatMatrixORDsm");
+  end;
+  if (StandardHansa==false) then begin
+    SpecialMenu("Trüki sisetellimus",' ',4,"Or2FormORDsm");
+  end;
+  SpecialMenu("Reserveeringud",' ',15,"OrderReservORDsm");
+  if (GuiType==kGuiiPhone) then begin
+    SpecialMenu("Allkirjasta",' ',10,"SignORDsm");
+  end;
+  
+  SpecMenuGroup("",kSpecMenuGroupTypeExtendedPlusMenu,0);
+//  SpecialMenu("Activity",'c',9,"CreateActFromORDsm");
+  SpecialMenu("Lähetus",'L',0,"SHFromORDsm");
+  if (HasDownpayments or IsBooks) then begin //##cc
+    SpecialMenu("Ettemaksuarve",' ',3,"DownPayFromORDsm");
+  end;
+  if (HaseMail or IsEnterprise) then begin
+  SpecialMenu("E-mail",'m',11,"CreateMailFromORDsm");
+  end;
+  SpecialMenu("Arve",'F',1,"IVFromORDsm");
+  if (HasModTS or IsEnterprise or IsBooks) then begin //##cc
+  SpecialMenu("Projekt",' ',9,"CreatePRFromORDsm");
+  SpecialMenu("Projektieelarve",' ',10,"CreateTBBUFromORDsm");
+  end;
+    SpecialMenu("Ostutellimus",' ',4,"POFromORDsm");
+  SpecialMenu("Tagastatud kaubad",'B',6,"RetFromORsm");
+  If (IsBooks) then begin //##ii
+  SpecialMenu("Tootmised",'',26,"ProdFromORDsm");//Bk  //##ii
+  end;//##ii
+  SpecialMenu("Laoliikumine",' ',8,"StockMovFromORDsm");
+  if (HasApprovals) then begin
+    SpecialMenu("Saada kinnitamiseks",' ',6,"ORSendforAcceptanceORDsm");
+    SpecialMenu("Tühista kinnitamise päring",' ',2,"CancelApprovalRequestDsm");
+  end;
+  SpecialMenu("Uus klient",' ',0,"AddCustomerORDsm");
+  SpecialMenu("Uus artikkel",' ',0,"AddItemORDsm");  
+  if (IsBooks) then begin //##ii
+  SpecialMenu("Hinnavõrdlus",' ',27,"DiffORPriceDsm");//Bk HAL Telema //##ii
+  end;//##ii
+  end;
+  EndWindow;
+end;
+
+window ORJRClass:1
+  wtag("language","EST"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Määra tellimuste nimekiri",ORJRClass,CGRcW,RcType);
+  SetWRect(20,80,515,410);
+  v= 6; vs = 20; h=160;
+  EditFieldTL(h,v, 150,"Tellimuse nr.",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Periood");
+  EditFieldTL(h,v+=vs ,150,"Kliendid",M4UStr,Normal,20,f2,false,CUSClass);
+  if (HasSalesman) then begin
+  EditFieldTL(h,v+=vs ,100,"Müügimees",M4UStr,Normal,10,AccStr,false,UserSClass);
+    if (StandardHansa==false) then begin
+  EditFieldTL(h,v+=vs ,50,"Müügigrupp",M4UStr,Normal,10,f3,false,SalesGroupSClass);
+    end;
+  end;
+  if (IsEnterprise) then begin
+  EditFieldTL(h,v+=vs, 150,"Tellimuse klass",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
+  end;
+  EditFieldTL(h,v+=vs, 150,"Artikkel",   M4UStr,Normal,20,LastAcc,false,INSClass);
+  if (HasMultiLocations) then begin
+  EditFieldTL(h,v+=vs, 150,"Ladu",M4UStr,Normal,10,f4,false,LocationSClass);
+  end;
+  if (IsEnterprise) then begin
+  CheckBox(h,v+=20,0,"Näita ainult reserveeritud tellimusi",flags[8]);
+  end;
+  if (HasTREO) then begin
+    CheckBox(h,v+=16,0,"Näita TREO infot",flags[10]);
+  end;
+  CheckBox(h,v+=16,0,"Kilogrammides",flags[14]); //OBS
+
+  ButtonFrame(h=30,vm=(v+=41),123,3,"Esitus");
+  RadioButton(h,v,0,0,"Kokkuvõte",ArtMode);
+  RadioButton(h,v+=16,1,0,"Detailne",ArtMode);
+  RadioButton(h,v+=16,2,0,"KM-_ta",ArtMode);
+  ButtonFrame(h+=143,v = vm,143,6,"Vali");
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Arveldatud, lähetamata",flags[4]); v = v + 16;
+  end;
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Arveldatud, osaliselt lähetatud",flags[13]); v = v + 16;
+  end;
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Arveldamata",flags[1]); v = v + 16;
+  end;
+  if (HasModIN) then begin
+    CheckBox(h,v,0,"Osaliselt lähetatud",flags[2]); v = v + 16;
+  end;
+  CheckBox(h,v,0,"Lõpetatud",flags[3]); v = v + 16;
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Lähetatud, arveldamata",flags[9]); v = v + 16;
+  end;
+  EndFrame;
+  ButtonFrame(h+=163, v = vm,130,2,"Järjestus");
+  RadioButton(h,v,0,0,"Tell nr.",flags[5]);
+  RadioButton(h,v+=16,1,0,"Klient",flags[5]);
+  ButtonFrame(h,v+=40,130,3,"Hetkeseis");
+  RadioButton(h,v,0,0,"V.a suletud",flags[12]);
+  RadioButton(h,v+=16,1,0,"K.a suletud",flags[12]);
+  RadioButton(h,v+=16,2,0,"Ainult suletud",flags[12]);
+/*## code comenmted out in hal file as well
+  ButtonFrame(h+=148, v = vm,123,2,"Vali");
+  CheckBox(h,v,0,"P_rinted",flags[6]);
+  CheckBox(h,v+=16,0,"No_t Printed",flags[7]);
+*/
+  //CheckBox(h,v+=32,0,"Show Reserved Orders only",flags[8]);
+  EndWindow;
+  end;

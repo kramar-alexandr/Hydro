@@ -1,0 +1,20 @@
+window MetalPriceTClass:1
+  wtag("language","EST,LAT,ENG,LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Metal Price",MetalPriceTClass,CGHbl,HBlRecType);
+  SetBlid(MetalPriceBlock);
+  SetWRect(20,80,460,350);
+  Sizeable(-1,-1,0,0);
+  h = 8; v = 60;
+
+  MatrixBegin(h,v,-50,-20,-,99);
+  MatCol(1,h+=20,"From",0,StartDate,false,0);
+  MatCol(1,h+=70,"To",0,EndDate,false,0);
+  MatCol(1,h+100,"Metal Price",0,MetalPrice,true,0);
+  MatCol(1,h+210,"Billet Premium",0,BilletPremium,true,0);
+
+  EndMatrix;
+   
+  EndWindow;
+end;

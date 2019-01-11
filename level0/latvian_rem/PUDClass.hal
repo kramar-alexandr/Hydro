@@ -1,0 +1,493 @@
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+remote   function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean HasTaxMatrix();
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external function Boolean CUVATNrColumn;
+external function Boolean UseTaxTemplatesforTaxCalc();
+external function string 60 UserDefined(string,string);
+external function Boolean HasJewelleryInterface();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasLimitedAccess();
+external function Boolean StandardHansa();
+external function Boolean HasModCRM();
+external function Boolean HasApprovals();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasTouchScreenLook();
+external function Boolean HaseMail();
+external function Boolean HasModPO();
+external function Boolean HasCommunicator();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasMultiCurrency();
+external function Boolean HasBase2();
+external function Boolean IsEnterprise();
+external function Boolean HasPriceLists();
+external function Boolean HasModSL();
+external function Boolean HasModSO();
+external function Boolean HasModIN();
+external function Boolean HasModTS();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasObjects();
+external function Boolean HasSalesman();
+external function Boolean HasStandardCRM();
+external function Boolean HasExtTax();
+external function Boolean HasModNL();
+external function Boolean HasCustItem();
+external function Boolean HasLanguages();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasModSVO();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasVATZone();
+external function Boolean HasModPOS();
+external function Boolean HasModCredMan();
+external function Boolean HasModPL();
+external function Boolean HasMultiLocations();
+external function Boolean HasRoute();
+external function Boolean HasSerialNumbers();
+external function Boolean HasQualityControl();
+external function Boolean HasAdvancedStock();
+external function Boolean HasModRent();
+external function Boolean HasItemGroups();
+external function Boolean HasItemClassification();
+external function Boolean HasContactClassification();
+external function Boolean HasSecondQuantity();
+external function Boolean HasDepartments();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasPositions();
+external function Boolean HasCategories();
+
+SetLangMode(LangLatvian,"LAT",2);
+
+window PUDClass:1
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,t,v,vm,vs;
+  string 255 label;
+  record CYBlock CYb;
+  Integer tilenr;
+  Integer f,flipnr;
+
+  BlockLoad(CYb);
+  WindowBegin("Saņemtās preces",PUDClass,CGview,-);
+  if (HasJewelleryInterface) then begin
+    SetWRect(20,80,870,620);
+  end else begin
+  SetWRect(20,80,750,460);
+  end;
+  Sizeable(-1,-1,0,0);
+  UseView(PUVc);
+  ActiveFieldOnNew("VECode");      
+  FormName(PurchaseForm);
+  Tile(0,74,false,"",TransDate);
+  EditField(75,vm=(v=6),95,"Nr.",Normal,SerNr,false,TSerSClass);
+  EditField(75,v+=20,95,"Piegādātājs",Normal,VECode,false,VESClass);
+  EnterSkip(TransDate);
+  EditField(h=255,v=vm,-40,"Nosaukums",Normal,VEName,false,0);
+  CheckBox(h4=-100,v+=20,0,"Grāmatot",OKFlag);
+  if (CYb.UseTaxTemplatesforTaxCalc==0) then begin
+  CheckBox(h4,v+=16,0,"Cena ar PVN",InclVAT);
+  end else begin
+    CheckBox(h4,v+=16,0,"Cena ar PVN",InclVAT);  
+  end;
+  tilenr = 1;
+  TileButton(tilenr,"Nosac."); tilenr = tilenr + 1;
+  TileButton(tilenr,"Artikuli"); tilenr = tilenr + 1;
+  if (HasMultiCurrency) then begin
+    TileButton(tilenr,"Valūta"); tilenr = tilenr + 1;
+  end;
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+    TileButton(tilenr,"Papildu izm."); tilenr = tilenr + 1;
+    TileButton(tilenr,"Transp."); tilenr = tilenr + 1;
+    end;
+    TileButton(tilenr,"Komentārs"); tilenr = tilenr + 1;
+  end;
+  tilenr = 1;
+
+  vs = 20; h1 = 110; h2 = 300; h3 = 550; h4 = -100;
+  Tile(tilenr,70,false,tilenr,TransDate); tilenr = tilenr + 1;
+  EditField(h1,vm=(v=6),82,"Grāmat. datums",Normal,TransDate,false,PasteCurDate);
+  if (IsEnterprise==false) then begin
+    EditField(h2,v,-20,"Komentārs",Normal,Comment,false,0);  
+  end;
+  if (HasMultiLocations) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Noliktava",Normal,Location,false,LocationSClass);  
+  end;
+  if (HasRoute) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Maršruts",ViewOnly,Sorting,false,0);  
+  end;
+  v = v + vs;
+  SoftEditField(h1,v,82,"Svītrkods",Normal,"scanbarcode",false,0,M4Str,60);  
+  if (HasObjects) then begin
+    if (IsEnterprise) then begin
+  EditField(h2,v=vm,135,"Objekts",Normal,Objects,false,ObjSClass);
+    end else begin
+      if (HasMultiLocations) then begin
+        EditField(h2,v,135,"Objekts",Normal,Objects,false,ObjSClass);  
+      end else begin
+        v = v + vs;
+        EditField(h2,v,135,"Objekts",Normal,Objects,false,ObjSClass);  
+      end;
+    end;
+  end;
+  if (HasModPO) then begin
+    if (HasObjects) then begin
+      v = v + vs;
+    end;
+    EditField(h2,v,135,"Pasūtījums Nr.",ViewOnly,PONr,false,0);  
+  end;
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      v = v + vs;
+      EditField(h2,v,135,"Pasūtījuma līgums",ViewOnly,POCOSerNr,true,POCOSClass);  
+    end;
+  EditField(h3,v=vm,80,"Pasūtījuma klase",ViewOnly,PUClass,false,0);
+  end;
+  if (HasLanguages) then begin
+    v = v + vs;
+    EditField(h3,v,80,"Valoda",Normal,LangCode,false,LangSClass);  
+  end;
+  if (IsEnterprise) then begin
+    v = v + vs;
+    EditField(h3,v,80,"Muitas Nr.",Normal,CustomsNr,false,0);  
+  end;
+  if (HasLocalization("ARG,MEX,USA")) then begin  
+    v = v + vs;
+    EditField(h3,v,80,"Dispatch Number",Normal,DispatchNumber,false,0);  
+  end;
+//  CheckBox(h4,v=vm,0,"Price Incl. #VAT#",InclVAT);
+  EnterSkip(Math);
+  Tile(tilenr,220,true,tilenr,Math); tilenr = tilenr + 1;
+  v = 24;
+  if (HasSerialNumbers) then begin
+    MatrixBegin(4,v,-50,-50,-,199);
+  end else begin
+    MatrixBegin(4,v,-25,-50,-,199);
+  end;
+  MatTypedRow(stp);
+  MatOverStrike(ovst);
+  Flip(0);
+  MatCol(1,28,"Artikuls",0,ArtCode,false,INSClass);
+//  MatCol(1,84,"Var",0,VARList,true,VARSClass);
+//  MatCol(1,144,"Qty",0,Quant,true,0);
+  if (HasVarieties) then begin
+  MatCol(1,94,"Daudz.",0,Quant,true,MATVARINSClass);
+  end else begin
+    MatCol(1,94,"Daudz.",0,Quant,true,0);  
+  end;
+  EnterSkip(Spec);
+  MatText(t=3,28,"Paraksts",true);
+  MatCol(t,100,"",0,Sign,false,0);
+  MatText(t,160,"Korekcija",true);
+  MatCol(t,290,"Labojums",0,UpdDate,false,0);
+  flipnr = 1;
+  Flip(flipnr); flipnr = flipnr + 1;
+  if (HasJewelleryInterface) then begin
+    MatColTL(1,144,"Vienība",0,M4Code,ViewOnly,5,UnitCode,false,UnitSCLass); 
+    MatCol(1,184,"Apraksts",0,Spec,false,0); 
+    MatCol(1,-485,"Noliktava",0,Location,false,LocationSClass); 
+    MatCol(1,-430,"Sērijas Nr..",0,SerialNr,false,SerialNrSClass); 
+    MatCol(1,-320,"Noliktavas tips",0,StockType,false,SetSClass); 
+  end else begin
+  MatColTL(1,164,"Vienība",0,M4Code,ViewOnly,5,UnitCode,false,UnitSCLass);
+  MatCol(1,204,"Nosaukums",0,Spec,false,0);
+  end;
+  MatCol(1,-240,"Cena",0,UPrice,true,0);
+  MatCol(1,-160,"Iepirk. cena",0,CostPrice,true,0);
+  MatCol(1,-80,"Summa",0,Sum,true,0);
+  if (IsEnterprise) then begin
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Nosaukums",0,Spec,false,0);
+  MatCol(1,-350,"Noliktava",0,Location,false,LocationSClass);
+  MatCol(1,-280,"Sērijas Nr.",0,SerialNr,false,SerialNrSClass);
+  MatCol(1,-150,"Derīgs līdz",0,BestBefore,false,0);
+  MatCol(1,-60,"Part. statuss",0,BatchStatus,false,BatchStatusSClass);
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Nosaukums",0,Spec,false,0);
+  MatColTL(1,-404,"Cena",0,-1,ViewOnly,-1,InPrice,false,0);
+    if (StandardHansa==false) then begin
+  MatColTL(1,-324,"Cenu neatb.",0,-1,ViewOnly,-1,VarianceAmount,false,0);
+  MatCol(1,-244,"Iepirk. cena",0,UPrice,true,0);
+  MatCol(1,-174,"Papildu izm.",0,Extra,true,0);  
+  MatCol(1,-104,"Pašizm.",0,CostPrice,true,0);
+    end else begin
+      MatCol(1,-324,"Nosūt. izm.",0,ShipCost,true,0);  
+      MatCol(1,-244,"Papildu izm.",0,Extra,true,0);  
+      MatCol(1,-164,"Muitas izm.",0,CustomsCost,true,0);  
+    end;
+  if (CYb.UseTaxTemplatesforTaxCalc!=0) then begin
+  MatCol(1,-34,"Nod.v.",0,TaxTemplateCode,false,TaxTemplateSClass);
+  end else begin
+  MatCol(1,-34,"PVNkd",0,VATCode,false,VATCodeSClass);
+  end;
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Nosaukums",0,Spec,false,0);
+  MatCol(1,-350,"#Pieg.# artik. Nr.",0,VEItemCode,false,PISClass);
+  MatColTL(1,-270,"P. vien.",0,M4Code,ViewOnly,5,VEUnit,false,UnitSCLass);
+  MatCol(1,-200,"P. daudz.",0,VEQuant,true,0);
+    if (StandardHansa==false) then begin
+  MatCol(1,-140,"Koef.",0,Coefficient,true,0);
+    end;
+  MatCol(1,-90,"Pamatcena",0,BasePrice,false,0);
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Nosaukums",0,Spec,false,0);
+    if (StandardHansa==false) then begin
+  MatCol(1,-400,"Nol. tips",0,StockType,false,SetSClass);
+    end;
+    if (HasTREO) then begin
+  MatCol(1,-310,"TREO",0,TREO,false,SetSClass);
+    end;
+  MatCol(1,-220,"Nol. konts",0,CostAcc,false,AccSClass);
+  MatCol(1,-155,"Kred. konts",0,CredAcc,false,AccSClass);
+  MatCol(1,-90,"Objekti",0,Objects,false,ObjSClass);
+    if (StandardHansa==false) then begin
+    Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(1,144,"Muitas Nr.",0,CustomsNr,false,0);  
+      MatCol(1,-340,"Muitas dat.",0,CustomsDate,false,PasteCurDate);  
+  MatCol(1,-240,"Valsts",0,CountryOfOrg,false,CountrySClass);
+  MatCol(1,-140,"Vieta",0,PosCode,false,PosSClass);
+  MatCol(1,-70,"Uz vietu",0,ToPosCode,false,FreePosSClass);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Nosaukums",0,Spec,false,0);
+  MatCol(1,-400,"Anod.",0,Anod,true,0); // OBS
+  MatCol(1,-350,"Powd.",0,Powd,true,0); // OBS
+  MatCol(1,-300,"Mec.",0,Mec,true,0);   // OBS
+  MatCol(1,-250,"Sērijas Nr",0,SerialNr,false,SerialNrSClass);
+  MatCol(1,-135,"Plat.",0,UnitXval,true,0);
+  MatCol(1,-90,"Augst.",0,UnitYval,true,0);
+  MatCol(1,-45,"Biez.",0,UnitZval,true,0);
+    if (StandardHansa==false) then begin
+  Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(1,144,"Papildizm.",0,Extra,true,0);  
+  MatCol(1,-420,"Pieg.",0,ShipCost,true,0);
+  MatCol(1,-360,"Muita",0,CustomsCost,true,0);
+  label = UserDefined("AccBlock","PUCost1");
+  if (blank(label)) then begin label = "Izm. 1";end;
+  MatCol(1,-300,label,0,RowCost1,false,0);
+  label = UserDefined("AccBlock","PUCost2");
+  if (blank(label)) then begin label = "Izm. 2";end;
+  MatCol(1,-240,label,0,RowCost2,false,0);
+  label = UserDefined("AccBlock","PUCost3");
+  if (blank(label)) then begin label = "Izm. 3";end;
+  MatCol(1,-180,label,0,RowCost3,false,0);
+  label = UserDefined("AccBlock","PUCost4");
+  if (blank(label)) then begin label = "Izm. 4";end;
+  MatCol(1,-120,label,0,RowCost4,false,0);
+  label = UserDefined("AccBlock","PUCost5");
+  if (blank(label)) then begin label = "Izm. 5";end;
+  MatCol(1,-60,label,0,RowCost5,false,0);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,144,"Pas. Nr.",0,PONr,false,POSClass);
+  MatCol(1,194,"Pas. Rnd.",0,OrdRow,false,0);
+  MatCol(1,-370,"Pas. sask.",0,PORecon,false,0);
+  MatCol(1,-310,"Komentārs",0,POReconComment,false,0);
+  MatCol(1,-200,"Rēķ.sask.",0,VIRecon,false,0);
+  MatCol(1,-130,"Komentārs",0,VIReconComment,false,0);
+  end else begin
+    if (HasSerialNumbers) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(1,144,"Apraksts",0,Spec,false,0);  
+      MatCol(1,-150,"Sērijas Nr.",0,SerialNr,false,SerialNrSClass);  
+    end;
+/*
+    MatCol(1,-280,"Vienības cena",0,UPrice,true,0);
+    MatCol(1,-210,"Transport.",0,ShipCost,true,0);
+    MatCol(1,-140,"Papildu",0,Extra,true,0);
+    MatCol(1,-70,"Pašizmaksa",0,CostPrice,true,0);
+*/
+  end;
+  if (HasLocalization("ARG,MEX,USA")) then begin  
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,144,"Description",0,Spec,false,0);  
+    MatCol(t,-250,"Dispatch Number",0,DispatchNumber,false,0);  
+  end;
+  if (HasJewelleryInterface) then begin
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,144,"Apraksts",0,Spec,false,0); 
+    MatCol(t,-350,"Pieg. sēr. Nr.",0,SuppSerialNr,true,0); 
+    MatCol(t,-200,"Metāls",0,Metal,true,0); 
+    MatCol(t,-150,"Svars",0,RowWeight,true,0); 
+    MatCol(t,-100,"Izmērs",0,Size,true,0); 
+    MatCol(t,-50,"Garums",0,Length,true,0); 
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,144,"Apraksts",0,Spec,false,0); 
+    MatCol(t,-350,"Pamatakmens",0,MajStoneDet,true,0); 
+    MatCol(t,-250,"Krāsa",0,Colour,true,0); 
+    MatCol(t,-200,"Tīrība",0,Clarity,true,0); 
+    MatCol(t,-150,"Sertif.",0,Cert,true,0); 
+    MatCol(t,-100,"Papildu akmens",0,MinStoneDet,true,0); 
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,144,"Apraksts",0,Spec,false,0); 
+    MatCol(t,-400,"Pulksteņa zīmols",0,WatchBrand,true,0); 
+    MatCol(t,-300,"Stila nosaukums",0,StyleName,true,0); 
+    MatCol(t,-200,"Pulksteņa metāls",0,WatchMetal,true,0); 
+    MatCol(t,-100,"Izplatība",0,Movement,true,0); 
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,144,"Apraksts",0,Spec,false,0); 
+    MatCol(t,-400,"Sprādze",0,BrcStr,true,0); 
+    MatCol(t,-300,"Dzimuma",0,Gender,true,0); 
+    MatCol(t,-200,"Cits",0,Other,true,0); 
+    MatCol(t,-100,"Cits 2",0,Other2,true,0); 
+  end;
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  vs = 20;
+//  v = 18;
+  v = v + 1;
+  if (flipnr>2) then begin
+    for (f=1;f<flipnr;f=f+1) begin
+      VTab(-35,v,-16,v+vs,ToolFlip,f,chr(asc("A") + f - 1));
+      v = v + vs;
+    end;
+  end;
+  EditField(110,-41,70,"Daudz.",ViewOnly,SumQuant,true,0);
+//  EditField(110,-21,70,"Price Subtotal",Normal,SubTotal,true,0); //Shows the same as SumCostPrice?
+  EditField(260,-41,70,"Piegāde",Normal,ShipCost,true,0);
+  if (IsEnterprise) then begin
+  EditField(260,-21,70,"Muita",Normal,CustomsCost,true,0);
+  end;
+  if (CYb.UseTaxTemplatesforTaxCalc==0) then begin
+  EditField(410,-41,70,"PVN",Normal,VATVal,true,0);
+  if (HasExtTax) then begin
+  EditField(410,-21,70,"Atsk. nod.",ViewOnly,TAX1Sum,true,0);
+    end;
+  end else begin
+    EditField(410,-41,70,"Nod.",Normal,VATVal,true,0);  
+  end;
+  EditField(-169,-41,118,"Summa",ViewOnly,SumCostPrice,true,0);
+  EditField(-169,-21,118,"KOPĀ",ViewOnly,PayVal,true,0);
+  if (HasMultiCurrency or HasBase2) then begin
+    Tile(tilenr,70,false,tilenr,FrRate); tilenr = tilenr + 1;
+  vs = 20;
+    if (HasBase2) then begin
+      h1 = h1 + 20;
+    end;
+  EditField(h1,v=6,50,"Valūta",Normal,CurncyCode,false,CurncyCodeSClass);
+    if (HasMultiCurrency) then begin
+    if (HasBase2) then begin
+        EditField(h1,v+vs,50,"Bāzes valūta 1",Normal,BaseRate1,true,0);
+    end else begin
+        EditField(h1,v+vs,50,"Bāzes valūta",Normal,BaseRate1,true,0);
+      end;
+      if (HasBase2) then begin  
+        EditField(h1,v+(vs*2),50,"Bāzes valūta 2",Normal,BaseRate2,true,0);  
+      end;
+      EditField(h2=295,v,50,"Kurss",Normal,FrRate,true,0);  
+      if (HasBase2) then begin  
+        RateField(h3=360,v,50,":",Normal,"ToRateB1",true,h3+60,v+14,"Bāzes valūta 1",false);  
+        RateField(h3,v+=vs,50,":",Normal,"ToRateB2",true,h3+60,v+14,"Bāzes valūta 2",false);            
+      end else begin
+        RateField(h3=360,v,50,":",Normal,"ToRateB1",true,h3+60,v+14,"Bāzes valūta",false);      
+      end;
+    end else begin
+      EditField(h1,v+=vs,50,"Bāzes valūta 1",Normal,BaseRate1,true,0);  
+      EditField(h1,v+=vs,50,"Bāzes valūta 2",Normal,BaseRate2,true,0);  
+    end;
+  end;
+  if (IsEnterprise and StandardHansa==false) then begin
+    Tile(tilenr,120,false,tilenr,Cost1); tilenr = tilenr + 1;
+  vs = 20;
+  label = UserDefined("AccBlock","PUCost1");
+  if (blank(label)) then begin label = "Papildizm. 1";end;
+  EditField(h=110,v=6,70,label,Normal,Cost1,false,0);
+  label = UserDefined("AccBlock","PUCost2");
+  if (blank(label)) then begin label = "Papildizm. 2";end;
+  EditField(h2=295,v,70,label,Normal,Cost2,false,0);
+  label = UserDefined("AccBlock","PUCost3");
+  if (blank(label)) then begin label = "Papildizm. 3";end;
+  EditField(h,v+=vs,70,label,Normal,Cost3,false,0);
+  label = UserDefined("AccBlock","PUCost4");
+  if (blank(label)) then begin label = "Papildizm. 4";end;
+  EditField(h2,v,70,label,Normal,Cost4,false,0);
+  label = UserDefined("AccBlock","PUCost5");
+  if (blank(label)) then begin label = "Papildizm. 5";end;
+  EditField(h,v+=vs,70,label,Normal,Cost5,false,0);
+  ButtonFrame(h3=400,v=16,130,2,"Papildus izmaksu aprēķins");
+  RadioButton(h3,v,0,0,"Cenā",ExtraCostsCalculation);
+  RadioButton(h3,v+=16,1,0,"Svarā",ExtraCostsCalculation);
+  ButtonFrame(h3=-163,v=16,123,6,"Apstiprinājuma statuss");
+  RadioButton(h3,v,kAcceptanceStateNotRequired,0,"Nav nepieciešams",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotStarted,0,"Nav sākts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotRequested,0,"Nav prasīts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStatePending,0,"Procesā",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateApproved,0,"Apstiprināts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateRejected,0,"Noraidīts",AcceptanceStatus);  
+    Tile(tilenr,130,false,tilenr,FreightCode); tilenr = tilenr + 1;
+  EditField(h1,v=6,80,"Transporta komp.",Normal,FreightCode,false,FreightCompanySClass);
+  EditField(h1,v+=vs,-20,"Nosaukums",Normal,FreightCompany,false,0);
+  EditField(h1,v+=vs,-20,"Reģ. Nr.",Normal,FreightCompanyRegNr,false,0);
+  EditField(h1,v+=vs,-20,"A/M informācija",Normal,TruckInfo,false,0);
+  EditField(h1,v+=vs,-20,"Vadītājs",Normal,Driver,false,0);
+  EditField(h1,v+=vs,-20,"CMR",Normal,CMRText,false,0); // International transporting number
+    Tile(tilenr,30,false,tilenr,Comment); tilenr = tilenr + 1;
+    EditField(h1,v=6,-20,"Komentārs",Normal,Comment,false,0);  
+  end;
+  if (StandardHansa==true) then begin
+    Tile(tilenr,30,false,tilenr,Comment); tilenr = tilenr + 1;
+    EditField(h1,v=6,-20,"Komentārs",Normal,Comment,false,0);  
+  end;
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Saņemtās preces statuss",'r',4,"PUStatusDsm");  
+    SpecialMenu("Veidot sēr. Nr.",' ',2,"GenSerialNosPUDsm");  
+    if (HasModNL) then begin
+      SpecialMenu("Atvērt grāmatojumu",'t',4,"OpenTRFromPU");  
+    end;
+    if (HasModPL) then begin
+      SpecialMenu("Veidot ienākošo rēķinu",'F',3,"VIFromPUDsm");  
+    end;
+    if (IsEnterprise or (HasLocalization("PRT") and HasModIN)) then begin    
+      SpecialMenu("Atgriezt preci",'B',7,"RetPUFromPUDsm");  
+    end;
+  end else begin
+  if (IsEnterprise) then begin
+  SpecialMenu("Meklēt artikulu",'f',1,"ItemSearchDsm");
+  SpecialMenu("Saņemtās preces statuss",'r',4,"PUStatusDsm");
+  end;
+  if (HasSerialNumbers) then begin
+  SpecialMenu("Veidot sēr. Nr.",' ',2,"GenSerialNosPUDsm");
+    if (StandardHansa==false) then begin
+  SpecialMenu("Atvērt partijas specifikāciju",' ',5,"OpenBatchPUDsm");
+    end;
+  end;
+  if (HasModNL) then begin
+  SpecialMenu("Atvērt grāmatojumu",'t',4,"OpenTRFromPU");
+  end;
+  if (HasTaxMatrix) then begin
+  SpecialMenu("Atvērt nod. matricu",' ',25,"OpenVatMatrixPUDsm"); 
+  end;
+  SpecialMenu("Drukāt uzlīmes",'e',0,"PrintPULabPUDsm");
+  if (HasApprovals) then begin
+    if (StandardHansa==false) then begin
+  SpecialMenu("Nosūtīt apstiprināšanai",' ',14,"PUSendforAcceptancePUDsm");
+  SpecialMenu("Atcelt apstiprināšanas pieprasījumu",' ',2,"CancelApprovalRequestDsm");
+  SpecialMenu("Sadalīt rindu",' ',7,"SplitRowPUDsm");
+    end;
+  SpecialMenu("Atjaunot cenas",' ',1,"UpdatePricesPUDsm");
+ 
+    if (StandardHansa==false) then begin
+  SpecialMenu("Apstiprināt noliktavas kustību",' ',9,"OKStockMovPUrDsm");
+    end;
+  end;
+  if (HasModPL) then begin
+  SpecialMenu("Veidot ienākošo rēķinu",'F',3,"VIFromPUDsm");
+  end;
+  if (HasQualityControl) then begin
+  SpecialMenu("Kvalitātes kontrole",'u',10,"QualConFromPUDsm");
+//  SpecialMenu("Update Mark",' ',6,"UpdateMarkPUDsm");
+  end;
+  if (HasAdvancedStock or (HasLocalization("PRT") and HasModIN)) then begin    
+  SpecialMenu("Atgriezt preci",'B',7,"RetPUFromPUDsm");
+  end;
+  if (HasModRent) then begin
+//  SpecialMenu("Create Stock Movement",' ',5,"StockMovFromPUSpec");
+//  SpecialMenu("Scan",' ',8,"ScanBarCodePUDsm");
+  SpecialMenu("Veidot noliktavas pārvietošanas",' ',8,"INTransFromPUsm");
+  end;
+  end;
+  EndWindow;
+end;

@@ -1,0 +1,31 @@
+global
+function LongInt INVcRecordCheck(var record INVc INr,record INVc IN2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+  record ExportAutoBlock ExportAutoBl;
+  integer i,rwcnt;
+  row INVc INrw;
+  
+  BlockLoad(ExportAutoBl);
+
+  res = 0;
+  if blank(INr.Perimeter) and nonblank(ExportAutoBl.CheckPerimeter) then begin
+    rwcnt = MatRowCnt(INr);    
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(INr,i,INrw);
+      if nonblank(INrw.LangCode) then begin 
+        if SetInSet(INrw.LangCode,ExportAutoBl.CheckPerimeter) then begin 
+          RecordCheckError(1000003,"",-1,"Perimeter");
+          res = -1;
+          goto LINVcRecordCheck;
+        end;
+      end;
+    end;
+  end;      
+  if (res!=-1) then begin
+    res = inner.INVcRecordCheck(INr,IN2r,stat,long4);
+  end;
+LINVcRecordCheck:;
+  INVcRecordCheck = res;
+  return;
+end;

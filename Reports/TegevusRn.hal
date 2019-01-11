@@ -1,0 +1,129 @@
+external inner procedure HT2Per(date,date,var string);
+external inner function Integer WeekNr(Date,string); // plo 30.11.2006
+
+global
+procedure TegevusRn(record RcVc RepSpec)
+begin
+  record ActTypeVc  ActTyper;
+  record ActVc	Actr;
+  record CYBlock Compr;
+  Boolean TrHs,test;
+  string  5 fromtype,totype,ctype;
+  Date dat1,dat2;
+  integer ThisYear;
+  LongInt totypeqty,totqty;
+  LongInt totypeqty1,totqty1;
+  string 255 tstr;
+  string 25 strdat;
+  integer rw,weeknumb;
+
+  SetLangMode(LangEstonian, "EST", 1);
+
+  fromtype = ReadFirstMain(ActTyper,1,true);
+  totype = ReadLastMain(ActTyper,1,true);
+
+  ThisYear = GetYear(RepSpec.sStartDate);
+  StartReportJob("Visits");
+  rw = 1;
+  if nonblank(RepSpec.f1) then begin
+  tstr = "Teg.tüüp: " & RepSpec.f1;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  if nonblank(RepSpec.f2) then begin
+    tstr = "Müügiagent:" & RepSpec.f2;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+
+  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  Header(rw,tstr,1);
+  rw = rw + 1;
+
+  EndHeader;
+
+  dat1 = StringToDate("01.01." & ThisYear);
+  dat2 = RepSpec.sEndDate;
+  weeknumb = WeekNr(RepSpec.sEndDate,Compr.CountryCode);
+
+  StartFormat(15);
+  //OutString(0,0,"Tegevuse tüüp",false);
+  OutString(0,0,"Visits",false);
+  //strdat = DateToString(RepSpec.sStartDate,"DD.MM.YY") & ":" & DateToString(RepSpec.sEndDate,"DD.MM.YY");
+  OutString(220,0,"Week " & weeknumb,true);
+  //strdat = DateToString(dat1,"DD.MM.YY") & ":" & DateToString(dat2,"DD.MM.YY");
+  OutString(420,0, "Total " & GetYear(RepSpec.sStartDate) ,true);
+  EndFormat;
+  Gray_Divider(0,1);
+
+  totqty = 0;
+  totypeqty = 0;
+
+  totqty1 = 0;
+  totypeqty1 = 0;
+
+  Actr.ActType = fromtype;
+  Actr.TransDate = dat1;
+  ctype = fromtype;
+  TrHs = true;
+  while (LoopKey("ActType",Actr,1,TrHs)) begin
+    test = true;
+    if (DateInRange(Actr.TransDate,dat1,dat2)==false) then begin
+      test = false;
+    end;
+    if (nonblank(RepSpec.f1)) then begin
+      if (SetInSet(Actr.ActType,RepSpec.f1) == false) then begin
+        test = false;
+      end;
+    end;
+    if (nonblank(RepSpec.f2)) then begin
+      if (SetInSet(Actr.MainPersons,RepSpec.f2) == false) then begin
+        test = false;
+      end;
+    end;
+    if (Actr.TransDate > RepSpec.sEndDate) then begin
+      test = false;
+    end;
+    if ((ctype<> Actr.ActType) and test) then begin
+      if (ctype <> fromtype) or blank(ctype)  then begin
+        OutLongInt(200,0,totypeqty,false);
+        OutLongInt(400,0,totypeqty1,false);
+        EndFormat;
+      end;
+      StartFormat(15);
+      ActTyper.Code = Actr.ActType;
+      ResetLoop(ActTyper);
+      OutString(0,0,Actr.ActType,false);
+      if ReadFirstMain( ActTyper,1,true) then begin
+        OutString(50,0,ActTyper.Comment,false);
+      end;
+      ctype = Actr.ActType;
+      totqty = totqty + totypeqty;
+      totqty1 = totqty1 + totypeqty1;
+      totypeqty = 0;
+      totypeqty1 = 0;
+    end;
+    if test then begin
+      if (DateInRange(Actr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+        totypeqty = totypeqty +1;
+      end;
+      totypeqty1 = totypeqty1 +1;
+    end;
+  end;
+
+  OutLongInt(200,0,totypeqty,false);
+  OutLongInt(400,0,totypeqty1,false);
+  totqty = totqty + totypeqty;
+  totqty1 = totqty1 + totypeqty1;
+  EndFormat;
+  Gray_Divider(0,1);
+  StartFormat(15);
+  OutString(0,0, "Total",false);
+  OutLongInt(200,0,totqty,false);
+  OutLongInt(400,0,totqty1,false);
+  EndFormat;
+  EndJob;
+
+  return;
+end;
+

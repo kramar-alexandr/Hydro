@@ -1,0 +1,306 @@
+external inner procedure HTArtGroup(string,var string);
+external inner procedure HT2Per(date,date,var string);
+external inner procedure HTSaleMan(string,var string);
+external inner function roundmode SetRoundModeD(Integer);
+
+SetLangMode(LangLatvian,"LAT",2);
+
+function val ShRest(string ordn,string artc)
+begin
+  record ORVc ORp;
+  record SHVc SHr;
+  record RetVc Retr;
+  row ORVc ORrw;
+  row SHVc SHrw;
+  row RetVc Retrw;
+  val artQty;
+  integer rw,i;
+  boolean TrHs;
+
+  ORp.SerNr = ordn;
+  if (ReadFirstMain(ORp,1,true)) then begin end;
+  TrHs = true; artQty = 0;
+  SHr.OrderNr = ORp.SerNr;
+  while (LoopKey("OrderKey",SHr,1,TrHs)) begin
+    if (SHr.OrderNr != ORp.SerNr) then begin
+      TrHs = false;
+    end else begin
+      rw = MatRowCnt(SHr);
+      for (i = 0; i < rw; i = i + 1) begin
+        MatRowGet(SHr,i,SHrw);
+        if (artc == SHrw.ArtCode) then begin
+          artQty = artQty + SHrw.Ship;
+        end;
+      end;
+    end;
+  end;
+  // returned
+  Retr.OrdNr = ORp.SerNr;
+  TrHs = true;
+  while (LoopKey("OrdNr",Retr,1,TrHs)) begin
+    if (Retr.OrdNr != ORp.SerNr) then begin
+      TrHs = false;
+    end else begin
+      rw = MatRowCnt(Retr);
+      for (i = 0; i < rw; i = i + 1) begin
+        MatRowGet(Retr,i,Retrw);
+        if (artc == Retrw.ArtCode) then begin
+          if (Retr.Type == 1) then begin
+            artQty = artQty + Retrw.Quant;
+          end else begin
+            artQty = artQty - Retrw.Quant;
+          end;
+        end;
+      end;
+    end;
+  end;
+  ShRest = artQty; return;
+end;
+
+function val CalcSumRowGP(record ORVc ORp, integer NotSent)
+begin
+  row ORVc ORrw;
+  val res, qty;
+  integer rwcnt,i;
+
+  rwcnt = MatRowCnt(ORp);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(ORp,i,ORrw);
+	if NotSent == 1 then begin
+		qty = ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode);
+		res = res + Round((ORrw.rowGP/ORrw.Quant)*qty,SetRoundModeD(2));
+	end else begin
+		res = res + ORrw.rowGP;
+	end;
+  end;
+  CalcSumRowGP = res;
+  return;
+end;
+
+global
+procedure SAPAORInfoRn(record RcVc RepSpec)
+begin
+  record ORVc ORp;
+  record INVc INr;
+  record CUVc CUr;
+  row ORVc ORrw;
+  array integer col;
+  boolean printf,TrHs,skipf;
+  string 255 tstr;
+  val res,QuantSum,Unit2QtySum,SumSum,cQuant,cUnit2Qty,cSum,cSumRowGP;
+  integer rw,i,j;
+
+  StartReportJob("SAPA kl.pas. atskaite");
+  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  Header(1,tstr,1);
+  rw = 2;
+  if NonBlank(RepSpec.f2) then begin
+    HTArtGroup(RepSpec.f2,tstr);
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  if NonBlank(RepSpec.f3) then begin
+    HTSaleMan(RepSpec.f3,tstr);
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  if NonBlank(RepSpec.f4) then begin
+    tstr = "Tikaj ar plānotajs piegād. laiks: " & RepSpec.f4;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  EndHeader;
+  if (RepSpec.ArtMode == 0) then begin
+    col[0] = 0;
+    col[1] = 45;
+    col[2] = 180;
+    col[3] = 260;
+    col[4] = 310;
+    col[5] = 360;
+    col[6] = 400;
+    col[7] = 480;
+    StartFormat(15);
+    OutString(col[0],0,"Kl.pas.nr.",false);
+    OutString(col[1],0,"Klients",false);
+    OutString(col[2],0,"Pas.datums",true);
+    OutString(col[3],0,"Plan.pieg.laiks",true);
+    OutString(col[4],0,"Daudz.1",true);
+    OutString(col[5],0,"Daudz.2",true);
+    OutString(col[6],0,"BP",true);
+    OutString(col[7],0,"Apgr.neiekļ.PVN",true);
+    EndFormat;
+    black_divider(0,1);
+  end else begin
+    col[0] = 0;
+    col[1] = 50;
+    col[2] = 280;
+    col[3] = 350;
+    col[4] = 410;
+    col[5] = 480;
+  end;
+  i = 0; TrHs = true;
+  ORp.OrdDate = RepSpec.sStartDate;
+  while (LoopKey("OrdDate",ORp,1,TrHs)) begin
+    printf = true;
+    if (ORp.OrdDate > RepSpec.sEndDate) then begin
+      TrHs = false;
+    end else begin
+      if (NonBlank(RepSpec.f3) and ORp.SalesMan != RepSpec.f3) then begin
+        printf = false;
+      end;
+      if (NonBlank(RepSpec.f2) and printf == true) then begin
+        printf = false;
+        rw = MatRowCnt(ORp);
+        for (j = 0; j < rw; j = j + 1) begin
+          MatRowGet(ORp,j,ORrw);
+          INr.Code = ORrw.ArtCode;
+          if (ReadFirstMain(INr,1,true)) then begin end;
+          if (INr.Group == RepSpec.f2) then begin
+            printf = true;
+          end;
+        end;
+      end;
+      if (NonBlank(RepSpec.f1) and RepSpec.f1 != ORp.CustCode and printf == true) then begin
+        printf = false;
+      end;
+      if (NonBlank(RepSpec.f4) and StringToDate(RepSpec.f4) != StringToDate(ORp.PlanShip) and printf == true) then begin
+        printf = false;
+      end;
+	  if (RepSpec.flags[0] == 1 and ORp.Closed == 1) then begin
+		printf = false;
+	  end;
+      if (RepSpec.flags[0] != 0 and printf == true) then begin
+        printf = false;
+        rw = MatRowCnt(ORp);
+        cQuant = 0; cUnit2Qty = 0; cSum = 0;
+        for (j = 0; j < rw; j = j + 1) begin
+          MatRowGet(ORp,j,ORrw);
+          INr.Code = ORrw.ArtCode;
+          if (ReadFirstMain(INr,1,true)) then begin end;
+          //if (NonBlank(ORrw.ArtCode) and ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode) > 0) then begin
+          if (NonBlank(ORrw.ArtCode) and ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode) > 0 and INr.ItemType == 1) then begin
+            if (RepSpec.flags[0] == 1) then begin
+              cQuant = cQuant + ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode);
+              cUnit2Qty = cUnit2Qty + INr.UnitCoefficient * (ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode));
+              cSum = cSum + ORrw.Price * (ORrw.Quant - ShRest(ORp.SerNr,ORrw.ArtCode)); 
+            end;
+            printf = true;
+          end;
+        end;
+      end;
+      CUr.Code = ORp.CustCode;
+      if (ReadFirstMain(CUr,1,true)) then begin end;
+      if (RepSpec.ArtMode == 0 and printf == true) then begin // detail
+        StartFormat(15);
+        if (RepSpec.flags[0] == 0) then begin
+          cQuant = ORp.TotUnit1Qty;
+          cUnit2Qty = ORp.TotUnit2Qty;
+          cSum = ORp.Sum1;
+        end;
+        OutString(col[0],"dblORVc",ORp.SerNr,false);
+        OutString(col[1],0,CUr.Name,false);
+        OutString(col[2],0,ORp.OrdDate,true);
+        OutString(col[3],0,ORp.PlanShip,true);
+        OutString(col[4],0,cQuant,true);
+        OutString(col[5],0,cUnit2Qty,true);
+	cSumRowGP = CalcSumRowGP(ORp, RepSpec.flags[0]);
+	if RepSpec.flags[0] == 1 then begin
+	  //stopalert("Ser: " & ORp.SerNr & " GP: " & cSumRowGP & " Quant " & cQuant);
+	  //cSumRowGP = Round(cSumRowGP*cQuant,2); // XXX
+	end;
+	OutVal(col[6],0,cSumRowGP,M45Val,true);
+        OutString(col[7],0,cSum,true);
+        QuantSum = QuantSum + cQuant;
+        Unit2QtySum = Unit2QtySum + cUnit2Qty;
+        SumSum = SumSum + cSum;
+        EndFormat;
+      end;
+      if (RepSpec.ArtMode == 1 and printf == true) then begin // plain
+        StartFormat(15);
+        OutString(col[0],0,"Kl.pas.nr.",false);
+        OutString(col[1],0,"Klients",false);
+        OutString(col[2] + 50,0,"Pas.datums",true);
+        OutString(col[5],0,"Plan.pieg.laiks",true);
+        EndFormat;
+        black_divider(0,1);
+        StartFormat(25);
+        OutString(col[0],"dblORVc",ORp.SerNr,false);
+        OutString(col[1],0,CUr.Name,false);
+        OutString(col[2] + 50,0,ORp.OrdDate,true);
+        OutString(col[5],0,ORp.PlanShip,true);
+        EndFormat;
+        StartFormat(15);
+        OutString(col[0],0,"Art.kods",false);
+        OutString(col[1],0,"Nosaukums",false);
+        OutString(col[2],0,"Daudz.1",true);
+        OutString(col[3],0,"Daudz.2",true);
+        OutString(col[4],0,"Cena par vien.",true);
+        OutString(col[5],0,"Ap.neiek.PVN",true);
+        EndFormat;
+        gray_divider(0,1);
+        rw = MatRowCnt(ORp);
+        for (i = 0; i < rw; i = i + 1) begin
+          printf = true;
+          MatRowGet(ORp,i,ORrw);
+          INr.Code = ORrw.ArtCode;
+          if ReadFirstMain(INr,1,true) then begin end;
+          if (NonBlank(RepSpec.f2) and RepSpec.f2 != INR.Group) then begin
+            printf = false;
+          end;
+          if (RepSpec.flags[0] == 1 and NonBlank(ORrw.ArtCode)) then begin
+            printf = false; skipf = true;
+            res = ShRest(ORp.SerNr,ORrw.ArtCode);
+            if (res != ORrw.Quant and INr.ItemType == 1) then begin
+              printf = true;
+              skipf = false;
+            end;
+          end;
+          if (printf == true and skipf == false) then begin
+            StartFormat(15);
+            OutString(col[0],0,ORrw.ArtCode,false);
+            OutString(col[1],0,ORrw.Spec,false);
+            if (RepSpec.flags[0] == 1 and ORrw.Quant - res > 0) then begin
+              INr.Code = ORrw.ArtCode;
+              if ReadFirstMain(INr,1,true) then begin end;
+              res = ShRest(ORp.SerNr,ORrw.ArtCode);
+              OutVal(col[2],0,ORrw.Quant - res,M45Val,true);
+              OutVal(col[3],0,(ORrw.Quant - res) * INr.UnitCoefficient,M45Val,true);
+              OutVal(col[4],0,ORrw.Price,M45Val,true);
+              OutVal(col[5],0,ORrw.Price * (ORrw.Quant - res),M45Val,true);
+              QuantSum = QuantSum + ORrw.Quant - res;
+              Unit2QtySum = Unit2QtySum + ((ORrw.Quant - res) * INr.UnitCoefficient);
+              SumSum = SumSum + (ORrw.Price * (ORrw.Quant - res));
+            end else begin
+              OutVal(col[2],0,ORrw.Quant,M45Val,true);
+              OutVal(col[3],0,ORrw.Unit2Qty,M45Val,true);
+              OutVal(col[4],0,ORrw.Price,M45Val,true);
+              OutVal(col[5],0,ORrw.Sum,M45Val,true);
+              QuantSum = QuantSum + ORrw.Quant;
+              Unit2QtySum = Unit2QtySum + ORrw.Unit2Qty;
+              SumSum = SumSum + ORrw.Sum;
+            end;
+            EndFormat;
+          end;
+        end;
+        gray_divider(0,1);
+        StartFormat(10);
+        EndFormat;
+      end;
+    end;
+  end;
+  black_divider(0,1);
+  StartFormat(15);
+  OutString(col[1],0,"Pas.kopā:",false);
+  if (RepSpec.ArtMode == 1) then begin
+    OutVal(col[2],0,QuantSum,M45Val,true);
+    OutVal(col[3],0,Unit2QtySum,M45Val,true);
+    OutVal(col[5],0,SumSum,M45Val,true);
+  end else begin
+    OutVal(col[4],0,QuantSum,M45Val,true);
+    OutVal(col[5],0,Unit2QtySum,M45Val,true);
+    OutVal(col[7],0,SumSum,M45Val,true);
+  end;
+  EndFormat;
+  EndJob;
+  return;
+end;

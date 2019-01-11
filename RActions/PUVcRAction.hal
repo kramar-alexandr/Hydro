@@ -1,0 +1,29 @@
+external function string 20 CheckArtCodeTreatments(string,val,val,val);
+
+global
+updating function LongInt PUVcRecordCheck(var record PUVc PUr,record PUVc PU2r,LongInt stat,LongInt long4)
+begin
+  row PUVc PUrw;
+  string 20 TreatmentErr;
+  integer i,rw;
+  longint res;
+
+  res = 0;
+  rw = MatRowCnt(PUr);
+  for(i=0;i<rw;i=i+1)begin
+    MatRowGet(PUr,i,PUrw);
+    TreatmentErr = CheckArtCodeTreatments(PUrw.ArtCode,PUrw.Anod,PUrw.Powd,PUrw.Mec);
+    if nonblank(TreatmentErr) then begin
+      RecordCheckError(1,"Ievadiet " & TreatmentErr,i,TreatmentErr);
+      res = -1;
+      goto LPUVcRecordCheck;
+    end;
+  end;
+  if res<>-1 then begin
+    res = inner.PUVcRecordCheck(PUr,PU2r,stat,long4);
+  end;
+
+LPUVcRecordCheck:;
+  PUVcRecordCheck = res;
+  return;
+end;

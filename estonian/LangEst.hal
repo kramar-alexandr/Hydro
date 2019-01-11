@@ -1,0 +1,53 @@
+event startup
+begin
+  SetLangMode(LangEstonian,"EST",0);
+
+  Report("SAPA - Artikli ajalugu", Sapa_INrsRClass, Sapa_INrsRn, 0, modIN);
+  Maintenance("Lisa artikliklassifikaator",BEAddINVcClassVClass,BEAddINVcMn,modIN);
+  Report("Arvete nimekiri, kogus 2", Sapa_IVJRClass, Sapa_InvoiceRn, 0, modSL);
+  Report("UUS:Sales Invoices",NewArveClass,NewArveRn,0,modSL);
+  Report("UUS:Sales Orders",UusTellimClass,UusTellimRn,0,modSO);
+  Report("VANA:Sales Orders",TellimClass,TellimRn,0,modSO);
+  Maintenance("SAPA:Koosta ostutellimus", OstuClass, OstuMn, modSO);
+  Report("SAPA:Pakkumised 24.11.00",PakkumClass,PakkumRn,0,modQT);
+  Report("SAPA:Tegevused 2003",TegevusClass,TegevusRn,0,modCRM);
+  Report("Loading list",LListRClass,LListRn,0,modIN);
+  
+  Report("SAPA: mŸŸgiaruanne",SapaSalesRClass,SapaSalesRn,0,modSL);
+  Maintenance("SAPA: customer.csv",SapaCustomerVClass,SapaCustomerMn,modSL);
+  Maintenance("SAPA: delivery.csv",SapaDeliveryVClass,SapaDeliveryMn,modSL);
+  Maintenance("SAPA: bookings.csv",SapaBookingVClass,SapaBookingMn,modSL);
+  Maintenance("SAPA: orders.csv",SapaOrderVClass,SapaOrderMn,modSL);
+  
+  Export("SAPA: customer.csv",SapaCustomerEClass,SapaCustomerEn,modSL);
+  Export("SAPA: delivery.csv",SapaDeliveryEClass,SapaDeliveryEn,modSL);
+  Export("SAPA: bookings.csv",SapaBookingEClass,SapaBookingEn,modSL);
+  Export("SAPA: orders.csv",SapaOrderEClass,SapaOrderEn,modSL);
+  
+  Setting("Auto SAPA Export",ExportAutoTClass,modSL);
+  Setting("Auto SAPA Export - k›ik ettev›tted",H_AllEksportTClass,modSL);
+  Setting("Metal Price ",MetalPriceTClass,modSL);
+
+  SString(1000000,"Kogus (kg)");
+  
+  SString(1000001,"Lisa MŸŸgimees");
+  SString(1000002,"TŠida Riik");
+  SString(1000003,"Lisa Perimeeter");
+  SString(1000004,"TŠida Plan. saatmise kp");
+  SString(1000005,"TŠida Plan. saabumise kp");
+  SString(1000006,"Kliendil puudub KMKR nr");
+  SString(1000007,"Kliendil puudub MŸŸgimees");
+  SString(1000008,"Kliendil puudub Riik");
+  SString(1000009,"Artiklil tŠitmata Perimeeter");
+  SString(1000010,"Kontakti kaardil on mŸŸgimees ");
+  SString(1000011,"Kontakti kaardil on riik  ");
+  //fix patch
+  
+  
+  SString(17961,"Kontakti klassifikaator ");
+
+  // 17.11.2010, not used in HALCUST
+  //sString(23000, "Sisesta lähetusviis"); //nk this number is used in standard
+
+  return;
+end;

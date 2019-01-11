@@ -1,0 +1,66 @@
+global
+procedure Sapa_IVJRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+
+  DeselectWindow(wn, false);
+  GetWindowRecord(wn, RepSpec);
+  ReportDefaults(RepSpec, "IVJRClass");
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn, RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+// based on 5.3
+procedure Sapa_INrsRClassReportDef(Var Record RcVc RepSpec)
+begin
+  record CostAccBlock CostAccr;
+
+  BlockLoad(CostAccr);
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  RepSpec.flags[7] = 1;
+  RepSpec.flags[8] = 1;
+  RepSpec.flags[9] = 0;
+  RepSpec.flags[11] = 1;
+  // ?
+  switch (CostAccr.PrimaryCostModel) begin
+    case kCostModelQueued:
+      RepSpec.flags[10] = 0;
+    otherwise
+      RepSpec.flags[10] = 1;
+  end;
+  RepSpec.flags[13] = 1;
+  RepSpec.flags[16] = 1;
+  RepSpec.flags[17] = 1;
+  RepSpec.flags[18] = 1;
+  RepSpec.flags[19] = 1;
+  RepSpec.flags[20] = 1;
+  return;
+end;
+
+global
+procedure Sapa_INrsRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+
+  DeselectWindow(wn, false);
+  GetWindowRecord(wn, RepSpec);
+  ReportDefaults(RepSpec, "INrsRClass");
+  Sapa_INrsRClassReportDef(RepSpec);
+  PutWindowRecord(wn, RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+

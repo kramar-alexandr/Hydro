@@ -1,0 +1,27 @@
+external inner procedure IVVc_PastePrice(var record IVVc,record IVVc,Integer,var string);
+external function val GetAnodPrice(record INVc ,date, var val );
+
+
+global
+procedure PasteIVAnodPrice(var record IVVc IVr,record IVVc IV2r, integer rownr)
+begin  
+  record INVc INr;
+  row IVVc IVrw;
+  string 255 warning;
+  val res,fprice;
+  
+  MatRowGet(IVr,rownr,IVrw);
+  if nonblank(IVrw.ArtCode) then begin 
+    INr.Code = IVrw.ArtCode;
+    if ReadFirstMain(INr,1,true) then begin
+      res  = GetAnodPrice(INr,IVr.InvDate,fprice);
+      //11.09.2018 IVrw.Price = (INr.UPrice1 - fprice) + (IVrw.AnodPrice * INr.Perimeter)/1000;
+      IVrw.Price =  (IVrw.UnitFactPrice * INr.UnitCoefficient) + (IVrw.AnodPrice * INr.Perimeter/1000);
+
+      MatRowPut(IVr,rownr,IVrw);
+      IVVc_PastePrice(IVr,IV2r,rownr,warning);
+    end;  
+  end;
+  
+  return;
+end;

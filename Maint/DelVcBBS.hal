@@ -1,0 +1,239 @@
+global updating
+procedure DelVcMn(record RcVc RepSpec)
+BEGIN
+  record CLInVc CLInr; // Kases ieòçmumi
+  record CLOutVc CLOutr; // Kases izdevumi
+  record JobVc Jobr;//Rezervâcijas    
+  record RestAccVc RestAccr;//Bâra ieraksti
+  record ShopBaskVc ShopBaskr; // WEB Pirkumu ieraksti
+  record TelCallsVc TelCallsr;// Zvani
+  record ResAvVc ResAvr;//Piedâvâjumi - resursi
+  record IVVc IVr;
+  record TRVc VIr;
+  record SHVc IPr;
+  record OPVc OPr;
+  
+  Boolean testf,testf2,TrHs,RemovePP,RecFound,RecRemoved;
+  LongInt FromSerNo, ToSerNo, recnr;
+  Integer i,j,rowcnt;
+  String 20 tstr;
+  String 20 codefr,codeto;
+  Val value;
+
+  FromSerNo = FirstInRange(RepSpec.f1,20);
+  ToSerNo = LastInRange(RepSpec.f1,20);
+  codefr = FirstInRange(RepSpec.f2,20);
+  codeto = LastInRange(RepSpec.f2,20);
+
+
+  IF (RepSpec.flags[1]==1)THEN BEGIN  // Rezervâcijas
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(Jobr);
+        Jobr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(Jobr,1,true);
+        if (DateInRange(Jobr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(Jobr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==2)THEN BEGIN  // Bâra ieraksti
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(RestAccr);
+        RestAccr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(RestAccr,1,true);
+        if (DateInRange(RestAccr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(RestAccr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==3)THEN BEGIN  // WEB pirkumu ieraksti
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(ShopBaskr);
+        ShopBaskr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(ShopBaskr,1,true);
+        if (DateInRange(ShopBaskr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(ShopBaskr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==4)THEN BEGIN  // Zvani
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(TelCallsr);
+        TelCallsr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(TelCallsr,1,true);
+        if (DateInRange(TelCallsr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(TelCallsr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==5)THEN BEGIN  // Kases ieòçmumi
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(CLInr);
+        CLInr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(CLInr,1,true);
+        if (DateInRange(CLInr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(CLInr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==6)THEN BEGIN  // Kases izdevumi
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(CLOutr);
+        CLOutr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(CLOutr,1,true);
+        if (DateInRange(CLOutr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+              RecordDelete(CLOutr);
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==7)THEN BEGIN  // Piedâvâjumi - resursi
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(ResAvr);
+        ResAvr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(ResAvr,1,true);
+        if (DateInRange(ResAvr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(ResAvr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==8)THEN BEGIN  // Rçíini
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(IVr);
+        IVr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(IVr,1,true);
+        if (DateInRange(IVr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(IVr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==9)THEN BEGIN  // Nosûtîðanas - Noliktavas modulis
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(IPr);
+        IPr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(IPr,1,true);
+        if (DateInRange(IPr.ShipDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(IPr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==10)THEN BEGIN  // Grâmatojumi
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(VIr);
+        VIr.Number = FromSerNo;         
+        testf = ReadFirstMain(VIr,1,true);
+        if (DateInRange(VIr.RegDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(VIr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  IF (RepSpec.flags[1]==11)THEN BEGIN  // Maksâjumu uzdevumi
+    TrHs = true;
+    if blank(RepSpec.f1) then begin TrHs = false; end;
+    while(TrHs) begin
+        ResetLoop(OPr);
+        OPr.SerNr = FromSerNo;         
+        testf = ReadFirstMain(OPr,1,true);
+        if (DateInRange(OPr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin
+           testf = false; 
+        end;
+
+        if ((TrHs==true) and (testf==true)) then begin
+           RecordDelete(OPr);  
+        end;
+        FromSerNo = FromSerNo + 1;
+        if FromSerNo>ToSerNo then begin TrHs = false; end;
+    end;
+  END;
+
+  RETURN;
+END;

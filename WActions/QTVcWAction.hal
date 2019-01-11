@@ -1,0 +1,63 @@
+external inner procedure QTSumup(var record QTVc);
+
+procedure CalcQTRowUnit2Qty(var record QTVc QTr,integer rownr)
+begin
+  row QTVc QTrw;
+  record INVc INr;
+
+  MatRowGet(QTr,rownr,QTrw);
+  INr.Code = QTrw.ArtCode;
+  if ReadFirstMain(INr,1,true) then begin end;
+  QTrw.Unit2Qty = QTrw.Quant*INr.UnitCoefficient;
+  MatRowPut(QTr,rownr,QTrw);
+  QTSumup(QTr);
+end;
+
+function Boolean QTDClassArtCodeEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record QTVc QTr;
+  row QTVc QTrw;
+  record INVc INr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,QTr);
+    MatRowGet(QTr,rownr,QTrw);
+    INr.Code = QTrw.ArtCode;
+    if ReadFirstMain(INr,1,true) then begin end;
+    QTrw.Unit2Code = INr.Unittext2;
+    MatRowPut(QTr,rownr,QTrw);
+    CalcQTRowUnit2Qty(QTr,rownr);
+    PutWindowRecord(wn,QTr);
+  end;
+  QTDClassArtCodeEFAfter = true;
+  return;
+end;
+ 
+function Boolean QTDClassQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record QTVc QTr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,QTr);
+    CalcQTRowUnit2Qty(QTr,rownr);
+    PutWindowRecord(wn,QTr);
+  end;
+  QTDClassQuantEFAfter = true;
+  return;
+end;
+
+global
+function Boolean QTDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+begin
+  boolean res;
+
+  res = inner.QTDClassAfterEditField(wn,fieldname,fn,rownr,changed);
+
+  switch (fieldname) begin
+    case "ArtCode": res = QTDClassArtCodeEFAfter(wn,fn,rownr,changed);
+    case "Quant": res = QTDClassQuantEFAfter(wn,fn,rownr,changed);
+    case "Unit2Code": res = QTDClassQuantEFAfter(wn,fn,rownr,changed);//readonly
+  end;
+  QTDClassAfterEditField = res;
+  return;
+end;

@@ -1,0 +1,30 @@
+window SapaDeliveryEClass:1
+  wtag("language","EST,LAT,LIT,ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Run delivery export",SapaDeliveryEClass,CGEc2W,RcType); 
+  SetWRect(64,80,450,230);
+  
+  //PeriodField(120,6,"Period");
+  StaticText(50,20,"Press the Run button",false);
+
+  EndWindow;
+end;
+
+
+window SapaDeliveryVClass:1
+  wtag("language","EST,LAT,LIT,ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Run delivery export",SapaDeliveryVClass,CGMnt,RcType); 
+  SetWRect(64,80,450,230);
+  
+  //PeriodField(120,6,"Period");
+  StaticText(50,20,"Press the Run button",false);
+
+  EndWindow;
+end;
+
+
+
+

@@ -1,0 +1,25 @@
+global
+function LongInt CUVcRecordCheck(var record CUVc CUr,record CUVc CU2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  res = 0;
+  if (CUr.CUType==1) then begin 
+    if blank(CUr.SalesMan) then begin
+      RecordCheckError(1000001,"",-1,"SalesMan");
+      res = -1;
+      goto LCUVcRecordCheck;
+    end;
+    if blank(CUr.CountryCode) then begin
+      RecordCheckError(1000002,"",-1,"CountryCode");
+      res = -1;
+      goto LCUVcRecordCheck;
+    end;
+  end;  
+  if (res!=-1) then begin
+    res = inner.CUVcRecordCheck(CUr,CU2r,stat,long4);
+  end;
+LCUVcRecordCheck:;
+  CUVcRecordCheck = res;
+  return;
+end;

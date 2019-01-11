@@ -1,0 +1,23 @@
+global
+procedure SapaDeliveryEClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  record ExportAutoBlock ExportAutoBl;
+  integer days;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  BlockLoad(ExportAutoBl);
+  days = ExportAutoBl.NrOfDays-1;
+ 
+  RepSpec.sStartDate = AddDay(CurrentDate,-days);
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;
+ // Trace(RepSpec.Period2Str,"RepSpec.Period2Str");
+  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end; 

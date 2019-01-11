@@ -1,0 +1,120 @@
+
+global
+procedure CheckItemSapa(record INVc INr, var string  c117, var string c118, var string c119)
+begin
+  row INVc INrw;
+  integer i,rwcnt;
+  
+  c117 = ""; 
+  c118 = "";
+  c119 = "";
+  
+  
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(INr,i,INrw);
+    switch (INrw.LangCode) begin
+      case "PTPC": c117 = "1";
+      case "PTFA": c119 = "1";
+      
+      case "PTNA5": c118 = "1";
+      case "PTNA": c118 = "1";
+      case "PTNA2": c118 = "1";
+      case "PTGD": c118 = "1";
+      case "PTHX1": c118 = "1";
+      case "PTHX3": c118 = "1";
+      case "PTHX5": c118 = "1";
+      case "PTHMW": c118 = "1";
+      case "PTHXR": c118 = "1";
+    end;
+  end;    
+  return;
+end;  
+
+global
+function string 5 SapaCheckOrder(record IVVc IVr, var date DespatchDate, var date OrdDate )
+begin
+  record ORVc ORr;
+  string 5 res;
+  date fakedate;
+  
+  res = "0";
+  DespatchDate = fakedate;
+  OrdDate = fakedate;
+  if (IVr.OrderNr!=-1) then begin 
+    ORr.SerNr = IVr.OrderNr;
+    if (ReadFirstMain(ORr,1,true)) then begin
+      if ORr.DespatchDate<=ORr.OrdDate then begin
+        res = "1";
+      end; 
+      DespatchDate = ORr.DespatchDate;
+      OrdDate      = ORr.OrdDate;
+    end;
+  end; 
+  SapaCheckOrder = res;
+  return;
+end;
+  
+
+global
+function boolean  FindMetalPrice(date invdate,var row MetalPriceBlock MetalPricerw)
+begin 
+  record MetalPriceBlock MetalPriceBl;
+  integer i,rwcnt;
+  boolean res;
+  
+  BlockLoad(MetalPriceBl);
+  
+  rwcnt = MatRowCnt(MetalPriceBl);
+  for (i=rwcnt-1;i>=0;i=i-1) begin
+    MatRowGet(MetalPriceBl,i,MetalPricerw);
+    if DateInRange(invdate,MetalPricerw.StartDate,MetalPricerw.EndDate) then begin 
+      res = true;
+      i = 0;
+    end;
+  end;  
+  FindMetalPrice = res;
+  return;
+end;  
+
+
+global
+procedure S_EmptyString(integer divider) 
+begin
+  if (divider==0) then begin 
+    ExportPadString(";",1," ",false);
+  end else begin
+    ExportString("");
+  end;  
+  return;
+end; 
+
+
+global
+procedure S_Export(string tstr, integer divider) 
+begin
+  if (divider==0) then begin 
+    ExportPadString(tstr,Len(tstr)," ",false);
+    ExportPadString(";",1," ",false);
+  end else begin 
+    ExportString(tstr);
+  end;  
+  return;
+end; 
+
+global
+procedure S_ExportVal(val s, integer divider) 
+begin
+  string 255 tstr;
+  
+  tstr = ValToString(s,M4Val,"",".",0);
+  
+  if (divider==0) then begin 
+    ExportPadString(tstr,Len(tstr)," ",false);
+    ExportPadString(";",1," ",false);
+  end else begin 
+    ExportString(tstr);
+  end;  
+  
+  return;
+end;
+     

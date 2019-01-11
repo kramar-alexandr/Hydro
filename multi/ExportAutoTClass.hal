@@ -1,0 +1,82 @@
+window ExportAutoTClass:1
+  wtag("language","EST,LAT,LIT,ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,hm,hs,t,v,v2,v3,vm,vs;
+  
+  WindowBegin("Auto SAPA Export",ExportAutoTClass,CGSbl,SRType);
+  SetWRect(64,80,789,660);
+  SetBlid(ExportAutoBlock);
+  vs = 20; h=285; 
+  Tile(0,20,false,"",ExportCU);
+  
+  EditField(h,v=20,200,"Default Export Code Page",Normal,DefExpCodepage,false,0);
+  CheckBox(-100,v,    0,"Test",Test);
+
+  TileButton(1,"Customers ");
+  TileButton(2,"Sales Report");
+  TileButton(3,"Bookings");
+  TileButton(4,"Orders");
+  Tile(1,190,false,"1",ExportCU)
+  t = v;
+  CheckBox(40,v+=16,0,"Export Customers",ExportCU);
+  EditField(h,v,50,"Export Time (hour)",Normal,CUExportTime,false,0); 
+  
+  EditField(h,v+=vs,-40,"File Path on Server",Normal,CUPath,false,0);
+  EditField(h,v+=vs,65,"Last time exported",Normal,CULastExportDate,false,0);
+  EditField(365,v,60,":",Normal,CULastExportTime,false,0);
+  ButtonFrame(h,v+=40,123,2,"Eraldaja");
+  RadioButton(h,v,0,0,";",CSeparator);
+  RadioButton(h,v+=16,1,0,"Tab",CSeparator);
+  
+  EditField(h,v+=vs*2,50,"Customer/Invoice Prefix",Normal,CUStart,false,0);
+  EditField(h,v+=vs,20,"IC1",Normal,IC1,false,0);
+  EditField(h+80,v,20,"IC2",Normal,IC2,false,0);
+  EditField(h,v+=vs,20,"LC1",Normal,LC1,false,0);
+  EditField(h+80,v,20,"LC2",Normal,LC2,false,0);
+  
+  //EditField(h,v+=vs,20,"PG1",Normal,PG1,false,0);
+  //EditField(h+80,v,20,"PG2",Normal,PG2,false,0);
+  Tile(2,190,false,"2",NrOfDays)
+  v = t;
+  EditField(h,v+=vs,60,"Number of Days",Normal,NrOfDays,false,0);
+
+  CheckBox(40,v+=vs*2,0,"Export Sales Report",ExportReport);
+  EditField(h,v,50,"Export Time (hour)",Normal,RepExportTime,false,0); 
+  EditField(h,v+=vs,-40,"File Path on Server",Normal,ReportPath,false,0);
+  EditField(h,v+=vs,65,"Last time exported",Normal,RepLastExportDate,false,0);
+  EditField(365,v,60,":",Normal,RepLastExportTime,false,0);
+  ButtonFrame(h,v+=40,123,2,"Eraldaja");
+  RadioButton(h,v,0,0,";",DSeparator);
+  RadioButton(h,v+=16,1,0,"Tab",DSeparator);
+  
+  EditField(180,v+=vs*2,-20,"Revenue Basic Lang.Codes",Normal,RevenueBasic,false,LangSClass);
+  EditField(180,v+=vs,-20,"Item Perimeter Check",Normal,CheckPerimeter,false,LangSClass);
+  
+  Tile(3,190,false,"3",BNrOfDays)
+  v = t;
+  EditField(h,v+=vs,60,"Number of Days",Normal,BNrOfDays,false,0);
+  CheckBox(40,v+=vs*2,0,"Export Bookings",ExportBookings);
+  EditField(h,v,50,"Export Time (hour)",Normal,BExportTime,false,0); 
+  EditField(h,v+=vs,-40,"File Path on Server",Normal,BReportPath,false,0);
+  EditField(h,v+=vs,65,"Last time exported",Normal,BLastExportDate,false,0);
+  EditField(365,v,60,":",Normal,BLastExportTime,false,0);
+  ButtonFrame(h,v+=40,123,2,"Eraldaja");
+  RadioButton(h,v,0,0,";",BSeparator);
+  RadioButton(h,v+=16,1,0,"Tab",BSeparator); 
+
+  Tile(4,190,false,"3",ONrOfDays)
+  v = t;
+  EditField(h,v+=vs,60,"Number of Days",Normal,ONrOfDays,false,0);
+  CheckBox(40,v+=vs*2,0,"Export Orders",ExportOrders);
+  EditField(h,v,50,"Export Time (hour)",Normal,OExportTime,false,0); 
+  EditField(h,v+=vs,-40,"File Path on Server",Normal,OReportPath,false,0);
+  EditField(h,v+=vs,65,"Last time exported",Normal,OLastExportDate,false,0);
+  EditField(365,v,60,":",Normal,OLastExportTime,false,0);
+  ButtonFrame(h,v+=40,123,2,"Eraldaja");
+  RadioButton(h,v,0,0,";",OSeparator);
+  RadioButton(h,v+=16,1,0,"Tab",OSeparator); 
+
+  EndWindow;
+end;  
+ 
+

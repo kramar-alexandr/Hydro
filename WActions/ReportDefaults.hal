@@ -1,0 +1,41 @@
+global
+function Boolean SAPASellRClassArtModeButtonAfter(Integer wn,Boolean changedf)
+begin
+  record RcVc RepSpec;
+  boolean res;
+
+  res = true;
+  GetWindowRecord(wn,RepSpec);
+  if RepSpec.ArtMode==0 then begin
+    RepSpec.BaseWidth = 900;
+  end else begin
+    RepSpec.BaseWidth = 600;
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SAPASellRClassArtModeButtonAfter = res;
+  return;
+end;
+
+global
+procedure SAPASellRClassReportDefaults(integer wn)
+begin
+  record RcVc RepSpec;
+
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SAPASellRClass");
+  RepSpec.Scaling = 0;
+  RepSpec.BaseWidth = 900;
+  RepSpec.flags[0] = 1;
+  PutWindowRecord(wn,RepSpec);
+end;
+ 
+global
+procedure INRClassReportDefaults(integer wn)
+begin
+  record RcVc RepSpec;
+
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"INRClass");
+  RepSpec.flags[11] = 2;
+  PutWindowRecord(wn,RepSpec);
+end;

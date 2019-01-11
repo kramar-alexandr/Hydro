@@ -1,0 +1,317 @@
+external inner function roundmode SetRoundModeD(Integer);
+
+function val GetOrderSHTotFIFO(longint OrderNr,string ArtCode, Record RcVc RepSpec)
+begin
+  record RetVc Retr;
+  row RetVc Retrw;
+  record SHVc SHr;
+  row SHVc SHrw;
+  val TotFIFO, TotShip, UnitFIFO;
+  integer i,rw;
+  boolean wLoop;
+
+  TotFIFO = 0; TotShip = 0;
+  wLoop = true;
+  SHr.OrderNr = OrderNr;
+  while LoopKey("OrderKey",SHr,1,wLoop)begin
+    if SHr.OrderNr<>OrderNr then begin
+      wLoop = false;
+    end else begin
+	  if (SHr.ShipDate >= RepSpec.sStartDate and SHr.ShipDate <= RepSpec.sEndDate) then begin
+      rw = MatRowCnt(SHr);
+      for(i=0;i<rw;i=i+1)begin
+        MatRowGet(SHr,i,SHrw);
+        if SHrw.ArtCode==ArtCode then begin
+          TotFIFO = TotFIFO + SHrw.FIFORowVal;
+		  TotShip = TotShip + SHrw.Ship;
+        end;
+      end;
+	  end;
+    end;
+  end;
+  UnitFIFO = TotFIFO / TotShip;
+  wLoop = true;
+  Retr.OrdNr = OrderNr;
+  while (LoopKey("OrdNr", Retr, 1, wLoop)) begin
+    if (Retr.OrdNr != OrderNr) then begin
+      wLoop = false;
+    end else begin
+	  if (Retr.TransDate >= RepSpec.sStartDate and Retr.TransDate <= RepSpec.sEndDate) then begin
+      rw = MatRowCnt(Retr);
+      for (i = 0; i < rw; i = i + 1) begin
+        MatRowGet(Retr, i, Retrw);
+        if (Retrw.ArtCode == ArtCode) then begin
+          TotFIFO = TotFIFO - (UnitFIFO * Retrw.Quant);
+        end;
+      end;
+	  end;
+    end;
+  end;
+  GetOrderSHTotFIFO = TotFIFO; return;
+end;
+
+function boolean GetIVData(record RcVc RepSpec,string ArtCode,var array val DataMas)
+begin
+  record ItemHistVc ItemHistr;
+  record IVVc IVr;
+  row IVVc IVrw;
+  val Quant;
+  longint prevTransNr,prevOrdNr;
+  integer rw,prevTransNrRow,Sign;
+  boolean wLoop,res;
+  val Fixer;
+
+  wLoop = true;
+  ItemHistr.FileName = "IVVc";
+  ItemHistr.ArtCode = ArtCode;
+  ItemHistr.TransDate = RepSpec.sStartDate;
+  while LoopKey("FNArtCode",ItemHistr,3,wLoop)begin
+    if ItemHistr.FileName<>"IVVc" or ItemHistr.ArtCode<>ArtCode or ItemHistr.TransDate>RepSpec.sEndDate then begin
+      wLoop = false;
+    end else begin
+      if blank(RepSpec.f3) or ItemHistr.Location==RepSpec.f3 then begin
+        if prevTransNr<>ItemHistr.TransNr or (ItemHistr.Row>prevTransNrRow) then begin//because of bug in ItemHistVc after unok
+          IVr.SerNr = ItemHistr.TransNr;
+          if ReadFirstMain(IVr,1,true) then begin
+	    // 2007-11-13:
+            //  if IVr.OKFlag<>0 then begin//because of bug with unok, the records stay
+			//stopalert("Ser: " & IVr.SerNr & "prevOrd: " & prevOrdNr & "OrderNR: " & IVr.OrderNr);
+			if IVr.OKFlag!=0 then begin
+              if blank(RepSpec.f4) or IVr.CustCode==RepSpec.f4 then begin
+                if blank(RepSpec.f5) or IVr.SalesMan==RepSpec.f5 then begin
+                  if MatRowCnt(IVr)>ItemHistr.Row then begin
+                    if IVr.InvType<>3 then begin
+                      Sign = 1;
+                    end else begin
+                      Sign = -1;
+                    end;
+                    MatRowGet(IVr,ItemHistr.Row,IVrw);
+                    if IVrw.ArtCode==ArtCode then begin
+                      Quant = Sign*IVrw.Quant;
+                      DataMas[1] = DataMas[1] + Quant;
+                      DataMas[3] = DataMas[3] + Quant*IVrw.Price;
+                      DataMas[4] = DataMas[4] + Sign*(IVrw.Quant*IVrw.Price-IVrw.Quant*(IVrw.Anod+IVrw.Powd+IVrw.Mec));
+                      DataMas[5] = DataMas[5] + Quant*IVrw.Anod;
+                      DataMas[6] = DataMas[6] + Quant*IVrw.Powd;
+                      DataMas[7] = DataMas[7] + Quant*IVrw.Mec;
+					  if prevOrdNr != IVr.OrderNr then begin
+                      if IVr.OrderNr<>-1 then begin
+                          DataMas[12] = DataMas[12] + Sign*GetOrderSHTotFIFO(IVr.OrderNr,ArtCode,RepSpec);
+                      end else begin
+                        if IVr.UpdStockFlag<>0 then begin
+							DataMas[12] = DataMas[12] + Sign*IVrw.FIFORowVal;//CPTotCost
+                        end;
+                      end;
+					  end;
+                      prevTransNr = ItemHistr.TransNr;
+                      prevTransNrRow = ItemHistr.Row;
+					  prevOrdNr = IVr.OrderNr;
+                      res = true;
+                    end;
+                  end;
+                end;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+  GetIVData = res;
+  return;
+end;
+/*datamas[11] is calculated in another way
+procedure GetPUData(record RcVc RepSpec,string ArtCode,var array val DataMas)
+begin
+  record ItemHistVc ItemHistr;
+  record PUVc PUr;
+  row PUVc PUrw;
+  longint prevTransNr;
+  integer rw,prevTransNrRow;
+  boolean wLoop;
+
+  wLoop = true;
+  ItemHistr.FileName = "PUVc";
+  ItemHistr.ArtCode = ArtCode;
+  ItemHistr.TransDate = RepSpec.sStartDate;
+  while LoopKey("FNArtCode",ItemHistr,3,wLoop)begin
+    if ItemHistr.FileName<>"PUVc" or ItemHistr.ArtCode<>ArtCode or ItemHistr.TransDate>RepSpec.sEndDate then begin
+      wLoop = false;
+    end else begin
+      if blank(RepSpec.f3) or ItemHistr.Location==RepSpec.f3 then begin
+        if prevTransNr<>ItemHistr.TransNr or (ItemHistr.Row>prevTransNrRow) then begin//because of bug in ItemHistVc after unok
+          PUr.SerNr = ItemHistr.TransNr;
+          if ReadFirstMain(PUr,1,true) then begin
+            if PUr.OKFlag<>0 then begin
+              if MatRowCnt(PUr)>ItemHistr.Row then begin
+                MatRowGet(PUr,ItemHistr.Row,PUrw);
+                if PUrw.ArtCode==ArtCode then begin
+                  DataMas[11] = DataMas[11] + PUrw.Sum - PUrw.Quant*(PUrw.Anod+PUrw.Powd+PUrw.Mec);
+                  prevTransNr = ItemHistr.TransNr;
+                  prevTransNrRow = ItemHistr.Row;
+                end;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+  return;
+end;*/
+
+global
+procedure SAPASellRn(record RcVc RepSpec)
+begin
+  record INVc INr;
+  array val DataMas,TotDataMas;
+  array integer ColX;
+  integer i,ivcnt;
+  boolean wLoop,ShowArtCode;
+
+  SetLangMode(LangLatvian,"LAT",2);
+  
+  i = 70;
+  ColX[0] = 13;
+  ColX[1] = 0;
+  ColX[2] = ColX[1]+120;
+  ColX[3] = ColX[2]+i;
+  ColX[4] = ColX[3]+i;
+  ColX[5] = ColX[4]+i;
+  ColX[6] = ColX[5]+i;
+  ColX[7] = ColX[6]+i;
+  ColX[8] = ColX[7]+i;
+  if RepSpec.ArtMode==0 then begin
+    ColX[9] = ColX[8]+i;
+  end else begin
+    ColX[9] = ColX[4];
+  end;
+  ColX[10] = ColX[9]+i;
+  ColX[11] = ColX[10]+i;
+  ColX[12] = ColX[11]+i;
+  ColX[13] = ColX[12]+i+10;
+  DataMas[0] = 12;
+  TotDataMas[0] = DataMas[0];
+  for(i=1;i<=DataMas[0];i=i+1)begin
+    DataMas[i] = 0;
+    TotDataMas[i] = 0;
+  end;
+  StartReportJob("SAPA Pārdošanas atskaite");
+  Header(1,"Periods: " & RepSpec.Period2Str,1);
+  if blank(RepSpec.f3) then begin
+    Header(2,"Visas noliktavas",0);
+  end else begin
+    Header(2,"Noliktava: " & RepSpec.f3,0);
+  end;
+  if blank(RepSpec.f4) then begin
+    Header(2,"Visi klienti",1);
+  end else begin
+    Header(3,"Klients: " & RepSpec.f4,1);
+  end;
+  if nonblank(RepSpec.f2) then begin
+    Header(3,"Artikulu grupas: " & RepSpec.f2,0);
+  end;
+  if nonblank(RepSpec.f5) then begin
+    Header(3,"Aģents: " & RepSpec.f5,1);
+  end;
+  EndHeader;
+  StartFormat(15);
+  OutString(ColX[1],0,"Art.kods",false);
+  OutString(ColX[2],0,"Mērv.1",true);
+  OutString(ColX[3],0,"Mērv.2",true);
+  OutString(ColX[4],0,"Total TO",true);
+  if RepSpec.ArtMode==0 then begin
+    OutString(ColX[5],0,"Extr. TO",true);
+    OutString(ColX[6],0,"Anod. TO",true);
+    OutString(ColX[7],0,"Powd. TO",true);
+    OutString(ColX[8],0,"Mec. TO",true);
+    OutString(ColX[9],0,"Av.pr.per kg",true);
+  end;
+  OutString(ColX[10],0,"Cost cover",true);
+  OutString(ColX[11],0,"Cost cover %",true);
+  OutString(ColX[12],0,"Pur.pr.per kg",true);
+  OutString(ColX[13],0,"Total purchase",true);
+  EndFormat;
+  Black_Divider(0,ColX[13]);
+  wLoop = true;
+  INr.Code = RepSpec.f1;
+  ivcnt = 0;
+  while LoopMain(INr,1,wLoop)begin
+    if nonblank(RepSpec.f1) and INr.Code<>RepSpec.f1 then begin
+      wLoop = false;
+    end else begin
+      ShowArtCode = true;
+      if nonblank(RepSpec.f2) then begin
+        ShowArtCode = SetInSet(INr.Group,RepSpec.f2) and nonblank(INr.Group);
+      end;
+      // 2007-11-13: Do not show "CITI" and "DET" groups
+      if INr.Group == "CITI" or INr.Group == "DET" then begin
+		ShowArtCode = false;
+      end;
+      if ShowArtCode then begin
+		ivcnt = ivcnt + 1;
+        if GetIVData(RepSpec,INr.Code,DataMas) or RepSpec.flags[0]==0 then begin
+          OutString(ColX[1],0,INr.Code,false);
+          //GetPUData(RepSpec,INr.Code,DataMas);
+          DataMas[2] = DataMas[1]*INr.UnitCoefficient;
+		  DataMas[11] = DataMas[12]-DataMas[5]-DataMas[6]-DataMas[7];
+          if DataMas[2]<>0 then begin
+            DataMas[8] = Round(DataMas[4]/DataMas[2],SetRoundModeD(2));
+            DataMas[11] = Round(DataMas[11]/DataMas[2],SetRoundModeD(2));
+          end else begin
+            DataMas[8] = 0;
+            DataMas[11] = 0;
+          end;
+          DataMas[9] = DataMas[3] - DataMas[12];// - DataMas[1]*INr.WeighedAvPrice;
+          if DataMas[12]<>0 then begin
+	    // 2007-11-13: "Cost cover %" = "Cost cover" * 100 / "Total TO"
+            //  DataMas[10] = Round(DataMas[9]/DataMas[12]*100,2);
+	    DataMas[10] = Round(DataMas[9]*100/DataMas[3],SetRoundModeD(2));
+          end else begin
+            DataMas[10] = 100;
+          end;
+          for(i=1;i<=DataMas[0];i=i+1)begin
+            if RepSpec.ArtMode==0 or (i<4 or i>8) then begin
+              // DataMas[13] - returned;
+	      if i<>10 then begin
+                OutVal(ColX[i+1],0,DataMas[i],M4Val,true);
+              end else begin
+                OutVal(ColX[i+1],0,DataMas[i],M4Prcnt,true);
+              end;
+              TotDataMas[i] = TotDataMas[i] + DataMas[i];
+            end;
+            DataMas[i] = 0;
+          end;
+          EndFormat;
+          Gray_Divider(0,ColX[13]);
+        end;
+      end;
+    end;
+  end;
+  Black_Divider(0,ColX[13]);
+  if TotDataMas[2]<>0 then begin
+    TotDataMas[8] = Round(TotDataMas[4]/TotDataMas[2],SetRoundModeD(2));
+  end else begin
+    TotDataMas[8] = 0;
+  end;
+  // 2007-11-13: Sum("Cost cover %") = Sum("Cost cover") * 100 / Sum("Total TO")
+  //  TotDataMas[10] = blankval;
+  TotDataMas[10] = Round(TotDataMas[9]*100/TotDataMas[3],SetRoundModeD(2));
+  OutString(ColX[1],0,"Kopā:",false);
+  for(i=1;i<=TotDataMas[0];i=i+1)begin
+    if RepSpec.ArtMode==0 or (i<4 or i>8) then begin
+	  if (i==11) then begin
+		if TotDataMas[2] != 0 then begin
+			OutVal(ColX[i+1],0,Round(((TotDataMas[12]-TotDataMas[5]-TotDataMas[6]-TotDataMas[7])/TotDataMas[2]),SetRoundModeD(2)),M4Val,true);
+		end else begin
+			OutVal(ColX[i+1],0,0,M4Val,true);
+		end;
+	  end else begin
+		OutVal(ColX[i+1],0,TotDataMas[i],M4Val,true);
+	  end;
+    end;
+  end;
+  EndFormat;
+  EndJob;
+  return;
+end;

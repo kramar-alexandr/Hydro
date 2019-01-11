@@ -1,0 +1,526 @@
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+remote   function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean HasTaxMatrix();
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external function Boolean CUVATNrColumn;
+external function Boolean UseTaxTemplatesforTaxCalc();
+external function string 60 UserDefined(string,string);
+external function Boolean HasJewelleryInterface();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasLimitedAccess();
+external function Boolean StandardHansa();
+external function Boolean HasModCRM();
+external function Boolean HasApprovals();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasTouchScreenLook();
+external function Boolean HaseMail();
+external function Boolean HasModPO();
+external function Boolean HasCommunicator();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasMultiCurrency();
+external function Boolean HasBase2();
+external function Boolean IsEnterprise();
+external function Boolean HasPriceLists();
+external function Boolean HasModSL();
+external function Boolean HasModSO();
+external function Boolean HasModIN();
+external function Boolean HasModTS();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasObjects();
+external function Boolean HasSalesman();
+external function Boolean HasStandardCRM();
+external function Boolean HasExtTax();
+external function Boolean HasModNL();
+external function Boolean HasCustItem();
+external function Boolean HasLanguages();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasModSVO();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasVATZone();
+external function Boolean HasModPOS();
+external function Boolean HasModCredMan();
+external function Boolean HasModPL();
+external function Boolean HasMultiLocations();
+external function Boolean HasRoute();
+external function Boolean HasSerialNumbers();
+external function Boolean HasQualityControl();
+external function Boolean HasAdvancedStock();
+external function Boolean HasModRent();
+external function Boolean HasItemGroups();
+external function Boolean HasItemClassification();
+external function Boolean HasContactClassification();
+external function Boolean HasSecondQuantity();
+external function Boolean HasDepartments();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasPositions();
+external function Boolean HasCategories();
+
+SetLangMode(LangLatvian,"LAT",2);
+
+window CustSalesRClass:1
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Veidot realizācijas statistiku",CustSalesRClass,CGRcW,RcType);
+  SetWRect(20,80,450,300);
+  h = 150; vs = 20;
+  PeriodField(h,v=6,"Periods");
+  EditFieldTL(h,v+=vs, 150,"Klienti",   M4UStr,Normal,50,f1,false,CUSClass);
+  EditFieldTL(h,v+=vs, 150,"Kategorija",   M4UStr,Normal,5,f2,false,CCatSClass);  
+  if (HasContactClassification) then begin
+  EditFieldTL(h,v+=vs,150,"Klasifikācija",M4UStr,Normal,30,f4,false,CClassSClass);
+  end;
+  EditFieldTL(h,v+=vs, 50,"Klientu skaits",   M4Long,Normal,0,long1,false,0);
+  ButtonFrame(h,vm=(v+=41),133,3,"Rādīt");
+  RadioButton(h,v,0,0,"Lielāko apgrozījumu",ArtMode);
+  RadioButton(h,v+=16,1,0,"Mazāko apgrozījumu",ArtMode);
+  RadioButton(h,v+=16,2,0,"Lielāko bruto peļņu",ArtMode);
+  CheckBox(h,v+=30,0,"Rādīt klientus bez apgrozījuma",flags[1]);
+  CheckBox(h,v+=20,0,"Neiekļaut av. rēķinus",flags[2]); // OBS
+  EndWindow;
+end;
+
+window IVGPRClass:1
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Veidot BP pārskatu pa rēķiniem",IVGPRClass,CGRcW,RcType);
+  SetWRect(20,80,480,320);
+  vs = 20;
+  Tile(0,20,false,"",Period2Str);
+  PeriodField(150,v=6,"Periods");
+  TileButtons(v,2);
+  Tile(1,280,false,"1",f3);
+  v = 6;
+  EditFieldTL(h=150,v, 150,"Rēķina Nr.",   M4Str,Normal,30,f1,false,0);
+  EditFieldTL(h,v+=vs ,150,"Klients",M4UStr,Normal,50,f2,false,CUSClass);
+  if (HasSalesman) then begin
+  EditFieldTL(h,v+=vs ,100,"Aģents",M4UStr,Normal,10,AccStr,false,UserSClass);
+    if (StandardHansa==false) then begin
+  EditFieldTL(h,v+=vs ,50,"Aģentu grupa",M4UStr,Normal,10,f5,false,SalesGroupSClass);
+  end;
+  end;
+  EditFieldTL(h,v+=vs ,150,"Artikuls",M4UStr,Normal,20,FirstAcc,false,INSClass);
+  if (HasItemClassification) then begin
+  EditFieldTL(h,v+=vs ,150,"Artikulu klasif.",M4UStr,Normal,200,f6,false,DISClass);
+  end;
+  if (HasItemGroups) then begin
+  EditFieldTL(h,v+=vs ,80,"Artikulu grupa",M4UStr,Normal,5,LastAcc,false,ITSClass);
+  end;
+  if (HasObjects) then begin
+  EditFieldTL(h,v+=vs ,150,"Objekts",M4UStr,Normal,60,ObjStr,false,ObjSClass);
+  EditFieldTL(h,v+=vs ,150,"Objekts no rindas (detal.)",M4UStr,Normal,60,f3,false,ObjSClass);
+  end;
+  EditFieldTL(h,v+=vs ,50,"Sam. term.",M4UStr,Normal,5,TransStr,false,PDSClass);
+  EditFieldTL(h,v+=vs ,80,"Noliktava",M4UStr,Normal,20,f7,false,LocationSClass);  // OBS added f7
+  ButtonFrame(h=60,vm=(v+=45),123,2,"Rādīt");
+  RadioButton(h,v,0,0,"Pārskatu",ArtMode);
+  RadioButton(h,v+=16,1,0,"Detalizēti",ArtMode);
+  ButtonFrame(h=250,v=vm,123,4,"Statuss");    //changed // OBS changed
+  CheckBox(h,v,0,"Neiegrāmatotie",flags[1]);
+  CheckBox(h,v+=16,0,"Iegrāmatotie",flags[2]);
+  CheckBox(h,v+=16,0,"Nerādīt avansa rēķinus",flags[12]); // OBS added
+  CheckBox(h,v+=16,0,"Summēt pa klientiem",flags[13]);  // OBS added
+  Tile(2,310,false,"2",f4);
+  h=150; v = 6;
+  if (HasMultiLocations) then begin
+    EditFieldTL(h,v,100,"Noliktava",M4UStr,Normal,60,f4,false,LocationSClass); //added  
+  end;
+  EditFieldTL(h,v+=20,80,"Filiāle",M4Code,Normal,20,Stext,false,ContactCUSClass);
+  ButtonFrame(h=60,vm=(v+=45),123,3,"Rādīt");
+  RadioButton(h,v,0,0,"Pašizmaksas",flags[11]);
+  if (HasBase2) then begin
+  RadioButton(h,v+=16,2,0,"Pašizm. Bāzes val.2",flags[11]);
+  end;
+  // RadioButton(h,v+=16,1,0,"Rindas pašizmaksa",flags[11]);  //OBS
+  RadioButton(h,v+=16,1,0,"FIFO",flags[11]);  // OBS
+  EndFrame;
+  ButtonFrame(h=210,v=vm,103,6,"Iekļaut");
+  CheckBox(h,v,0,"Rēķinus",flags[3]);
+  CheckBox(h,v+=16,0,"S/N rēķinus",flags[4]);
+  CheckBox(h,v+=16,0,"Kredītrēķinus",flags[5]);
+  if (StandardHansa==false) and (IsStandardProduct==false) then begin
+  CheckBox(h,v+=16,0,"Soda naud. rēķ.",flags[6]);
+  CheckBox(h,v+=16,0,"Priekšapmaksas",flags[7]);
+  CheckBox(h,v+=16,0,"Priekšapm. rēķ.",flags[8]);
+  end;
+  EndFrame;
+  if (StandardHansa==false) and (IsStandardProduct==false) then begin
+  CheckBox(h,v+=32,0,"Tikai SVO rēķini",flags[10]);  
+  end;
+  CheckBox(h,v+=16,0,"Iekļaut POS rēķinus",flags[12]);
+  EndWindow;
+end;
+
+window INRClass:2
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,v,v1,vm,vs,v2;
+  WindowBegin("Noliktavas atlikums",INRClass,CGRcW,RcType);
+  h = 160; v = 6; vs = 20; h2 = 30; h3 = 180; h4 = 330;
+
+  if (IsEnterprise) then begin
+  SetWRect(20,80,580,470);
+    h4 = 330;
+  end else begin
+    SetWRect(20,80,400,470);
+    h4 = 227;
+    h = 120;
+  end;
+
+	EditFieldTL(h,v,150,"Artikuls",M4UStr,Normal,50,f1,false,INSClass);
+  if (HasItemGroups) then begin
+	EditFieldTL(h,v+=vs,150,"Grupa",M4UStr,Normal,11,f3,false,ITSClass);
+  end;
+  if (HasItemClassification) then begin
+	EditFieldTL(h,v+=vs,150,"Artikula klasifikācija", M4UStr,Normal,100,f4,false,DISClass); 
+	EditFieldTL(h,v+=vs,150,"Klasifikācijas tips",M4UStr,Normal,60,f5,false,CTypeSClass);
+  end;
+  if (HasMultiLocations) then begin
+	EditFieldTL(h,v+=vs,80,"Noliktava",M4Code,Normal,10,f2,false,LocationSClass);
+  end;
+//  EditFieldTL(h,v+=vs,80,"Location Group",M4Code,Normal,10,f6,false,LocGrSClass);
+//  EditFieldTL(h,v+=vs,150,"Location Classification",M4List,Normal,200,f7,false,LocClSClass);
+  if (HasPositions) then begin
+  EditFieldTL(h,v+=vs,150,"Vieta",M4Code,Normal,10,FirstAcc,false,PosSClass);
+  end;
+  if (HasDepartments) then begin
+	EditFieldTL(h,v+=vs,150,"Departaments",M4UStr,Normal,10,AccStr,false,DepSClass);
+  end;
+  if (HasModPO) then begin
+	EditFieldTL(h,v+=vs,150,"Piegādātājs",M4UStr,Normal,20,LastAcc,false,VESClass);
+  end;
+	EditFieldTL(h,v+=vs,80,"Datums",M4Date,Normal,0,d1,false,PasteCurDate);
+  if (StandardHansa==true) then begin
+    v = v + vs;
+  end;
+  ButtonFrame(h2,vm=(v+=50),123,7,"Rādīt"); // OBS modified
+	RadioButton(h2,v,0,0,"Pārskatu",ArtMode);
+  CheckBox(h2+30,v+=16,0,"Rādīt rezervētos",flags[3]); // OBS added
+  CheckBox(h2+30,v+=16,0,"Rādīt pasūtītos",flags[4]);  // OBS added
+	RadioButton(h2,v+=16,1,0,"Detalizēti",ArtMode);
+  if (HasMultiLocations) then begin
+	RadioButton(h2,v+=16,2,0,"Pa no_liktavām",ArtMode);
+	CheckBox(h2+30,v+=16,0,"Ar vērtībām",flags[14]); 
+  RadioButton(h2,v+=16,3,0,"Nolikt. apkopojumi",ArtMode);
+  end;
+  EndFrame;
+  if (HasMultiCurrency) then begin
+    v = v + 45; v1 = v;
+  end;
+/*not implemented ?   
+  if (HasMultiCurrency) then begin
+  ButtonFrame(h2,v1=(v+=45),123,2,"Valūtas kurss");
+  RadioButton(h2,v,0,0,"Preču _saņ. dienā",flags[1]);
+  RadioButton(h2,v+=16,1,0,"P_ašreizējais",flags[1]);
+  end;
+*/  
+  if (IsEnterprise) then begin
+	ButtonFrame(h3,v=vm,123,5,"Izmaksu modelis");
+	RadioButton(h3,v,0,0,"Noklusējuma",flags[11]);
+	RadioButton(h3,v+=16,1,0,"Pašizmaksa",flags[11]);
+	RadioButton(h3,v+=16,2,0,"% no cenas",flags[11]);
+	RadioButton(h3,v+=16,3,0,"Vidējā svērtā",flags[11]);
+	RadioButton(h3,v+=16,4,0,"Rindā",flags[11]);
+	ButtonFrame(h3,v=v1,123,3,"Rādīt");
+	RadioButton(h3,v,0,0,"Parasts",flags[19]);
+	RadioButton(h3,v+=16,1,0,"Kopsummu",flags[19]);
+	RadioButton(h3,v+=16,2,0,"Atsevišķi",flags[19]);
+  end;
+  ButtonFrame(h4,v=vm,123,5,"Secība pēc");
+	RadioButton(h4,v,0,0,"Numuriem",flags[2]);
+  if (HasItemGroups) then begin
+	RadioButton(h4,v+=16,1,0,"Grupām",flags[2]);
+  end;
+	RadioButton(h4,v+=16,2,0,"N_osaukumiem",flags[2]);
+  if (IsEnterprise) then begin
+	RadioButton(h4,v+=16,3,0,"Svītru kods",flags[2]);
+    if (StandardHansa==false) then begin
+	RadioButton(h4,v+=16,4,0,"Klasifikācijas",flags[2]);    
+    end;
+  end;
+  EndFrame;
+  v2 = v + 16;
+  v = v1;
+  if (IsEnterprise) then begin
+    ButtonFrame(h4,v,188,3,"Iekļaut/neiekļaut");
+	RadioButton(h4,v,0,0,"Iekļaut nosūtāmo atlikumu",flags[12]);
+	RadioButton(h4,v+=16,1,0,"Neiekļaut nosūtāmo atlik.",flags[12]);
+	RadioButton(h4,v+=16,2,0,"Tikai nosūtāmais atlikums",flags[12]);
+	CheckBox(h4,v=20,0,"Tikai ar atlikumu",UsedOnly);
+	CheckBox(h4,v+=16,0,"Tikai ar negat. atlik.",flags[17]);
+  end;
+  if (IsEnterprise==false) then begin
+    v = v2;
+  end;
+  if (HasSerialNumbers) then begin
+    CheckBox(h4,v+=16,0,"Rādīt sērijas Nr.",flags[10]); v = v + 16;
+  end;
+  if (HasSecondQuantity) then begin
+    CheckBox(h4,v,0,"Rādīt daudzumu 2",flags[15]); v = v + 16;  
+  end;
+  if (IsEnterprise) then begin
+    CheckBox(h4,v,0,"Summas - simtdaļās",flags[16]); v = v + 16; // Who wanted this? Decimals per report....nahh.., I haven't added this one, JJ
+    CheckBox(h4,v,0,"Iekļaut slēgtos artikulus",flags[18]); v = v + 16;
+    CheckBox(h4,v,0,"Parādīt kl.pas. daudzumus",flags[5]); v = v + 16; // OBS added    
+    CheckBox(h4,v,0,"Atsk. apr. atpakaļejoša datuma vid. svērto",flags[20]); v = v + 16;  
+    if (StandardHansa==false) then begin
+      CheckBox(h4,v,0,"Rādīt ar aizstājējiem",flags[21]); v = v + 16;  
+    end;
+end;
+  if (HasVarieties) then begin
+    CheckBox(h4,v,0,"Rādīt variācijas",flags[22]); v = v + 16;
+  end;
+  if (HasLocalization("ARG,MEX,USA") and IsStandardProduct==false) then begin  
+    CheckBox(h4,v,0,"Rādīt nosūt. Nr. (Detalizēti)",flags[23]); v = v + 16;  
+  end;
+  EndWindow;
+end;
+
+window ORJRClass:1
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Veidot klientu pasūtījumu žurnālu",ORJRClass,CGRcW,RcType);
+  SetWRect(20,80,515,410);
+  v= 6; vs = 20; h=160;
+  EditFieldTL(h,v, 150,"Pasūtījums",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Periods");
+  EditFieldTL(h,v+=vs ,150,"Klients",M4UStr,Normal,20,f2,false,CUSClass);
+  if (HasSalesman) then begin
+  EditFieldTL(h,v+=vs ,100,"Aģents",M4UStr,Normal,10,AccStr,false,UserSClass);
+    if (StandardHansa==false) then begin
+  EditFieldTL(h,v+=vs ,50,"Aģentu grupa",M4UStr,Normal,10,f3,false,SalesGroupSClass);
+    end;
+  end;
+  if (IsEnterprise) then begin
+  EditFieldTL(h,v+=vs, 150,"Pasūt. veids",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
+  end;
+  EditFieldTL(h,v+=vs, 150,"Artikuls",   M4UStr,Normal,20,LastAcc,false,INSClass);
+  if (HasMultiLocations) then begin
+  EditFieldTL(h,v+=vs, 150,"Noliktava",M4UStr,Normal,10,f4,false,LocationSClass);
+  end;
+  if (IsEnterprise) then begin
+  CheckBox(h,v+=20,0,"Rādīt tikai rezervētos pasūtījumus",flags[8]);
+  end;
+  if (HasTREO) then begin
+    CheckBox(h,v+=16,0,"Rādīt TREO info.",flags[10]);  
+  end;
+  CheckBox(h,v+=16,0,"Uzrādīt daudzumu kilogramos",flags[14]); //OBS
+  ButtonFrame(h=30,vm=(v+=41),123,3,"Rādīt");
+  RadioButton(h,v,0,0,"Pārskatu",ArtMode);
+  RadioButton(h,v+=16,1,0,"Detalizēti",ArtMode);
+  RadioButton(h,v+=16,2,0,"Bez PVN",ArtMode);
+  ButtonFrame(h+=143,v = vm,143,6,"Statuss");
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Rēķ. ir,nav nosūt.",flags[4]); v = v + 16;  
+  end;
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Ir rēķ., daļa nosūt.",flags[13]); v = v + 16;  
+  end;
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Nav rēķins",flags[1]); v = v + 16;  
+  end;
+  if (HasModIN) then begin
+    CheckBox(h,v,0,"Daļēji nosūtīts",flags[2]); v = v + 16;  
+  end;
+  CheckBox(h,v,0,"Pabeigts",flags[3]); v = v + 16;  
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Nosūtīts, nav reķ.",flags[9]); v = v + 16;  
+  end;
+  EndFrame;
+  ButtonFrame(h+=163, v = vm,130,2,"Secība pēc");
+  RadioButton(h,v,0,0,"Pasūt. Nr.",flags[5]);
+  RadioButton(h,v+=16,1,0,"Klientiem",flags[5]);
+  ButtonFrame(h,v+=40,130,3,"Statuss");
+  RadioButton(h,v,0,0,"Nerādīt slēgtos",flags[12]);
+  RadioButton(h,v+=16,1,0,"Rādīt slēgtos",flags[12]);
+  RadioButton(h,v+=16,2,0,"Tikai slēgtie",flags[12]);
+/*## code comenmted out in hal file as well
+  ButtonFrame(h+=148, v = vm,123,2,"Veids");
+  CheckBox(h,v,0,"D_rukāti",flags[6]);
+  CheckBox(h,v+=16,0,"Ne_drukāti",flags[7]);
+*/
+  //CheckBox(h,v+=32,0,"Show Reserved Orders only",flags[8]);
+  EndWindow;
+end;
+
+window IVJRClass:3
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,hs,v,v3,vm,vs,l;
+ 
+  WindowBegin("Veidot rēķinu žurnālu",IVJRClass,CGRcW,RcType);
+  SetWRect(20,80,520,390);
+  vs = 20;
+    hs=148;
+   if (IsEnterprise) then begin
+    if (HasLocalization("ARG,HRV,LTU,LVA,POL,PRT,RUS") or (HasOfficialSerNr and HasPreferedOfficialSerNr==false))  then begin
+    Tile(0,40,false,"",f1);
+    end else begin
+      Tile(0,20,false,"",f1);  
+    end;
+   end;
+
+  v = 6; h = 150;
+  if (HasPreferedOfficialSerNr) then begin
+    EditFieldTL(h,v,150,"Pavadz. Nr.",M4UStr,Normal,41,f6,false,0);  
+    v = v + 20;
+    if (HasLocalization("POL,PRT")==false)  then begin  
+      EditFieldTL(h,v,150,"Rēķina Nr.",M4Str,Normal,30,f1,false,0);  
+      v = v + 20;
+    end;
+   end else begin
+    EditFieldTL(h,v,150,"Rēķina Nr.",M4Str,Normal,30,f1,false,0);
+    v = v + 20;
+    if (HasOfficialSerNr) then begin
+      EditFieldTL(h,v,150,"Pavadz. Nr.",M4UStr,Normal,41,f6,false,0);  
+      v = v + 20;
+   end;
+  end;
+
+   if (IsEnterprise) then begin
+    TileButtons(v,2);
+    Tile(1,380,false,"1",f2);
+    v = 6;
+     vm = v;
+   end;
+   PeriodField(h,v,"Periods"); 
+   EditFieldTL(h,v+=vs, 150,"Kredītrēķina periods",M4UStr,Normal,21,Period2Str2,false,PerSClass); 
+    EditFieldTL(h,v+=vs ,150,"Klients",M4UStr,Normal,50,f2,false,CUSClass);
+  if (HasCategories) then begin
+    EditFieldTL(h,v+=vs ,70,"Klienta kateg.",M4UStr,Normal,5,f3,false,CCatSClass);
+   end;
+   if (HasContactClassification) then begin
+    EditFieldTL(h,v+=vs ,70,"Klasifikāciju tips",M4UStr,Normal,60,f5,false,CTypeSClass);
+    EditFieldTL(h,v+=vs ,70,"Klienta klasifikācija",M4UStr,Normal,30,f4,false,CClassSClass);
+   end;
+  if (HasSalesman) then begin
+    EditFieldTL(h,v+=vs ,70,"Aģents",M4UStr,Normal,10,AccStr,false,UserSClass);
+   end;
+   if (HasObjects) then begin
+    EditFieldTL(h,v+=vs,250,"Objekts",M4UStr,Normal,60,ObjStr,false,ObjSClass);
+    EditFieldTL(h,v+=vs,50,"Objekta tips",M4UStr,Normal,5,ObjType,false,OTSClass);
+    EditFieldTL(h,v+=vs,250,"Objekti (no rindas)",M4UStr,Normal,60,f11,false,ObjSClass);  
+   end;
+   if (HasModTS) then begin
+    EditFieldTL(h,v+=vs,50,"Projekts",M4UStr,Normal,20,FirstAcc,false,PRSClass);
+   end;
+   if (HasMultiLocations) then begin
+    EditFieldTL(h,v+=vs,70,"Noliktava",M4UStr,Normal,60,LastAcc,false,LocationSClass);
+   end;
+   if (IsEnterprise) then begin
+    EditFieldTL(h,v+=vs,50,"Samaksas termiņš",M4UStr,Normal,5,TransStr,false,PDSClass);
+    EditFieldTL(h,v+=vs,50,"Oriģ. klients",M4Code,Normal,20,f12,false,CUSClass);  
+  end;
+  if (IsEnterprise) then begin
+    EditFieldTL(h,v3=(v+=vs),50,"Min. summa",M4Val,Normal,0,vals0,false,0);
+   end;
+   if (IsEnterprise) then begin
+     h = 320;
+     v = vm + 10;
+   end else begin
+     v = v + 40;
+     v3 = v + 20;
+     vm = v;
+   end;
+   ButtonFrame(h,v,123,5,"Statuss"); 
+    CheckBox(h,v,0,"Negrāmatotie",flags[1]);
+    CheckBox(h,v+=16,0,"Grāmatotie",flags[2]);
+   if (IsEnterprise) then begin
+    RadioButton(h,v+=16,0,0,"Iekļaut maz ticamos",flags[7]);
+    RadioButton(h,v+=16,1,0,"Neiekļ. maz ticamos",flags[7]);
+    RadioButton(h,v+=16,2,0,"Tikai maz ticamie",flags[7]);    
+   end;
+   EndFrame;
+
+   v3 = v3 + 41;
+   v = v3;
+   if (IsEnterprise) then begin
+     vm = v;
+   end;
+   ButtonFrame(h=148,v,123,3,"Rādīt"); 
+    RadioButton(h,v,0,0,"Pārskatu",ArtMode);
+    RadioButton(h,v+=16,1,0,"Detalizēti",ArtMode);
+   if (HasMultiCurrency) then begin
+    RadioButton(h,v+=16,4,0,"Pārskats ar val.",ArtMode);
+   end;
+   EndFrame;
+   if (IsEnterprise==false and HasBase2) then begin
+     CheckBox(h,v+=42,0,"Rādīt bāzes valūtu kopsummas",flags[12]);  
+   end;
+  
+   if (IsEnterprise) then begin
+     h2 = 320;
+     l = 160;
+   end else begin
+     h2 = h + 148;
+    l = 160;
+   end;
+   ButtonFrame(h2,v=vm,l,5,"Kārtot pēc"); 
+   if (HasModNL) then begin
+    RadioButton(h2,v,0,0,"Grām. datuma",flags[10]);
+   end else begin
+     RadioButton(h2,v,0,0,"Rēķina datums",flags[10]);  
+   end;
+   if (HasLocalization("BRA,POL,PRT")) then begin  
+     RadioButton(h2,v+=16,5,0,"Rēķina Nr.",flags[10]);
+   end else begin
+     RadioButton(h2,v+=16,1,0,"Rēķina Nr.",flags[10]);
+   end;
+  if (HasMultiLocations) then begin
+    RadioButton(h2,v+=16,2,0,"Noliktavas (no augš. daļ.)",flags[10]);
+  end; 
+  if (HasOfficialSerNr) then begin
+    RadioButton(h2,v+=16,3,0,"Pārsk. ar pavadz. Nr.",flags[10]);
+  end;
+  if (IsEnterprise) then begin
+    RadioButton(h2,v+=16,4,0,"Rēķ. datums",flags[10]);
+   end;
+   EndFrame;
+   if (IsEnterprise) then begin
+    Tile(2,330,false,"2",Stext);
+    v = 6;
+    EditFieldTL(h=150,v,100,"Artikulu grupa",M4UStr,Normal,21,Stext,false,ITSClass);
+    EditFieldTL(h,v+=vs,100,"Artikuls",M4UStr,Normal,41,f10,false,INSClass);  
+   EditFieldTL(h=150,v+=vs,100,"Real. konts",M4UStr,Normal,21,f7,false,AccSClass);
+   EditFieldTL(h=150,v+=vs,100,"Debitoru konts",M4UStr,Normal,21,f8,false,AccSClass);
+    if (StandardHansa==false) then begin
+   EditFieldTL(h=150,v+=vs,100,"Galv. partneris",M4UStr,Normal,20,f9,false,CUSClass);
+    end;
+//    EditFieldTL(h,v+=vs,50,"Order Class",M4UStr,Normal,5,Stext,false,OrderClassSClass); // no more strings to use....
+    ButtonFrame(h=50,vm = (v+=40),123,4,"Rēķina tips");
+    CheckBox(h,v,0,"Rēķini",flags[3]);
+    CheckBox(h,v+=16,0,"Sk. naudas rēķini",flags[4]);
+    CheckBox(h,v+=16,0,"Kredītrēķini",flags[5]);
+    CheckBox(h,v+=16,0,"Soda naudas rēķ.",flags[6]);
+    CheckBox(h,v+=26,0,"Tikai ar realiz. saist. rēķ.",flags[19]);
+    StaticText(h+17,v+=30,"(ignorēt rēķ. tipus)",false);
+    CheckBox(h=220,v=vm,0,"Rādīt komentārus",flags[11]);
+    CheckBox(h,v+=16,0,"Rādīt bāzes valūtu kopsummas",flags[12]);
+    if (StandardHansa==false) then begin
+    CheckBox(h,v+=16,0,"Tikai fiskālie rēķini",flags[13]);
+    end;
+    CheckBox(h,v+=16,0,"Rādīt izsvītrotos rēķinus",flags[14]);
+    CheckBox(h,v+=16,0,"Rādīt PVN summu",flags[15]);
+    CheckBox(h,v+=16,0,"Kavētie pēc rēķina datuma",flags[17]);
+    CheckBox(h,v+=16,0,"Iekļaut oriģ. klientu",flags[18]);
+    CheckBox(h,v+=16,0,"Rēķini par kopējo summu, kas vienāda ar nulli",flags[20]); 
+    CheckBox(h,V+=16,0,"Uzrādīt daudzumu kilogramos",flags[27]); //OBS
+    CheckBox(h+=hs,v=vm,0,"Rādīt pavadzīmju nr.",flags[16]);
+   end else begin
+     ButtonFrame(h+=148,v+=41,123,3,"Rēķina tips"); 
+     CheckBox(h,v,0,"Rēķini",flags[3]); 
+     CheckBox(h,v+=16,0,"S/N rēķini",flags[4]); 
+     CheckBox(h,v+=16,0,"Kredītrēķini",flags[5]); 
+    if (HasLocalization("PRT")) then begin   
+      CheckBox(h,v+=16,0,"Soda naudas rēķ.",flags[6]);  
+    end;  
+    EndFrame;
+    if (HasLocalization("PRT")) then begin  
+      CheckBox(h,v+=24,0,"Rēķini par kopējo summu, kas vienāda ar nulli",flags[20]);  
+    end;
+   end;
+    EndWindow;
+end;

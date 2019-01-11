@@ -1,0 +1,96 @@
+external inner procedure IVSumup(var record IVVc,Boolean);
+//cust start
+remote procedure  PasteIVAnodPrice(var record IVVc, record IVVc,integer);
+//cust end
+procedure CalcIVRowUnit2Qty(var record IVVc IVr,integer rownr)
+begin
+  row IVVc IVrw;
+  record INVc INr;
+
+  MatRowGet(IVr,rownr,IVrw);
+  INr.Code = IVrw.ArtCode;
+  if ReadFirstMain(INr,1,true) then begin end;
+  IVrw.Unit2Qty = IVrw.Quant*INr.UnitCoefficient;
+  MatRowPut(IVr,rownr,IVrw);
+  IVSumup(IVr,true);
+end;
+
+function Boolean IVDClassArtCodeEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record IVVc IVr;
+  row IVVc IVrw;
+  record INVc INr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,IVr);
+    MatRowGet(IVr,rownr,IVrw);
+    INr.Code = IVrw.ArtCode;
+    if ReadFirstMain(INr,1,true) then begin end;
+    IVrw.Unit2Code = INr.Unittext2;
+    MatRowPut(IVr,rownr,IVrw);
+    CalcIVRowUnit2Qty(IVr,rownr);
+    PutWindowRecord(wn,IVr);
+  end;
+  IVDClassArtCodeEFAfter = true;
+  return;
+end;
+
+function Boolean IVDClassQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record IVVc IVr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,IVr);
+    CalcIVRowUnit2Qty(IVr,rownr);
+    PutWindowRecord(wn,IVr);
+  end;
+  IVDClassQuantEFAfter = true;
+  return;
+end;
+
+
+function Boolean IVDClassAnodPriceEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record IVVc IVr,IV2r;
+  
+  if (changed!=0) then begin
+    GetWindowRecord(wn,IVr);
+    GetPrevWindowRecord(wn,IV2r);
+    PasteIVAnodPrice(IVr,IV2r,rownr);
+    PutWindowRecord(wn,IVr);
+  end;
+  IVDClassAnodPriceEFAfter = true;
+  return;
+end;
+
+global
+function Boolean IVDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+begin
+  boolean res;
+
+  res = inner.IVDClassAfterEditField(wn,fieldname,fn,rownr,changed);
+  switch (fieldname) begin
+    case "ArtCode": res = IVDClassArtCodeEFAfter(wn,fn,rownr,changed);
+    case "Quant": res = IVDClassQuantEFAfter(wn,fn,rownr,changed);
+    case "AnodPrice": res = IVDClassAnodPriceEFAfter(wn,fn,rownr,changed);
+    case "Unit2Code": res = IVDClassQuantEFAfter(wn,fn,rownr,changed);//readonly
+  end;
+  IVDClassAfterEditField = res;
+  return;
+end;
+
+//allow to change Anod, Powd, Mec in oked invoice
+global
+function Boolean IVDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+begin
+  boolean res;
+
+  if fieldname=="Anod" or fieldname=="Powd" or fieldname=="Mec" then begin
+    res = true;
+  end else begin
+    res = inner.IVDClassActiveEditField(wn,fieldname,fn,wnst,rownr,changed);
+  end;
+  IVDClassActiveEditField = res;
+  return;
+end;
+ 

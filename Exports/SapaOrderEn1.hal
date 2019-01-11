@@ -1,0 +1,578 @@
+external function boolean GetItemTel2016(var val,var val,var record ExportAutoBlock,var record INVc,string,var string,var val ,var val ,var val ,var val ,date ,date ,Date ,val ,date ,LongInt ,LongInt);
+
+external procedure S_EmptyString(integer); 
+external procedure S_Export(string,integer); 
+external procedure S_ExportVal(val,integer); 
+external function boolean FindMetalPrice(date,var row MetalPriceBlock);
+external function string 5 SapaCheckOrder(record IVVc,var date,var date);
+external procedure CheckItemSapa(record INVc, var string, var string, var string);
+
+external inner function LongInt DateDiff(Date,Date);
+external inner procedure HTCustClass(string,var string);
+external inner function roundmode SetRoundModeD(Integer);
+
+external inner procedure ValToHALString(val,string,var string);
+external inner procedure HTCusts(string, string, var string);
+external inner procedure HT2Per(date,date,var string);
+external inner procedure HTCustCat(string,var string);
+external inner function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
+
+external inner procedure GetDateTurnover(string,string,string,string,string,record ICSVc,string,Date,Date,var val,Integer);
+//external inner function Boolean FindICS(string,string,string,string,var record ICSVc);
+external inner procedure ItemDateTurnover(string,string,string,string,string,string,Date,Date,string,var val);
+external inner function Boolean TestArtCodeMatch(string,string);
+external inner procedure PrintStrings(record RcVc);
+external inner procedure PrintStrings2(string,val,val,val,val);
+external inner procedure PrintStrings3(val,val,val,val);
+external inner procedure PrintStrings4(string,string,string,val,val,val,val,val,val);
+external inner procedure HT2Per(Date, Date , var string);
+external inner procedure PrintGroup(string);
+external inner procedure GetITName(string,string,var string);
+external inner procedure Base1ToBase2(var val,Date,var val);
+external inner function Boolean SetInSet2(string,string);
+external inner function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
+external inner procedure HTSaleMan(string, var string);
+
+
+
+procedure MakeMarginString(val t,var string res)
+begin
+  string 255 tstr;
+
+  ValToHALString(t,"2",tstr);  
+  if (t<0) then begin
+    res = "-";
+    res = "";
+  end else begin
+    res = "+";
+  end;
+  res = res & tstr;
+  res = res & "%";
+  return;
+end;
+
+
+procedure CalcGPProc(var val gp,val total,var string gppstr)
+begin
+  val gpp;
+  
+  if (gp==0) then begin gp = 1; end;
+  gpp = gp * 100;
+  gpp = gpp / total;  
+  if (gp==total) then begin gpp = 100; end;
+  gpp = Round(gpp,SetRoundModeD(2));
+  MakeMarginString(gpp,gppstr);
+  return;
+end;
+
+
+global updating
+function boolean S_Orders(string outtype,record RcVc RepSpec,var val  t_kog2, var val t_novat, var val  t_r11, var val t_spread, var val t_Anodising, var val t_PowderCoating, var val  t_Dies, var val t_Others,  var val t_Extrusions, var val t_Fabrication, var val t_Accessories,var val t_cost,var val tA_r14_17, var val tP_r14_17,var val t_avpr1)
+
+begin 
+  record ORVc ORr;
+  record IVVc IVr;
+  record CUVc CUr;
+  row ORVc ORrw;
+  integer i,rwcnt;
+  boolean test,TrHs;
+  boolean sold;
+  string 20 item;
+  boolean cuPrinted; 
+  record INVc INr;
+  integer k;
+  string 255 tstr;
+  string 5 itemtype;
+  val koef;  
+
+  Date dat1;
+  String 10 std;
+  LongInt LastYear,ThisYear;
+  string 5 itype;
+  string 3 kweek;
+  integer rw,b;
+  integer ilan,irow,NrWeeks;
+  integer weeknumb,secnum;
+  val ikoef,wkoef;
+  
+  
+  val gp,c_gp,t_gp;
+  val kog2,kog1,c_kog1,c_kog2;
+  val novat,c_novat;
+  val cost,c_cost;
+  val val31,c_val31;     // (3) PT codes
+  
+  val QtyInTons_M;     // (2) Quantity in tons
+  val TotalSales_tons; // (10) Total sales
+  val QtyInTons;
+
+  Val avpr1, c_avpr1; 	   // All together , Average Price
+  Val qty1, c_qty1;
+  val sumval, c_sumval;
+  val Anodising, c_Anodising;
+  val PowderCoating, c_PowderCoating;
+  val Fabrication, c_Fabrication;
+  val Accessories, c_Accessories;
+  val Dies, c_Dies;
+  val Others, c_Others;
+  val CostCover, c_CostCover;
+  val Extrusions, c_Extrusions;
+  val t;
+  val TotalCost;
+  val r11,r14_17, c_r11,cA_r14_17,cP_r14_17;
+  val spread, c_spread;
+  
+  string 20 fromcust,tocust;
+  string 20 fromcat,tocat;
+  
+  record ExportAutoBlock ExportAutoBl;
+  integer rwnr,x;
+  val v,v1;
+  row MetalPriceBlock MetalPricerw;
+  date dispatchd,orderd;
+  LongInt days;
+  record CountryVc Countryr;
+  string 5 t1,t2,c117,c118,c119;
+  record IVVc oldORr;
+  val AddTreatment;
+  record UserVc Userr;
+  integer dev;
+  val v9,notinv,rowsum,fprice;
+  boolean lres;
+  
+  BlockLoad(ExportAutoBl);
+  
+  
+  dev = ExportAutoBl.BSeparator;
+
+  LastYear = GetYear(RepSpec.sStartDate) - 1;
+  ThisYear = GetYear(RepSpec.sStartDate);
+  
+  fromcust = FirstInRange(RepSpec.f1,20);
+  tocust = LastInRange(RepSpec.f1,20);
+  fromcat = FirstInRange(RepSpec.ObjStr,20);
+  tocat = LastInRange(RepSpec.ObjStr,20);
+  
+ 
+  TrHs = true;
+  ORr.OrdDate  = RepSpec.sStartDate;
+  while LoopKey("OrdDate",ORr,1,TrHs) begin
+    test = true;
+    if (ORr.OrdDate>RepSpec.sEndDate) then begin 
+      test = false;
+      TrHs = false;
+    end;
+    if (ORr.Closed==1) then begin 
+      test = false;
+    end;
+    if (ORr.OKFlag!=1) then begin 
+     // test = false;
+    end;
+    /*
+    IVr.OrderNr = ORr.SerNr;
+    if (ReadFirstKey("OrderNr",IVr,1,true)==true) then begin
+      test = false;
+    end;   
+    */
+    k = 1;
+    if test then begin
+      rwcnt = MatRowCnt(ORr);
+      for (i=0;i<rwcnt;i=i+1) begin
+        MatRowGet(ORr,i,ORrw);
+        notinv = ORrw.Quant - ORrw.Invd;
+        if (ORrw.stp==kInvoiceRowTypeNormal) or (ORrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
+          if (notinv>0) and nonblank(ORrw.ArtCode) and (ORrw.Quant!=0) then begin
+            sold   = true;
+            item   = ORrw.ArtCode;
+            lres = GetItemTel2016(fprice,AddTreatment,ExportAutoBl,INr,item,itype,ikoef,Anodising,PowderCoating,Fabrication,RepSpec.sStartDate,RepSpec.sEndDate,ORr.OrdDate,notinv*k,dat1,ThisYear,LastYear);
+            kog1   = notinv * k;
+            //kog2   = ORrw.UnitFactQuant * k;
+            kog2   = notinv * ORrw.Coefficient * k;
+            if (notinv!=ORrw.Quant) then begin 
+              rowsum = (ORrw.Sum/ORrw.Quant) * notinv;
+            end else begin 
+              rowsum = ORrw.Sum;
+            end;  
+            sumval = k * MulRateToBase1(ORr.CurncyCode,rowsum,ORr.FrRate,ORr.ToRateB1,ORr.ToRateB2,ORr.BaseRate1,ORr.BaseRate2,DefaultCurRoundOff);
+            novat  = sumval;
+            cost   = ORrw.BasePrice * notinv * k;
+            gp = c_novat - c_cost;
+            CalcGPProc(gp,c_novat,tstr);
+            TotalSales_tons = sumval/1000;
+            TotalCost  =  cost/1000;
+            
+            avpr1 =  (novat - val31)/(ikoef*kog1);
+
+            r11 =  (cost - val31)/(ikoef*kog1);
+            r14_17 = (kog1 * INr.Perimeter)/1000; //R14, R17
+           
+            if (Anodising!=0) then begin 
+              cA_r14_17 = cA_r14_17 + r14_17;
+              tA_r14_17 = tA_r14_17 + r14_17;
+            end;  
+            if (PowderCoating!=0) then begin 
+              cP_r14_17 = cP_r14_17 + r14_17;
+              tP_r14_17 = tP_r14_17 + r14_17;
+            end;  
+            spread = blankval;
+            if (INr.Spread!=0) then begin 
+              spread = INr.Spread * kog2;
+            end;  
+            //return in m2 - main unit!!!
+            //nk QtyInTons  =  (ORrw.Quant * ikoef  * k)/1000; //qty in Tons
+              
+            //metal QtyInTons SMrw_1CredVal2 SMrw_1CredVal
+            if (Left(itype,1) == "M") then begin
+              // Qty in Tons
+              //nk QtyInTons_M = (ORrw.Quant * ikoef * k)/1000;
+            end;
+            Accessories = blankval;
+            Dies        = blankval;
+            Others      = blankval;
+            //accessories 
+            if (Left(itype,1) == "A") then begin
+              Accessories = sumval; //  /1000 ???
+            end;
+
+            //dies 
+            if (Left(itype,1) == "D") then begin
+              Dies = sumval; // /1000 ???
+            end;
+            
+            //others
+            if (Left(itype,1) == "O")  then begin
+              Others = sumval;   // /1000 ???
+            end;
+            
+            // Cost Cover 
+            CostCover = (ORrw.rowGP * k); // /1000;
+            // (3) PT codes total + others,access,fabric
+            val31 = blankval;
+            val31 = val31 + Anodising;
+            val31 = val31 + PowderCoating;
+            val31 = val31 + Fabrication;
+// 8. Revenue basic = (†hikuhind Arvelt - Artikli Tekstid osa PTFA) x "kogus 1Ó Arvelt
+
+            //14.11.17 Extrusions = r11*kog1; //Extrusion Revenue R22
+            
+        
+            //LogText(0,ORr.SerNr & "/" & ORrw.ArtCode & "/" & Fabrication);
+            Extrusions = novat - Fabrication; //Extrusion Revenue R22
+            
+            if (outtype == "export") then begin 
+              tstr = ExportAutoBl.CUStart & ORr.SerNr;
+              rwnr = i + 1;
+              tstr = tstr & rwnr;
+              S_Export(tstr,dev); //1
+              tstr = "";
+              if blankdate(ORr.SExportDate) then begin 
+                tstr = "A";
+              end else begin
+                tstr = "M";
+              end;
+              if (ORr.Closed==1) then begin 
+                tstr = "D";
+              end;
+              S_Export(tstr,dev); // 2
+              tstr = ORr.SerNr;
+              S_Export(tstr,dev); // 3
+              tstr = rwnr;
+              S_Export(tstr,dev); // 4
+              
+              S_ExportVal(kog2,dev); // 5
+              S_EmptyString(dev); //6 not used
+              S_EmptyString(dev); //7 not used
+              
+             // S_ExportVal(novat,dev); // 7 ok
+             
+              S_ExportVal(novat,dev); // 8
+
+              v = 0;
+              //cust start 02.07.2018 
+              v9 = 0;
+              
+              //cust start 19.10.2018
+              //1-variant
+              if (lres==true) then begin 
+                v9 = (ORrw.AnodPrice * INr.Perimeter/1000) * notinv;
+              end else begin
+                if (fprice!=0) then begin
+                  v9 = (fprice/INr.Perimeter) * 1000;
+                end;
+              end;    
+              //2-variant
+              if (ORrw.AnodPrice==0) then begin 
+                v9 = (fprice/INr.Perimeter) * 1000;
+              end;
+              //3-variant
+              if (INr.Spread!=0) then begin 
+                v9 = (ORrw.AnodPrice * INr.Perimeter/1000) * (INr.Spread/1000) * notinv;
+                //4-variant
+                if (ORrw.AnodPrice==0) or (lres==false) then begin 
+                  if (fprice!=0) then begin
+                    v9 = (fprice * INr.Perimeter/1000) * (INr.Spread/1000) * notinv;
+                  end;
+                end;
+              end;  
+              
+              //cust end 02.07.2018
+            //  v9 = (ORrw.AnodPrice * INr.Perimeter/1000) * notinv;
+              S_ExportVal(v9,dev); //9
+              
+              S_EmptyString(dev); //10
+              
+              v = Accessories + Dies + Others;
+//11. Revenue other additional treatment= Artikli Tekstid osa PTFA x "kogus 1Ó Arvelt
+              //15.12
+              if (INr.Group=="A") or (INr.Group=="O") or (INr.Group=="D") then begin 
+                S_ExportVal(novat,dev); // 11
+              end else begin 
+                S_ExportVal(AddTreatment,dev); // 11
+              end;   
+              //12,13,14,15,16,17,18
+              for (x=12;x<=18;x=x+1) begin
+                S_EmptyString(dev); //12,13,14...,17
+              end; 
+              
+              v = 0;
+              if FindMetalPrice(ORr.OrdDate,MetalPricerw) then begin 
+                v = MetalPricerw.MetalPrice * kog2;
+                S_ExportVal(v,dev); // 19
+                S_EmptyString(dev); //20
+                v = MetalPricerw.BilletPremium * kog2;
+                S_ExportVal(v,dev); // 21
+              end else begin 
+                S_ExportVal(v,dev); // 19
+                S_EmptyString(dev); //20
+                S_ExportVal(v,dev); // 21
+              end;
+//23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
+              for (x=22;x<=42;x=x+1) begin
+                S_EmptyString(dev); //22,24,...29
+              end; 
+              
+            //  tstr = SapaCheckOrder(ORr,dispatchd,orderd);
+            
+              S_Export("1",dev); // 43
+              S_EmptyString(dev); //44
+              S_Export(ExportAutoBl.CUStart & ORr.CustCode,dev); //45
+              tstr = DateToString(ORr.DespatchDate,"YYYYMMDD");
+              S_Export(tstr,dev); // 46  
+         
+              for (x=47;x<=51;x=x+1) begin
+                S_EmptyString(dev); //47...51
+              end; 
+              S_Export(ExportAutoBl.LC1,dev);  // 52
+              S_Export(ExportAutoBl.LC2,dev);  // 53
+              S_Export(INr.DefaultSource,dev); // 54
+
+              for (x=55;x<=58;x=x+1) begin
+                S_EmptyString(dev); //55...58
+              end; 
+              S_Export(INr.PG1,dev); // 59
+              S_Export(INr.PG2,dev); // 60
+              S_EmptyString(dev); //61
+              S_EmptyString(dev); //62
+              
+              t1 = ""; t2 = "";
+              Countryr.Code = ORr.InvCountry;
+              if ReadFirstMain(Countryr,1,true) then begin 
+                t1 = Countryr.D1AQCD; 
+                t2 = Countryr.D2ARCD;
+              end;
+              S_Export(t1,dev);     // 63
+              S_Export(t2,dev);     // 64
+              S_EmptyString(dev);   // 65
+              S_Export("6",dev);    // 66
+              S_Export("1",dev);    // 67
+              S_Export("EUR",dev);  // 68
+              for (x=69;x<=77;x=x+1) begin
+                S_EmptyString(dev); //69 .... 76
+              end; 
+              v = 0;
+              //76 
+              v = (INr.Perimeter/1000) * notinv;
+              //VARIANT 2:
+              //notinv ??
+              if (INr.Spread!=0) then begin 
+                v = (INr.Perimeter/1000) *  notinv * (INr.Spread/1000);
+              end;  
+
+
+              S_ExportVal(v,dev); //77
+              if (PowderCoating!=0) then begin 
+                S_Export("1",dev); // 78
+              end else begin 
+                S_Export("0",dev); // 78
+              end;  
+              if (Fabrication!=0) then begin 
+                S_Export("1",dev); // 79
+              end else begin 
+                S_Export("0",dev); // 79
+              end;  
+              NewLine;
+            end;   
+            cuPrinted = true;
+            c_avpr1 = c_avpr1 + avpr1;
+            t_avpr1 = t_avpr1 + avpr1;
+            t_r11 = t_r11 + r11;
+            c_r11 = c_r11 + r11;
+            
+            c_spread = c_spread + spread;
+            t_spread = t_spread + spread;
+            
+            //c_val31 = c_val31 + val31;
+            //t_val31 = t_val31 + val31;
+             
+            c_kog1   = c_kog1   + kog1;
+            c_kog2   = c_kog2   + kog2;
+            c_sumval = c_sumval + sumval;
+            c_novat  = c_novat  + novat;
+            c_cost   = c_cost   + cost;
+            
+            //t_kog1   = t_kog1   + kog1;
+            t_kog2   = t_kog2   + kog2;
+            //t_sumval = t_sumval + sumval;
+            t_novat  = t_novat  + novat;
+            t_cost   = t_cost   + cost;
+                      
+            t_Anodising     = t_Anodising + Anodising;
+            t_PowderCoating = t_PowderCoating + PowderCoating;
+            t_Accessories   = t_Accessories + Accessories;
+            t_Dies          = t_Dies + Dies;
+            t_Others        = t_Others + Others;
+            t_Extrusions    = t_Extrusions + Extrusions;
+            t_Fabrication   = t_Fabrication + Fabrication;
+            
+            c_Anodising     = c_Anodising + Anodising;
+            c_PowderCoating = c_PowderCoating + PowderCoating;
+            c_Accessories   = c_Accessories + Accessories;
+            c_Dies          = c_Dies + Dies;
+            c_Others        = c_Others + Others;
+            c_Extrusions    = c_Extrusions + Extrusions; 
+                    
+            
+            
+            /*
+            if (outtype == "report") then begin 
+            if (RepSpec.ArtMode==1) then begin 
+              //if true then begin 
+              if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) then begin
+                StartFormat(15);
+                OutString(0,0,CUr.Code,false); 
+                OutString(10,0,CUr.Name,false); 
+                OutString(20,0,CUr.SalesMan,false);
+                //OutString(30,0,CUr.Classification,false);
+                OutString(40,0,item,false);
+                OutVal(50,0,kog2,M4Val,true);
+                //OutVal(120,0,kog,M4Val,true); 
+                OutVal(60,0,novat,M4Val,true);
+                OutVal(70,0,novat-cost,M4Val,true); 
+                OutString(80,0,tstr,true);  
+                //koef is taken from item card  , no totals  
+                OutVal(90,0,avpr1,M4Val,true); //9  Sales Kg Price //average price  R10 
+                OutVal(100,0,r11,M4Val,true); //10 R11 ??? //purchase kg price
+                OutVal(110,0,spread,M4Val,true); 
+                
+                //Anodising
+                OutVal(120,0,Anodising,M4Val,true); 
+                if (Anodising!=0) then begin 
+                  OutVal(130,0,r14_17,M4Val,true); 
+                  OutVal(140,0,Anodising/r14_17,M4Val,true); //13 R15 //Anod m2
+                end else begin
+                  OutString(130,0,"",true); 
+                  OutString(140,0,"",true); 
+                end;  
+                
+                //Powder coating
+                OutVal(145,0,PowderCoating,M4Val,true); 
+                if (PowderCoating!=0) then begin 
+                  OutVal(150,0,r14_17,M4Val,true); 
+                  OutVal(160,0,PowderCoating/r14_17,M4Val,true); //13 R15 //Anod m2
+                end else begin
+                  OutString(150,0,"",true); 
+                  OutString(160,0,"",true); 
+                end;  
+            
+                OutVal(170,0,Accessories,M4Val,true);  //17
+                OutVal(180,0,Dies,M4Val,true);         //18
+                OutVal(190,0,Others,M4Val,true);       //19
+                OutVal(200,0,Extrusions,M4Val,true);   //20
+                OutLongInt(210,"DblIVVc",ORr.SerNr,false);  //21
+                OutString(220,0,INr.Group,true);               //22
+                OutString(230,0,CUr.Classification,true);   //23
+                EndFormat;
+              
+              end else begin
+             
+                StartFormat(15);
+                OutString(0,"DblINVc",item,false); //4 R4
+                OutVal(50,0,kog2,M4Val,true); //5 R5 //Volume in KG
+                //OutVal(120,0,kog,M4Val,true); // R6  NOT IN KEILI's SPETS
+                OutVal(80,0,novat,M4Val,true); // R7 //Total Revenue
+                OutVal(110,0,novat-cost,M4Val,true); //7 R8 //Gross Margin 
+                OutString(140,0,tstr,true);   //8 R9 //Gross Margin %
+                //koef is taken from item card  , no totals  
+                OutVal(170,0,avpr1,M4Val,true); //9  Sales Kg Price //average price  R10 
+                OutVal(200,0,r11,M4Val,true); //10 R11 ??? //purchase kg price
+                OutVal(220,0,spread,M4Val,true); //Spread
+                //Anodising
+                OutVal(250,0,Anodising,M4Val,true); //11 R13  //Anod Revenue
+                OutVal(270,0,Anodising/r14_17,M4Val,true); //13 R15 //Anod m2
+                //Powder coating
+                OutVal(290,0,PowderCoating,M4Val,true); //14  //Paint Revenue
+                OutVal(310,0,PowderCoating/r14_17,M4Val,true); //Paint m2 price
+                OutVal(330,0,Accessories,M4Val,true);  //17
+                OutVal(350,0,Dies,M4Val,true);         //18
+                OutVal(370,0,Others,M4Val,true);       //19
+                OutVal(400,0,Extrusions,M4Val,true);   //20
+                //11.10.2016
+                OutString(410,"DblCUVc",CUr.Code,false); 
+                OutLongInt(450,"DblIVVc",ORr.SerNr,false);  //21
+                OutString(1,0,INr.Group,true);               //22
+                //OutString(1,0,CUr.Classification,true);   //23
+                EndFormat;
+              end;
+              
+            end else begin 
+              StartFormat(15);
+              OutString(0,"DblCUVc",CUr.Code,false); 
+              OutString(50,0,CUr.SalesMan,false); 
+              OutString(80,0,CUr.Name,false); //? 
+              OutVal(180,0,kog2,M4Val,true); 
+              OutVal(210,0,Fabrication,M4Val,true); 
+              OutVal(240,0,Anodising,M4Val,true);
+              OutVal(270,0,r14_17,M4Val,true); 
+              OutVal(300,0,Anodising/r14_17,M4Val,true)
+              //Paint
+              OutVal(330,0,PowderCoating,M4Val,true); 
+              OutVal(360,0,r14_17,M4Val,true); 
+              OutVal(390,0,PowderCoating/r14_17,M4Val,true); 
+              OutVal(420,0,spread,M4Val,true); 
+              OutVal(450,0,novat,M4Val,true);  //total revenue excl taxes
+              OutString(1,0,CUr.Classification,true); 
+              EndFormat;  
+            end;
+            end; //report
+           */
+          end;
+        end;
+        
+      end; 
+      
+    
+      if (outtype == "export") then begin 
+        RecordCopy(oldORr,ORr);
+        ORr.SExportDate = CurrentDate;
+        RecordUpdate(oldORr,ORr,false);
+      end;
+      
+      
+    end; //test
+  end; //while
+ 
+  return;
+end;  
+
+
+

@@ -1,0 +1,57 @@
+event startup
+begin
+
+  SetLangMode(LangLithuanian,"LIT",0);
+
+  //Report("SAPA - Prek˜s istorija", Sapa_INrsRClass, Sapa_INrsRn, 0, modIN);
+  //Maintenance("Add Item Classification",BEAddINVcClassVClass,BEAddINVcMn,modIN);
+ //NK  Report("Faktðr÷ ìurnalas, kiekis 2", Sapa_IVJRClass, Sapa_InvoiceRn, 0, modSL);
+  //NK Report("NEW:Sales Invoices",NewArveClass,NewArveRn,0,modSL);
+  //NK Report("NEW:Sales Orders",UusTellimClass,UusTellimRn,0,modSO);
+  //NK Report("OLD:Sales Orders",TellimClass,TellimRn,0,modSO);
+  //NK Maintenance("SAPA:Create Purchase Order", OstuClass, OstuMn, modSO);
+  //NK Report("SAPA:Pasiðlymai 24.11.00",PakkumClass,PakkumRn,0,modQT);
+  //NK Report("SAPA:Tegevused 2003",TegevusClass,TegevusRn,0,modCRM);
+  //NK Report("Loading list",LListRClass,LListRn,0,modIN);
+  
+  Report("SAPA: Sales Report",SapaSalesRClass,SapaSalesRn,0,modSL);
+  Maintenance("SAPA: customer.csv",SapaCustomerVClass,SapaCustomerMn,modSL);
+  Maintenance("SAPA: delivery.csv",SapaDeliveryVClass,SapaDeliveryMn,modSL);
+  Maintenance("SAPA: bookings.csv",SapaBookingVClass,SapaBookingMn,modSL);
+  Maintenance("SAPA: orders.csv",SapaOrderVClass,SapaOrderMn,modSL);
+  
+  Export("SAPA: customer.csv",SapaCustomerEClass,SapaCustomerEn,modSL);
+  Export("SAPA: delivery.csv",SapaDeliveryEClass,SapaDeliveryEn,modSL);
+  Export("SAPA: bookings.csv",SapaBookingEClass,SapaBookingEn,modSL);
+  Export("SAPA: orders.csv",SapaOrderEClass,SapaOrderEn,modSL);
+  
+  Setting("Auto SAPA Export",ExportAutoTClass,modSL);
+  Setting("Auto SAPA Export - All Companies",H_AllEksportTClass,modSL);
+
+  Setting("Metal Price ",MetalPriceTClass,modSL);
+
+  SString(1000000,"Kiekis (kg)");
+  
+  SString(1000001,"Add Pardav˜jas");
+  SString(1000002,"Add Country");
+  SString(1000003,"Add Perimeter");
+  SString(1000004,"Add Siuntimo data");
+  SString(1000005,"Add Siuntimo laikas");
+
+  
+  SString(1000006,"PVM mok. nr. is missed on contact card");
+  SString(1000007,"Pardav˜jas is missed on contact card");
+  SString(1000008,"alis is missed on contact card");
+  
+  SString(1000009,"Perimeter may not be blank on item card");
+  SString(1000010,"Contact Pardav˜jas is ");
+  SString(1000011,"Contact alis is ");
+
+  //fix patch
+  SString(17961,"Contact classification");
+
+  // 17.11.2010, not used in HALCUST
+  //sString(23000, "Sisesta lähetusviis"); //nk this number is used in standard
+
+  return;
+end;

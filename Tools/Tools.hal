@@ -1,0 +1,69 @@
+//return field code that is blank, but should be
+global
+function string 20 CheckArtCodeTreatments(string ArtCode,val Anod,val Powd,val Mec)
+begin
+  record INVc INr;
+  string 20 res;
+
+  INr.Code = ArtCode;
+  if ReadFirstMain(INr,1,true) then begin end;
+  if SetInSet("ANO",INr.DispGroups) then begin
+    if Anod==blankval then begin
+      res = "Anod";
+    end;
+  end;
+  if SetInSet("POW",INr.DispGroups) then begin
+    if Powd==blankval then begin
+      res = "Powd";
+    end;
+  end;
+  if SetInSet("MEC",INr.DispGroups) then begin
+    if Mec==blankval then begin
+      res = "Mec";
+    end;
+  end;
+  CheckArtCodeTreatments = res;
+  return;
+end;
+
+global
+function val GetOrderQty(Record RcVc RepSpec,String ArtCode)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  val res;
+  Boolean testf, wloop;
+  Integer i, rwc;
+
+  ORr.ShipMark = 0; res = 0;
+  ResetLoop(ORr);
+  wloop = true;
+  while LoopKey("ShipFlag",ORr,1,wloop) begin
+    if ORr.ShipMark != 0 then begin
+	  wloop = false;
+	end else begin
+	  testf = true;
+	  if nonblank(RepSpec.d1) and ORr.OrdDate>RepSpec.d1 then begin
+	    testf = false;
+      end;
+      if ORr.Closed == 1 then begin
+        testf = false;
+	  end;
+	  if ORr.OKFlag == 0 then begin
+	    testf = false;
+	  end;
+	  //Logtext(0,"Ser:" & ORr.SerNr & " Testf " & testf);
+	  if testf then begin
+	    rwc = MatRowCnt(ORr);
+	    for (i=0;i<rwc;i=i+1) begin
+		  MatRowGet(ORr,i,ORrw);
+		  if ORrw.ArtCode == ArtCode and ORrw.stp == 1 then begin
+		    res = res + ORrw.Quant - ORrw.Shipd2;
+		  end;
+		end;
+	  end;
+	end;
+  end;
+  GetOrderQty = res;
+  return;
+end;

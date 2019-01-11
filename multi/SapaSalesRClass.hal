@@ -1,0 +1,18 @@
+window SapaSalesRClass:1
+  wtag("language","EST,LAT,ENG,LIT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Specify Sapa Sales Report",SapaSalesRClass,CGRcW,RcType);
+  SetWRect(20,80,450,200);
+  vs = 20; h = 150; v = 10; 
+  PeriodField(h,v,"Period");
+  EditFieldTL(h=160,v+=vs, 150,"Customer",   M4UStr,Normal,50,f1,false,CUSClass);
+  EditFieldTL(h,v+=vs, 150,"Customer Category",   M4UStr,Normal,30,ObjStr,false,CCatSClass);
+  EditFieldTL(h,v+=vs, 150,"Classification", M4UStr,Normal,60,f4,false,CClassSClass);
+  EditFieldTL(h,v+=vs,50, "Salesman",   M4UStr,Normal,50,f5,false,UserSClass);
+  ButtonFrame(h,v+=40,123,2,"Function");
+  RadioButton(h,v,1,0,"Detailed",ArtMode);
+  RadioButton(h,v+=16,0,0,"Overview",ArtMode);
+  EndWindow;
+end;
+ 

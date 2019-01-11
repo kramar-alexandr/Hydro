@@ -1,0 +1,90 @@
+external inner procedure ORSumup(var record ORVc);
+external inner procedure ORDchsum(var record ORVc,Integer);
+//cust start
+remote procedure PasteORAnodPrice(var record ORVc,var boolean,integer);
+//cust end
+
+
+function Boolean ORDClassAnodPriceEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record ORVc ORr;
+  boolean chsum;
+  
+  if (changed!=0) then begin
+    GetWindowRecord(wn,ORr);
+    PasteORAnodPrice(ORr,chsum,rownr);
+    
+    if (chsum) then begin
+      ORDchsum(ORr,rownr);
+      ORSumup(ORr);
+    end;
+    PutWindowRecord(wn,ORr);
+  end;
+  ORDClassAnodPriceEFAfter = true;
+  return;
+end;
+
+procedure CalcORRowUnit2Qty(var record ORVc ORr,integer rownr)
+begin
+  row ORVc ORrw;
+  record INVc INr;
+
+  MatRowGet(ORr,rownr,ORrw);
+  INr.Code = ORrw.ArtCode;
+  if ReadFirstMain(INr,1,true) then begin end;
+  ORrw.Unit2Qty = ORrw.Quant*INr.UnitCoefficient;
+  MatRowPut(ORr,rownr,ORrw);
+  ORSumup(ORr);
+end;
+
+function Boolean ORDClassArtCodeEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  record INVc INr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,ORr);
+    MatRowGet(ORr,rownr,ORrw);
+    INr.Code = ORrw.ArtCode;
+    if ReadFirstMain(INr,1,true) then begin end;
+    ORrw.Unit2Code = INr.Unittext2;
+    MatRowPut(ORr,rownr,ORrw);
+    CalcORRowUnit2Qty(ORr,rownr);
+    PutWindowRecord(wn,ORr);
+  end;
+  ORDClassArtCodeEFAfter = true;
+  return;
+end;
+
+function Boolean ORDClassQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin
+  record ORVc ORr;
+
+  if (changed!=0) then begin
+    GetWindowRecord(wn,ORr);
+    CalcORRowUnit2Qty(ORr,rownr);
+    ORSumup(ORr);
+    PutWindowRecord(wn,ORr);
+  end;
+  ORDClassQuantEFAfter = true;
+  return;
+end;
+
+global
+function Boolean ORDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+begin
+  boolean res;
+
+  res = inner.ORDClassAfterEditField(wn,fieldname,fn,rownr,changed);
+  switch (fieldname) begin
+    case "ArtCode": res = ORDClassArtCodeEFAfter(wn,fn,rownr,changed);
+    case "Quant": res = ORDClassQuantEFAfter(wn,fn,rownr,changed);
+    case "AnodPrice": res = ORDClassAnodPriceEFAfter(wn,fn,rownr,changed);
+
+    case "Unit2Code": res = ORDClassQuantEFAfter(wn,fn,rownr,changed);//readonly
+  end;
+  ORDClassAfterEditField = res;
+  return;
+end;
+ 

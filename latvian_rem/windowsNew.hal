@@ -1,0 +1,103 @@
+event DefineWindows
+begin
+  real x,h,h1,h2,h3,h4,h5,h6,h7,hs,v,v2,l,vs,vm,f,t;
+  string 255 label;
+  
+  SetLangMode(LangLatvian,"LAT",2);
+  
+  WindowBegin("Dzēst īpašos ierakstus (BBS)",DelVcVClass,CGMnt,RcType);
+  SetWRect(64,73,509,400);
+  h = 150; v= 6; vs = 20;
+  PeriodField(h,v,"Periods");
+  EditFieldTL(h,v+=vs, 170,"Sēr.Nr.",   M4Str,Normal,30,f1,false,0);  
+  StaticText(50,v+=40,"Sērijas numurs vai numuru intervāls jānorāda obligāti.",false);
+  StaticText(50,v+=16,"Grāmatojums netiek izdzēsts - jāizdzēš manuāli.",false);
+  h = 50;
+//  RadioButton(h,v+=vs,1,0,"Rezervācijas",flags[1]);
+//  RadioButton(h,v+=vs,2,0,"Bāra ieraksti",flags[1]);
+//  RadioButton(h,v+=vs,3,0,"WEB pirkumi (Shoping Basket)",flags[1]);
+//  RadioButton(h,v+=vs,4,0,"Zvani",flags[1]);
+//  RadioButton(h,v+=vs,5,0,"Kases ieņēmumi",flags[1]);
+//  RadioButton(h,v+=vs,6,0,"Kases _izdevumi",flags[1]);
+//  RadioButton(h,v+=vs,7,0,"Piedāvājumi - resursi",flags[1]);
+  RadioButton(h,v+=vs,8,0,"Rēķini (arī kred. rēķini);",flags[1]);
+  RadioButton(h,v+=vs,9,0,"Nosūtīšanas (Noliktava);",flags[1]);
+  RadioButton(h,v+=vs,10,0,"Grāmatojumi.",flags[1]);
+//  RadioButton(h,v+=vs,11,0,"Maksājumu uzdevumi",flags[1]);
+  EndWindow;
+  
+  WindowBegin("Numuru sērijas - Klienti",OBS_CUSerTClass,CGHbl,HBlRecType);
+  SetBlid(OBS_CUSerBlock);
+  SetWRect(20,80,532,357);
+  Sizeable(-1,-1,0,0);
+  h = 8; v = 60;
+  h1=24; h2=h1+60; h3=h2+60; h4=h3+85; h5=h4+85;
+  MatrixBegin(h,v,-31,-20,IVSerRowType,99);
+  MatCol(1,h1,"Sērija",0,TSerStr,false,0);
+  MatCol(1,h2,"No",0,TSerStart,false,0);
+  MatCol(1,h3,"Līdz",0,TSerEnd,false,0);
+  MatCol(1,h4,"Komentārs",0,TSerCom,false,0);
+  EndMatrix;
+  EndWindow;
+
+  WindowBegin("Ievietot",OBS_CUSerSetSClass,CGother,HBlRecType);
+  SetWRect(240,80,500,299);
+  Sizeable(-1,-1,0,0);
+  StringList(9,9,-40,-10);
+  EndWindow;
+  
+  WindowBegin("Veidot pasūtījumu",POFromORWClass,CGother,RcType);
+  SetWRect(64,80,400,200);
+  UseView(RcVc);
+  ToolBar;
+  h = -160;
+  HalPushButton(h,5,h+60,v+20,"POFromORWClassCancel","Atcelt");
+  HalPushButton(h+=80,5,h+60,v+20,"POFromORWClassCreate","Veidot");
+  EndToolBar;
+  v=6;
+  v = 6; vs = 20; h = 160;
+  EditField(h,v+=vs,70,"Piegādātājs",Normal,f1,false,VESClass);
+  EditField(h,v+=vs,50,"Valūta",Normal,CurncyCode,false,CurncyCodeSClass);
+  EndWindow;
+
+  WindowBegin("SAPA kl.pas. atskaite",SAPAORInfoRClass,CGRcw,-);
+  SetWRect(100,100,500,300);
+  vs=20;
+  PeriodField(h=150,v=6,"Periods");
+  EditField(h,v+=vs,150,"Klients",Normal,f1,false,CUSClass);
+  EditField(h,v+=vs,150,"Artikulu grupa",Normal,f2,false,ITSClass);
+  EditField(h,v+=vs,70,"Aģents",Normal,f3,false,UserSClass);
+  EditField(h,v+=vs,150,"Plānotajs piegādes laiks",Normal,f4,false,PasteCurDate);
+  ButtonFrame(h,v+=40,100,2,"Statuss");
+  RadioButton(h,v,0,0,"Rādit visus",flags[0]);
+  RadioButton(h,v+=16,1,0,"Nenosūtītie",flags[0]);
+  ButtonFrame(h,v+=40,100,2,"Rādīt");
+  RadioButton(h,v,0,0,"Pārskats",ArtMode);
+  RadioButton(h,v+=16,1,0,"Detalizēti",ArtMode);
+  EndWindow;
+  
+  WindowBegin("SAPA Pārdošanas atskaite",SAPASellRClass,CGRcw,RcType);
+  SetWRect(100,100,500,240);
+  PeriodField(h=150,v=6,"Periods");
+  EditField(h,v+=20,150,"Artikuls",Normal,f1,false,INSClass);
+  EditField(h,v+=20,150,"Grupas",Normal,f2,false,ITSClass);
+  EditField(h,v+=20,70,"Noliktava",Normal,f3,false,LocationSClass);
+  EditField(h,v+=20,70,"Klients",Normal,f4,false,CUSClass);
+  EditField(h,v+=20,70,"Aģents",Normal,f5,false,UserSClass);
+  CheckBox(h,v+=20,0,"Tikai periodā pārdotie artikuli",flags[0]);
+  ButtonFrame(h+=100,v=86,100,2,"Rādīt");
+  RadioButton(h,v,1,0,"Pārskats",ArtMode);
+  RadioButton(h,v+=16,0,0,"Detalizēti",ArtMode);
+  EndWindow;
+
+  WindowBegin("Recalculate Total Quantities",RecalcTotQtyVClass,CGMnt,RcType);
+  SetWRect(64,80,439,340);
+  PeriodField(h=120,v=6,"Period");
+  ButtonFrame(h,vm = (v+=40),123,3,"Register");
+  CheckBox(h,v,0,"Invoices",flags[0]);
+  CheckBox(h,v+=16,0,"Orders",flags[1]);
+  CheckBox(h,v+=16,0,"Quantites",flags[2]);
+  EndWindow;
+
+  return;
+end;

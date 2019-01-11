@@ -1,0 +1,14 @@
+window H_AllEksportTClass:1
+  wtag("language","EST,ENG;LIT,LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,v,vs;
+  WindowBegin("Export - all companies",H_AllEksportTClass,CGSbl,-);
+  SetBlid(H_AllEksportBlock);
+  SetWRect(64,80,600,640);
+  v=16; vs = 20; h = 270; h2 = 220; h3 = 380;
+  EditField(h,v,50,"Export Time (hour)",Normal,ExportTime,false,0); 
+  EditField(h,v+=vs,-40,"File Path on Server",Normal,ExportPath,false,0);
+  EditField(h,v+=vs,65,"Last time exported",Normal,LastExportDate,false,0);
+  EndWindow;
+end;
+

@@ -1,0 +1,609 @@
+external inner procedure HT2Per(date,date,var string);
+external inner procedure HTCusts(string,string,var string);
+
+external procedure GetItemTel(string,var string,var val,var record SMVc,date,date,Date,val,date,LongInt,LongInt);
+external procedure GetThird(var record SMVc, string ,LongInt,string,val);
+external procedure SumUpInv(Boolean, var record SMVc,record RcVc,var val,var val,var val,date,date);
+
+external inner function Integer WeekNr(Date,string); // plo 30.11.2006
+external inner function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
+
+global
+procedure NewArveRn(record RcVc RepSpec)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  record OrderClassVc OrderClr;
+  record SMVc SMr;
+  row SMVc SMrw;
+  record SMVc SMallr;
+  row SMVc SMallrw;
+  record CYBlock Compr;
+  record WeekVc Weekr;
+  row WeekVc Weekrw;
+  record ITVc ITr;
+  Boolean TrHs1,test,TrHs;
+  Date dat1,wlast1,wlast2;
+  String 10 std;
+  LongInt LastYear,ThisYear;
+  string 255 tstr;
+  string 5 itype;
+  string 3 kweek;
+  integer rw,i,rwcnt,k,b;
+  integer ilan,irow,NrWeeks;
+  integer weeknumb,secnum;
+  val ikoef,wkoef;
+  Val val31,val32,val33,val34;     // (3) PT codes
+  Val val21,val22,val23,val24;     // (2) Quantity in tons
+  Val val111,val112,val113,val114; // (10) Total sales
+  Val avpr1,avpr2,avpr3,avpr4; 	   // All together , Average Price
+  Val qty1,qty2,qty3,qty4;
+  val sumval;
+
+  LastYear = GetYear(RepSpec.sStartDate) - 1;
+  ThisYear = GetYear(RepSpec.sStartDate);
+
+  if (RepSpec.flags[1]==1) then begin
+    StartReportJob("Sales report weekly");
+  end else begin
+    StartReportJob("Sales report monthly");
+  end;
+
+  rw = 1;
+  if nonblank(RepSpec.f1) then begin
+  HTCusts( RepSpec.f1,RepSpec.f1,tstr)
+  Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+
+  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  Header(rw,tstr,1);
+
+  EndHeader;
+
+  BlockLoad(Compr);
+
+  if (RepSpec.flags[1]==0) then begin //cust
+    weeknumb = WeekNr(RepSpec.sEndDate,Compr.CountryCode);
+    // total week numbers 22.11.00
+     Weekr.CountryCode = Compr.CountryCode;
+     if (ReadFirstMain(Weekr,1,true)) then begin
+       k = MatRowCnt(Weekr);
+       for (i = 0; i<k ;i=i+1) begin
+          MatRowGet(Weekr,i,Weekrw);
+         if (Weekrw.Year == ThisYear) then begin
+           Nrweeks = Weekrw.NrOffWeeks;
+           i = k;
+         end;
+       end;
+    end;
+  end else begin
+  //cust
+    weeknumb = GetMonth(RepSpec.sStartDate);
+    Nrweeks = 12;
+  end;
+
+  if nonblank(RepSpec.f1) then begin
+    dat1 = StringToDate("01.01." & ThisYear);
+  end else begin
+    dat1 = StringToDate("01.01." & LastYear);
+    wlast1 = dat1;
+    std = DateToString(RepSpec.sEndDate,"DD.MM.YYYY");
+    std = Left(std,6);
+    wlast2 = StringToDate(std & LastYear);
+  end;
+
+  ClearRow(SMr,SMrw,0);
+  SMrw.AccNumber = "(1)";
+  SMrw.Comment = "Number of Orders";
+  MatRowPut(SMr,0,SMrw);
+
+  ClearRow(SMallr,SMallrw,0);
+  SMallrw.AccNumber = "(1)";
+  SMallrw.Comment = "Number of Orders";
+  MatRowPut(SMallr,0,SMallrw);
+
+  ClearRow(SMr,SMrw,1);
+  SMrw.AccNumber = "(2)";
+  SMrw.Comment = "Quantity in tons";
+  MatRowPut(SMr,1,SMrw);
+
+  ClearRow(SMallr,SMallrw,1);
+  SMallrw.AccNumber = "(2)";
+  SMallrw.Comment = "Quantity in tons";
+  MatRowPut(SMallr,1,SMallrw);
+
+  ClearRow(SMr,SMrw,2);
+  SMrw.AccNumber = "(3)";
+  SMrw.Comment = "Anodising";
+  MatRowPut(SMr,2,SMrw);
+
+  ClearRow(SMallr,SMallrw,2);
+  SMallrw.AccNumber = "(3)";
+  SMallrw.Comment = "Anodising";
+  MatRowPut(SMallr,2,SMallrw);
+
+  ClearRow(SMr,SMrw,3);
+  SMrw.AccNumber = "(4)";
+  SMrw.Comment = "Powder coating";
+  MatRowPut(SMr,3,SMrw);
+
+  ClearRow(SMallr,SMallrw,3);
+  SMallrw.AccNumber = "(4)";
+  SMallrw.Comment = "Powder coating";
+  MatRowPut(SMallr,3,SMallrw);
+
+  ClearRow(SMr,SMrw,4);
+  SMrw.AccNumber = "(5)";
+  SMrw.Comment = "Fabrication";
+  MatRowPut(SMr,4,SMrw);
+
+  ClearRow(SMallr,SMallrw,4);
+  SMallrw.AccNumber = "(5)";
+  SMallrw.Comment = "Fabrication";
+  MatRowPut(SMallr,4,SMallrw);
+
+  ClearRow(SMr,SMrw,5);
+  SMrw.AccNumber = "(6)";
+  SMrw.Comment = "Accessories, 000EEK";
+  MatRowPut(SMr,5,SMrw);
+
+  ClearRow(SMallr,SMallrw,5);
+  SMallrw.AccNumber = "(6)";
+  SMallrw.Comment = " Accessories, 000EEK";
+  MatRowPut(SMallr,5,SMallrw);
+
+  ClearRow(SMr,SMrw,6);
+  SMrw.AccNumber = "(7)";
+  SMrw.Comment = "Dies, 000EEK";
+  MatRowPut(SMr,6,SMrw);
+
+  ClearRow(SMallr,SMallrw,6);
+  SMallrw.AccNumber = "(7)";
+  SMallrw.Comment = "Dies, 000EEK";
+  MatRowPut(SMallr,6,SMallrw);
+
+  ClearRow(SMr,SMrw,7);
+  SMrw.AccNumber = "(8)";
+  SMrw.Comment = "Others, 000EEK";
+  MatRowPut(SMr,7,SMrw);
+
+  ClearRow(SMallr,SMallrw,7);
+  SMallrw.AccNumber = "(8)";
+  SMallrw.Comment = "Others, 000EEK";
+  MatRowPut(SMallr,7,SMallrw);
+
+  ClearRow(SMr,SMrw,8);
+  SMrw.AccNumber = "(9)";
+  SMrw.Comment = "Average Price EEK/kg, 000EEK";
+  MatRowPut(SMr,8,SMrw);
+
+  ClearRow(SMallr,SMallrw,8);
+  SMallrw.AccNumber = "(9)";
+  SMallrw.Comment = "Average Price EEK/kg, 000EEK";
+  MatRowPut(SMallr,8,SMallrw);
+
+  ClearRow(SMr,SMrw,9);
+  SMrw.AccNumber = "(10)";
+  SMrw.Comment = "CostCover, 000EEK";
+  MatRowPut(SMr,9,SMrw);
+
+  ClearRow(SMallr,SMallrw,9);
+  SMallrw.AccNumber = "(10)";
+  SMallrw.Comment = "CostCover, 000EEK";
+  MatRowPut(SMallr,9,SMallrw);
+
+  ClearRow(SMr,SMrw,10);
+  SMrw.AccNumber = "(11)";
+  SMrw.Comment = "Selling of Extrus., 000EEK";
+  MatRowPut(SMr,10,SMrw);
+
+  ClearRow(SMallr,SMallrw,10);
+  SMallrw.AccNumber = "(11)";
+  SMallrw.Comment = "Selling of Extrus., 000EEK";
+  MatRowPut(SMallr,10,SMallrw);
+
+  ClearRow(SMr,SMrw,11);
+  SMrw.AccNumber = "(12)";
+  SMrw.Comment = "Total Sales, 000EEK";
+  MatRowPut(SMr,11,SMrw);
+
+  ClearRow(SMallr,SMallrw,11);
+  SMallrw.AccNumber = "(12)";
+  SMallrw.Comment = "Total Sales, 000EEK";
+  MatRowPut(SMallr,11,SMallrw);
+
+  StartFormat(15);
+
+//OutString(300,0, "Week "& weeknumb,true);
+//OutString(360,0, "Total ",true);
+
+  if blank(RepSpec.f1) then begin
+    OutString(460,0,"Compared to",true);
+  end else begin
+    OutString(420,0," Compared to",true);
+  end;
+  OutString(420,0,"the budget",true);
+
+  if blank(RepSpec.f1) then begin
+    OutString(480,0,LastYear,true);
+  end;
+  EndFormat;
+
+  ResetLoop(OrderClr);
+  TrHs = true;
+  secnum =1;
+  while (LoopMain(OrderClr,1,TrHs)) begin
+
+  if (secnum == 3) then begin
+    for (b = 0; b<10; b=b+1) begin
+      StartFormat(15);
+      OutString(0,0,"",true);
+      EndFormat;
+    end;
+  end;
+  StartFormat(15);
+    OutString(0,0,"1." & secnum & "." & OrderClr.Code & " " & OrderClr.Comment,false);
+    EndFormat;
+    StartFormat(15);
+    //cust
+    if (RepSpec.flags[1]==0) then begin
+      OutString(300,0, "Week "& weeknumb,true);
+    end else begin
+      OutString(300,0, "Month "& weeknumb,true);
+    end;
+  OutString(360,0, "Total ",true);
+  if blank(RepSpec.f1) then begin
+    OutString(480,0,"Total ",true);
+  end;
+  secnum = secnum + 1;
+  EndFormat;
+    Black_Divider(0,1);
+
+  k = MatRowCnt(SMr);
+  for (i = 0; i<k ;i=i+1) begin
+      MatRowGet(SMr,i,SMrw);
+    SMrw.DebVal  = 0;
+      SMrw.CredVal = 0;
+    SMrw.DebVal2  = 0;
+      SMrw.CredVal2 = 0;
+        SMrw.CurDebVal  = 0;
+      SMrw.CurCredVal = 0;
+    MatRowPut(SMr,i,SMrw);
+    end;
+
+    val21 = 0;
+  val22 = 0;
+  val23 = 0;
+  val24 = 0;
+
+  val31 = 0;
+  val32 = 0;
+  val33 = 0;
+  val34 = 0;
+
+  val111 = 0;
+  val112 = 0;
+  val113 = 0;
+  val114 = 0;
+    ORr.OrderClass = OrderClr.Code;
+    TrHs1 = true;
+  ResetLoop(ORr);
+
+    //wkoef = weeknumb / Nrweeks;
+  kweek = weeknumb;
+  wkoef = StringToVal(kweek,M4Val);
+  kweek = Nrweeks;
+  wkoef = wkoef/StringToVal(kweek,M4Val);
+/*
+StartFormat(15);
+OutVal(200,0,wkoef,M45Val,true);
+EndFormat;
+*/
+  GetThird(SMr,ORr.OrderClass,ThisYear,RepSpec.f1,wkoef);
+
+    // arve kontroll
+    if nonblank(RepSpec.f2) then begin
+    if (RepSpec.f2 == OrderClr.Code) then begin
+      //12.12.2000
+    SumUpInv(true,SMr,RepSpec,val111,val112,val114,wlast1,wlast2);
+    end;
+    end;
+    /*
+    while (LoopKey("OrderClass",ORr,1,TrHs1)) begin
+      test = true;
+      if (ORr.OrderClass <> OrderClr.Code) then begin
+      TrHs1 = false;
+      test = false;
+    end;
+        if (DateInRange(ORr.OrdDate,dat1,RepSpec.sEndDate)==false) then begin
+          test = false;
+      end;
+    if nonblank(RepSpec.f1) then begin
+        if (RepSpec.f1 <> ORr.CustCode) then begin
+            test = false;
+        end;
+        end;
+    if test then begin
+        // (3) COLUMN FROM QUOTATION
+          // number of orders
+          MatRowGet(SMr,0,SMrw);
+        if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+        SMrw.DebVal = SMrw.DebVal +1;
+      end;
+      if (GetYear(dat1) == LastYear) then begin
+        if (DateInRange(ORr.OrdDate,wlast1,wlast2)==true) then begin
+          SMrw.CredVal2 = SMrw.CredVal2 +1;
+        end;
+      end;
+      if (GetYear(ORr.OrdDate) == ThisYear) then begin
+        SMrw.CredVal = SMrw.CredVal +1;
+      end;
+      MatRowPut(SMr,0,SMrw);
+      //ITEM QTY AND SUMS
+          rwcnt = MatRowCnt(ORr);
+          for (i = 0 ; i<rwcnt ;i=i+1) begin
+            MatRowGet(ORr,i,ORrw);
+            if nonblank(ORrw.ArtCode) then begin
+        sumval = MulRateToBase1(ORr.CurncyCode, ORrw.Sum,ORr.FrRate,ORr.ToRateB1,ORr.ToRateB2,ORr.BaseRate1,ORr.BaseRate2,DefaultCurRoundOff);
+        if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+          val111 = val111 + sumval/1000;
+        end;
+        if (GetYear(dat1) == LastYear) then begin
+          if (DateInRange(ORr.OrdDate,wlast1,wlast2) == true) then begin
+            val114 = val114 + sumval/1000;
+          end;
+        end;
+                if (GetYear(ORr.OrdDate) == ThisYear) then begin
+          val112 = val112 + sumval/1000;
+        end;
+                GetItemTel(ORrw.ArtCode,itype,ikoef,SMr,RepSpec.sStartDate,RepSpec.sEndDate,ORr.OrdDate,ORrw.Quant,dat1,ThisYear,LastYear);
+        //metal
+        if (Left(itype,1) == "M") then begin
+                    // Qty in Tons
+                  MatRowGet(SMr,1,SMrw);
+          if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+            SMrw.DebVal = SMrw.DebVal + ORrw.Quant * ikoef/1000;
+            val21 = val21 + ORrw.Quant * ikoef/1000;
+          end;
+          if (GetYear(dat1) == LastYear) then begin
+            if (DateInRange(ORr.OrdDate,wlast1,wlast2) == true) then begin
+              SMrw.CredVal2 = SMrw.CredVal2 + ORrw.Quant * ikoef/1000;
+              val24 = val24 + ORrw.Quant * ikoef/1000;
+            end;
+          end;
+                if (GetYear(ORr.OrdDate) == ThisYear) then begin
+            SMrw.CredVal = SMrw.CredVal + ORrw.Quant * ikoef/1000;
+            val22 = val22 + ORrw.Quant * ikoef/1000;
+            end;
+          MatRowPut(SMr,1,SMrw);
+        end;
+                //accessories
+            if (Left(itype,1) == "A") then begin
+                   MatRowGet(SMr,5,SMrw);
+           if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+            SMrw.DebVal = SMrw.DebVal + sumval/1000;
+           end;
+           if (GetYear(dat1) == LastYear) then begin
+            if (DateInRange(ORr.OrdDate,wlast1,wlast2)==true) then begin
+              SMrw.CredVal2 = SMrw.CredVal2 + sumval/1000;
+            end;
+           end;
+           if (GetYear(ORr.OrdDate) == ThisYear) then begin
+              SMrw.CredVal = SMrw.CredVal + sumval/1000;
+                   end;
+           MatRowPut(SMr,5,SMrw);
+                 end;
+
+         //dies
+           if (Left(itype,1) == "D") then begin
+                   MatRowGet(SMr,6,SMrw);
+           if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+            SMrw.DebVal = SMrw.DebVal + sumval/1000;
+           end;
+           if (GetYear(dat1) == LastYear) then begin
+            if (DateInRange(ORr.OrdDate,wlast1,wlast2)==true) then begin
+              SMrw.CredVal2 = SMrw.CredVal2 + sumval/1000;
+            end;
+           end;
+           if (GetYear(ORr.OrdDate) == ThisYear) then begin
+              SMrw.CredVal = SMrw.CredVal + sumval/1000;
+                   end;
+           MatRowPut(SMr,6,SMrw);
+                end;
+        //others
+        if ((Left(itype,1) <> "M") and (Left(itype,1) <> "D") and (Left(itype,1) <> "A")) then begin
+                  MatRowGet(SMr,7,SMrw);
+          if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+            SMrw.DebVal = SMrw.DebVal + sumval/1000;
+          end;
+          if (GetYear(dat1) == LastYear) then begin
+            if (DateInRange(ORr.OrdDate,wlast1,wlast2)==true) then begin
+              SMrw.CredVal2 = SMrw.CredVal2 + sumval/1000;
+            end;
+          end;
+          if (GetYear(ORr.OrdDate) == ThisYear) then begin
+              SMrw.CredVal = SMrw.CredVal + sumval/1000;
+                    end;
+          MatRowPut(SMr,7,SMrw);
+              end;
+
+              // Cost Cover
+            MatRowGet(SMr,9,SMrw);
+            if (DateInRange(ORr.OrdDate,RepSpec.sStartDate,RepSpec.sEndDate)==true) then begin
+          SMrw.DebVal = SMrw.DebVal + ORrw.rowGP/1000;
+            end;
+        if (GetYear(dat1) == LastYear) then begin
+          if (DateInRange(ORr.OrdDate,wlast1,wlast2)==true) then begin
+            SMrw.CredVal2 = SMrw.CredVal2 + ORrw.rowGP/1000;
+          end;
+        end;
+        if (GetYear(ORr.OrdDate) == ThisYear) then begin
+            SMrw.CredVal = SMrw.CredVal + ORrw.rowGP/1000;
+                end;
+        MatRowPut(SMr,9,SMrw);
+
+      end;
+        end;
+    end;
+  end;
+    */
+
+// (3) PT codes total + others,access,fabric
+for (i = 2; i< 8;i=i+1) begin
+  MatRowGet(SMr,i,SMrw);
+  val31 = val31 + SMrw.DebVal;
+  val32 = val32 + SMrw.CredVal;
+  val33 = val33 + SMrw.DebVal2;
+  val34 = val34 + SMrw.CredVal2;
+end;
+
+//Total Sales
+MatRowGet(SMr,11,SMrw);
+SMrw.DebVal  = val111;
+SMrw.CredVal = val112;
+SMrw.CredVal2 = val114;
+MatRowPut(SMr,11,SMrw);
+
+//Selling of Extrusions
+MatRowGet(SMr,10,SMrw);
+SMrw.DebVal  = val111 - val31;
+SMrw.CredVal = val112 - val32;
+val113 = SMrw.DebVal2;
+SMrw.CredVal2 = val114 - val34;
+MatRowPut(SMr,10,SMrw);
+
+//val23 finding
+MatRowGet(SMr,1,SMrw);
+val23 = SMrw.DebVal2;
+
+//Average price
+MatRowGet(SMr,8,SMrw);
+SMrw.DebVal   = (val111 - val31)/val21;
+SMrw.CredVal  = (val112 - val32)/val22;
+
+SMrw.DebVal2  = val113;
+SMrw.CredVal2 = (val114 - val34)/val24;
+MatRowPut(SMr,8,SMrw);
+
+//Total Sales (3)
+MatRowGet(SMr,11,SMrw);
+SMrw.DebVal2 = val113 + val33 ;
+MatRowPut(SMr,11,SMrw);
+
+//Average price
+MatRowGet(SMr,1,SMrw);
+qty1 =  SMrw.DebVal;
+qty2 =  SMrw.CredVal;
+qty3 =  SMrw.DebVal2;
+qty4 =  SMrw.CredVal2;
+
+MatRowGet(SMr,10,SMrw);
+avpr1 =  SMrw.DebVal/qty1;
+avpr2 =  SMrw.CredVal/qty2;
+avpr3 =  avpr2 - SMrw.DebVal2/qty3;
+avpr4 =  avpr2 - SMrw.CredVal2/qty4;
+
+MatRowGet(SMr,8,SMrw);
+SMrw.DebVal = avpr1;
+SMrw.CredVal = avpr2;
+SMrw.DebVal2 = avpr3;
+SMrw.CredVal2 = avpr4;
+MatRowPut(SMr,8,SMrw);
+
+k = MatRowCnt(SMr);
+for (i = 0; i<k ;i=i+1) begin
+    MatRowGet(SMr,i,SMrw);
+    MatRowGet(SMallr,i,SMallrw);
+    StartFormat(15);
+    // OutString(0,0, "(" & (i+5) & ")" ,false);
+  //OutString(0,0,SMrw.AccNumber,false);
+    OutString(0,0,SMrw.Comment,false);
+  OutVal(300,0,SMrw.DebVal, M4Val,true);
+  OutVal(360,0,SMrw.CredVal, M4Val,true);
+
+    //Average price
+    if (i<> 8) then begin
+    OutVal(420,0,(SMrw.CredVal- SMrw.DebVal2), M4Val,true);
+  //	OutVal(420,0,(SMrw.DebVal2- SMrw.CredVal), M4Val,true);
+    if blank(RepSpec.f1) then begin
+      OutVal(480,0,SMrw.CredVal - SMrw.CredVal2,M4Val,true);
+      end;
+  end else begin
+    OutVal(420,0,SMrw.DebVal2, M4Val,true);
+    if blank(RepSpec.f1) then begin
+      OutVal(480,0,SMrw.CredVal2,M4Val,true);
+      end;
+  end;
+
+    SMallrw.DebVal  = SMallrw.DebVal + SMrw.DebVal;
+    SMallrw.CredVal = SMallrw.CredVal + SMrw.CredVal;
+  SMallrw.DebVal2  = SMallrw.DebVal2 + SMrw.DebVal2;
+    SMallrw.CredVal2 = SMallrw.CredVal2 + SMrw.CredVal2;
+    MatRowPut(SMallr,i,SMallrw);
+  EndFormat;
+end;
+StartFormat(15);
+EndFormat;
+end;
+
+//Average price (All together)
+MatRowGet(SMallr,1,SMallrw);
+qty1 =  SMallrw.DebVal;
+qty2 =  SMallrw.CredVal;
+qty3 =  SMallrw.DebVal2 ;
+qty4 =  SMallrw.CredVal2;
+
+MatRowGet(SMallr,10,SMallrw);
+avpr1 =  SMallrw.DebVal/qty1;
+avpr2 =  SMallrw.CredVal/qty2;
+avpr3 =  SMallrw.DebVal2/qty3;
+avpr4 =  SMallrw.CredVal2/qty4;
+
+MatRowGet(SMallr,8,SMallrw)
+SMallrw.DebVal = avpr1;
+SMallrw.CredVal = avpr2;
+SMallrw.DebVal2 = avpr2 - avpr3;
+SMallrw.CredVal2 = avpr2 - avpr4;
+MatRowPut(SMallr,8,SMallrw)
+
+// All together
+StartFormat(15);
+OutString(0,0,"1." & secnum & ".All together",false);
+if (RepSpec.flags[1]==0) then begin
+  OutString(300,0, "Week "& weeknumb,true);
+end else begin
+  OutString(300,0, "Month "& weeknumb,true);
+end;
+OutString(360,0, "Total ",true);
+if blank(RepSpec.f1) then begin
+  OutString(480,0,"Total ",true);
+end;
+EndFormat;
+Black_Divider(0,1);
+for (i = 0; i<k ;i=i+1) begin
+  MatRowGet(SMallr,i,SMallrw);
+  StartFormat(15);
+  //  OutString(0,0,SMallrw.AccNumber,false);
+  OutString(0,0,SMallrw.Comment,false);
+  OutVal(300,0,SMallrw.DebVal, M4Val,true);
+  OutVal(360,0,SMallrw.CredVal, M4Val,true);
+    if (i<> 8) then begin
+    //OutVal(420,0,(SMallrw.DebVal2 - SMallrw.CredVal),M4Val,true);
+    OutVal(420,0,(SMallrw.CredVal - SMallrw.DebVal2),M4Val,true);
+    if blank(RepSpec.f1) then begin
+      OutVal(480,0,SMallrw.CredVal - SMallrw.CredVal2,M4Val,true);
+    end;
+    end else begin
+    OutVal(420,0,SMallrw.DebVal2,M4Val,true);
+    if blank(RepSpec.f1) then begin
+      OutVal(480,0,SMallrw.CredVal2,M4Val,true);
+    end;
+    end;
+  EndFormat;
+  end;
+  EndJob;
+
+  return;
+end;
+

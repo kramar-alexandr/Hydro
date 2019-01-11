@@ -1,0 +1,85 @@
+remote inner procedure POVc_PastePrice(var record POVc,Integer);
+
+function Boolean PODClassQuantEFAfter(Integer wn,Integer rownr,Boolean changedf)
+begin
+  record POVc POr;
+  row POVc POrw;
+  record INVc INr;
+
+  if (changedf) then begin
+    GetWindowRecord(wn,POr);
+    MatRowGet(POr,rownr,POrw);
+    INr.Code = POrw.ArtCode;
+    if (ReadFirstMain(INr,1,true)) then begin end;
+    POrw.PalletNr = POrw.Quant*INr.UnitCoefficient;
+    MatRowPut(POr,rownr,POrw);
+    PutWindowRecord(wn,POr);
+  end;
+  PODClassQuantEFAfter = true;
+  return;
+end; 
+
+function Boolean PODClassQuant2EFAfter(Integer wn,Integer rownr,Boolean changedf)
+begin
+  record POVc POr;
+  row POVc POrw;
+
+  if (changedf) then begin
+    GetWindowRecord(wn,POr);
+    MatRowGet(POr,rownr,POrw);
+    POrw.Comment = POrw.Price/POrw.PalletNr;
+    MatRowPut(POr,rownr,POrw);
+    PutWindowRecord(wn,POr);
+  end;
+  PODClassQuant2EFAfter = true;
+  return;
+end;
+
+function Boolean PODClassCommentEFAfter(Integer wn,Integer rownr,Boolean changedf)
+begin
+  record POVc POr;
+  row POVc POrw;
+
+  if (changedf) then begin
+    GetWindowRecord(wn,POr);
+    MatRowGet(POr,rownr,POrw);
+    if (nonblank(POrw.Quant)) then begin
+      POrw.Price = StringToVal(POrw.Comment,M4Val)*POrw.PalletNr/POrw.Quant;
+    end;
+    MatRowPut(POr,rownr,POrw);
+    POVc_PastePrice(POr,rownr);
+    PutWindowRecord(wn,POr);
+  end;
+  PODClassCommentEFAfter = true;
+  return;
+end;
+
+global
+function Boolean PODClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+begin
+  Boolean res;
+
+  res = inner.PODClassAfterEditField(wn,fieldname,fn,rownr,changed);
+
+  switch (fieldname) begin
+    case "Quant": res = PODClassQuantEFAfter(wn,rownr,changed!=0);
+    case "Comment": res = PODClassCommentEFAfter(wn,rownr,changed!=0);
+  end;
+  PODClassAfterEditField = res;
+  return;
+end;
+
+//don`t change WONr - it is OR.SerNr
+global
+function Boolean PODClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+begin
+  boolean res;
+
+  if fieldname=="WONr" then begin
+    res = false;
+  end else begin
+    res = inner.PODClassActiveEditField(wn,fieldname,fn,wnst,rownr,changed);
+  end;
+  PODClassActiveEditField = res;
+  return;
+end;

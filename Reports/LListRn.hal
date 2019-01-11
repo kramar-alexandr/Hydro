@@ -1,0 +1,211 @@
+external inner procedure HT2Per(Date, Date , var string);
+
+procedure PrintDelivery(var Integer rw,string rregion,string rcustord,val kgs,string rvol,string rship,Integer Loendur,Boolean onef)
+begin
+  Integer i,rwcnt;
+  row SHVc SHrw;
+  record ORVc ORr;
+  record RegionVc regr;
+  record DMVc dmr;
+
+  regr.Code = rregion;
+  if (ReadFirstMain(regr,1,true)) then begin end;
+  dmr.Code = rship;
+  if (ReadFirstMain(dmr,1,true)) then begin end;
+  StartFormat(15);
+  OutString(17,0,rw,true);
+  rw = rw + 1;
+  OutString(25,0,regr.Name,false);
+  if (onef) then begin
+    OutString(165,0,rcustord,true);
+  end else begin
+    OutString(165,0,Loendur,true);
+  end;
+  OutVal(235,0,kgs,M4UVal,true);
+  OutString(300,0,rvol,true);
+  if (onef) then begin
+    OutString(405,0,"",true);
+  end else begin
+    OutString(405,0,rcustord,true);
+  end;
+  OutString(415,0,dmr.Comment,false);
+  EndFormat;
+
+  return;
+end;
+
+global
+procedure LListRn(record RcVc RepSpec)
+begin
+  record SHVc SHr;
+  row SHVc SHrw;
+  record ORVc ORr;
+  row ORVc ORrw;
+  record CUVc CUr;
+  Boolean TrHs,testf,firstf,onef;
+  String 100 tstr;
+  Integer Loendur,rw,i,rwcnt,k;
+  String 60 frcc,tocc;
+  String 60 prevcust,prevregion,rregion;
+  String 60 rcustord,rship,rvol;
+  Val qty;
+  Array Integer dnr;
+  Array string 60 dreg;
+  Array date dat;
+  Date prevdat;
+  record RegionVc regr;
+
+  SetLangMode(LangEstonian,"EST",1);
+
+  i = -1;
+  Loendur = RepSpec.flags[1];
+  if (Loendur<1 or Loendur>99) then begin
+    Loendur = 1;
+  end;
+  firstf = true;
+  onef = true;
+  frcc = FirstInRange(RepSpec.f1,20);
+  tocc = LastInRange(RepSpec.f1,20);
+  StartReportJob("Loading List");
+  //  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  //  Header(1,tstr,1);
+  EndHeader;
+  rw = 1;
+  StartFormat(15);
+    OutString(0,0,"Loading List",false);
+    OutString(94,0,"",false);
+    OutString(95,0,"Sapa Profiilid AS",false);
+    OutString(195,0,"Estonia",false);
+    if (RepSpec.Media!=mtScreen) then begin
+      OutString(345,0,"",false);
+    end;
+    tstr = "Delivery date: " & RepSpec.sStartDate;
+    tstr = tstr & " : " & RepSpec.sEndDate;
+    OutString(480,0,tstr,true);
+  EndFormat;
+  Gray_Divider(0,1);
+  if (RepSpec.Media==mtScreen) then begin
+  StartFormat(25);
+    OutString(0,0,"",false);
+  EndFormat;
+  end;
+  StartFormat(15);
+  OutString(0,0,"Line",false);
+  OutString(25,0,"Delivery place",false);
+  OutString(95,0,"Delivery number",false);
+  OutString(175,0,"Number of kgs",false);
+  OutString(245,0,"Length of package",false);
+  OutString(335,0,"Package number",false);
+  OutString(420,0,"Type of packing",false);
+  EndFormat;
+  Black_Divider(0,1);
+
+  SHr.CustCode = frcc;
+  TrHs = true;
+  while LoopKey("Region",SHr,1,TrHs) begin
+    testf = true;
+    if (DateInRange(SHr.ShipDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin testf = false; end;
+    if (SHr.OKFlag!=1) then begin
+      testf = false;
+    end;
+    if (testf) then begin
+      if nonblank(tocc) then begin
+        if ((SHr.CustCode<frcc) or (SHr.CustCode>tocc)) then begin
+          testf = false;
+        end;
+      end;
+      if blank(SHr.Region) then begin
+        testf = false;
+      end;
+    end;
+    if (testf) then begin
+    if (SHr.CustCode != prevcust) then begin
+      if (nonblank(RepSpec.f4)) then begin
+        CUr.Code = SHr.CustCode;
+        if (ReadFirstMain(CUr,1,true)) then begin
+          if (SetInSet(RepSpec.f4,CUr.Classification)==false) then begin
+            testf = false;
+          end;
+        end;
+      end;
+    end;
+    end;
+    if (testf) then begin
+      if (firstf == false) then begin
+        if (SHr.Region == prevregion) then begin
+          PrintDelivery(rw,rregion,rcustord,qty,rvol,rship,Loendur,false);
+          onef = false;
+        end else begin
+          if (onef == false) then begin
+            PrintDelivery(rw,rregion,rcustord,qty,rvol,rship,Loendur,false);
+            i = i + 1;
+            dnr[i] = Loendur;
+            dreg[i] = rregion;
+            dat[i] = prevdat;
+            Loendur = Loendur + 1;
+            if (Loendur>99) then begin
+              Loendur = 1;
+            end;
+          end else begin
+            PrintDelivery(rw,rregion,rcustord,qty,rvol,rship,Loendur,true);
+          end;
+          onef = true;
+        end;
+      end;
+      if (firstf) or (SHr.Region != prevregion) then begin
+      prevdat = SHr.ShipDate;
+      end;
+      rcustord = "";
+      ORr.SerNr = SHr.OrderNr;
+      if (ReadFirstMain(ORr,1,true)) then begin end;
+      rregion = SHr.Region;
+      rcustord = ORr.CustOrdNr;
+      rvol = SHr.TransportNumber;
+      qty = SHr.TotWeight;
+      rship = SHr.ShipMode;
+      prevcust = SHr.CustCode;
+      prevregion = SHr.Region;
+      firstf = false;
+    end;
+  end;
+  if (nonblank(rregion)) then begin
+    if (onef == false) then begin
+      PrintDelivery(rw,rregion,rcustord,qty,rvol,rship,Loendur,false);
+      i = i + 1;
+      dnr[i] = Loendur;
+      dreg[i] = rregion;
+      dat[i] = prevdat;
+    end else begin
+      PrintDelivery(rw,rregion,rcustord,qty,rvol,rship,Loendur,true);
+    end;
+  end;
+  Black_Divider(0,1);
+  NewPage(true);
+  StartFormat(35);
+  OutString(11,0,"",false);
+  EndFormat;
+  StartFormat(15);
+  OutString(11,0,"Delivery number",false);
+  OutString(94,0,"",false);
+  OutString(95,0,"Delivery place",false);
+  OutString(175,0,"Delivery date",false);
+  EndFormat;
+  Black_Divider(0,1);
+  for (Loendur = 0; Loendur<=i; Loendur = Loendur + 1) begin
+    StartFormat(15);
+    OutString(11,0,dnr[Loendur],false);
+    OutString(94,0,"",false);
+    regr.Code = dreg[Loendur];
+    if (ReadFirstMain(regr,1,true)) then begin end;
+    OutString(95,0,regr.Name,false);
+    tstr = DateToString(dat[Loendur],"DD.MM.YY");
+    OutString(175,0,tstr,false);
+    EndFormat;
+  end;
+  Black_Divider(0,1);
+
+  EndJob;
+
+  return;
+end;
+

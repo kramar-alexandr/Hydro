@@ -1,0 +1,103 @@
+external function string 20 CheckArtCodeTreatments(string,val,val,val);
+
+global
+function LongInt IVVcRecordDefaults(var record IVVc IVr,record IVVc IV2r,LongInt long3,LongInt long4)
+begin
+  LongInt res;
+  
+  res = inner.IVVcRecordDefaults(IVr,IV2r,long3,long4);
+  IVr.PlanArrDate  = CurrentDate;
+  IVr.PlanSendDate = CurrentDate;
+  
+  IVVcRecordDefaults = res;  
+  RETURN;
+END;
+
+global
+updating function LongInt IVVcRecordCheck(record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt long4)
+begin
+  row IVVc IVrw;
+  string 20 TreatmentErr;
+  integer i,rw;
+  longint res;
+  record CustomerSettingBlock CSb;
+  record CUVc CUr;
+  
+  BlockLoad(CSb);
+
+  res = 0;
+  rw = MatRowCnt(IVr);
+  for(i=0;i<rw;i=i+1)begin
+    MatRowGet(IVr,i,IVrw);
+    TreatmentErr = CheckArtCodeTreatments(IVrw.ArtCode,IVrw.Anod,IVrw.Powd,IVrw.Mec);
+    if nonblank(TreatmentErr) then begin
+      RecordCheckError(1,"Ievadiet " & TreatmentErr,i,TreatmentErr);
+      res = -1;
+      goto LIVVcRecordCheck;
+    end;
+  end;
+  
+  if (CSb.DemandVATRegNo!=0) then begin 
+    
+      if blank(IVr.VATNr) then begin 
+        RecordCheckError(1058,"",-1,"VATNr"); 
+        res = -1; 
+        goto LIVVcRecordCheck;
+      end;   
+  end;
+  
+  if blankdate(IVr.PlanSendDate) then begin
+    RecordCheckError(1000004,"",-1,"PlanSendDate"); 
+    res = -1; 
+    goto LIVVcRecordCheck;
+  end;
+  
+   if blankdate(IVr.PlanArrDate) then begin
+    RecordCheckError(1000005,"",-1,"PlanArrDate"); 
+    res = -1; 
+    goto LIVVcRecordCheck;
+  end;
+  
+  if blank(IVr.SalesMan) then begin
+    RecordCheckError(1000001,"",-1,"SalesMan"); 
+    res = -1; 
+    goto LIVVcRecordCheck;
+  end;
+  if blank(IVr.InvCountry) then begin
+    RecordCheckError(1000002,"",-1,"InvCountry"); 
+    res = -1; 
+    goto LIVVcRecordCheck;
+  end;
+  CUr.Code = IVr.CustCode;
+  if ReadFirstMain(CUr,1,true) then begin 
+   if (IVr.SalesMan!=CUr.SalesMan) and nonblank(CUr.SalesMan) then begin 
+      RecordCheckError(1000010,CUr.SalesMan,-1,"SalesMan"); 
+      res = -1; 
+      goto LIVVcRecordCheck;
+    end;  
+    if blank(CUr.SalesMan) then begin 
+      RecordCheckError(1000007 ,"",-1,"SalesMan"); 
+      res = -1; 
+      goto LIVVcRecordCheck;
+    end;  
+    if (IVr.InvCountry!=CUr.CountryCode) and nonblank(CUr.CountryCode) then begin 
+      RecordCheckError(1000011,CUr.CountryCode,-1,"InvCountry"); 
+      res = -1; 
+      goto LIVVcRecordCheck;
+    end;  
+    if blank(CUr.CountryCode) then begin 
+      RecordCheckError(1000008 ,"",-1,"InvCountry"); 
+      res = -1; 
+      goto LIVVcRecordCheck;
+    end;  
+  end;
+  
+  
+  if res<>-1 then begin
+    res = inner.IVVcRecordCheck(IVr,IV2r,stat,long4);
+  end;
+
+LIVVcRecordCheck:;
+  IVVcRecordCheck = res;
+  return;
+end;

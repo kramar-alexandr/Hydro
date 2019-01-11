@@ -1,0 +1,701 @@
+external procedure SetupColumWithKeypadWindow(var real,var real,var real,var real,var real,var real,var real);
+external function Integer POSFontSize();
+external function string 255 F_Label(string);
+external procedure SplitButton(LongInt,LongInt,LongInt,LongInt,LongInt,string,string,string,string,LongInt);
+external procedure POSKeyPad(LongInt,LongInt,LongInt,LongInt,LongInt,string,LongInt);
+external function string 255 GetChangePaswordLink();
+remote function UUID GetServerUUIDRemote();
+external function string 255 RemainingEinvoicesQuantity;
+external function Boolean DisplayAdditionalFields();
+remote function Integer MailAcceptanceStatus(LongInt);
+external function Boolean IsMoveToCloud(record SetupStatusBlock);
+external function Boolean IsMoveToCloudB();
+external outer function Boolean IsCloudControllerClient();
+external function string 255 GetCurrentStoreName();
+external function Boolean CompaniesInClientMode();
+external function Boolean ProductInDemoMode();
+remote function string 255 GetCompanyShortCode(string);
+external function Boolean AnyModuleAvailable();
+external function Boolean AcceptanceStatusColumnTest(string);
+external function Integer FlipCharCode(Integer,Integer);
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
+external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
+external function Boolean TouchScreenLookVertical();
+external procedure SysEClass_Tool(Integer,var real,var real);
+external procedure GTransEClass_Tool(Integer,var real,var real);
+external procedure GTrans2EClass_Tool(Integer,var real,var real,var real);
+external procedure GBaseEClass_Tool(Integer,var real,var real);
+external procedure TransGenVClass_Tool(Integer,var real,var real);
+external procedure GetCurUser(var record UserVc);
+external function string 60 UserDefined(string,string);
+external function string 60 RestPMCashModePayMode();
+external outer function string 255 MasterBannerURL();
+external procedure ItemStatusUserSettings(string,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean,var Boolean);
+external function Boolean AllowedInCountry(integer);
+external function Integer ResourceWindowResourceType();
+external function Boolean ResPlan_Rental();
+external function Boolean ResPlan_ProdOperations();
+external function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc);
+external function Boolean ReadNPTSWindowData(string,string,longint,string,string,Date,Time,var Boolean,var string,var string,var string,var record POSButtonsVc);
+external function Boolean TouchScreenLook();
+external procedure ExtractObj(string,var Integer,var string);
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external procedure CntNPTSPaymentCurrencies(var Array string,var Array string,var Array Integer,var Array string,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+external function Boolean CheckOffLineRecords(Boolean);
+external function string 60 TileUserDefined(string,Integer,var Integer);
+external function Boolean CUVATNrColumn;
+external function Integer GetInternetEnablerCountry();
+external function Integer CntVarietyCode(Integer,var Array string);
+external function Integer VarietyMatMax(Integer);
+external function Boolean UseTaxTemplatesforTaxCalc();
+remote procedure TablesViewWClassDo(record LocalMachineBlock,string,Array string,Array string,Array string,Array string,Array Integer,var Integer,var LongInt);
+external function string 20 GetMenuCode(string);
+external procedure DrawModifierButtons(var Integer);
+remote procedure ForkLiftQueueArray(string,string,var Array string,var Array string,var Array string,var Array string,var Array val,var Array Integer,var Array string,var Integer,Boolean,LongInt,LongInt,string);
+
+external function Boolean DisplayLoginButtons();
+external function Integer LoginShortcutsLines(Integer);
+external function Integer LoginShortcutsPos(Real,Integer);
+
+external procedure DefineTTRRowTypes(Integer);
+external function real ItemButtons(string,Integer);
+external procedure HWStoreWClassAddProducts(Integer);
+external function Boolean HasYodlee();
+external function Boolean HasAvalara();
+external function Boolean HasCharts();
+external function Boolean HasDetailedCharts();
+external function Boolean HasNewRegistration();
+external function Boolean ActivityIsForAcceptanceOrFYI(record ActVc,Boolean,Boolean);
+// TravelLog
+external function Integer LoginShortcuts();
+external function Boolean TestConfigurationEnabler(string);
+remote function Integer CustomerSalesPaymentTermType(string);
+// POS Standalone
+external function Boolean DefCustCodeSetup();
+// in-apps
+external function Boolean HasInAppsAvailable();
+external function Integer CountCountries();
+
+// Language functions ENG
+external function Boolean DisplayLoginKeyPad_ENG();
+external function string 255 VATZoneEditFieldLabel_ENG(Integer);
+external function real VATZoneButtonsLabelsENG(real,real,real,real);
+external procedure LoginButtons2_ENG(Real,Real);
+external procedure FORMDEF_ENG();
+external function string 255 DemoMsgWClassTitle_ENG(Boolean,Boolean);
+external procedure TBEClassDef_ENG();
+external function string 255 VATZoneNameENG();
+external procedure TSERW_ENG();
+external procedure TSERWNT_ENG();
+external procedure TSERWTouch_ENG();
+external procedure TSERWTEST_ENG();
+external procedure INVFORM_ENG(Boolean);
+external procedure DisplayRecordDetails_ENG(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external procedure DrawPOSInterface2_ENG(string,string,record POSButtonsVc,string,Integer,Integer);
+external procedure DisplayRecordDetailsCustDisplay_ENG(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
+external function string 255 ResDayWClassWindowTitle_ENG();
+external function string 255 ResMonWClassWindowTitle_ENG();
+external function string 255 RTMonWClassWindowTitle_ENG();
+external procedure SetupNightAuditWindowControls_ENG(Boolean);
+external procedure CURClassDefinitionENG();
+external function real DrawPaymentModesButtons_IV_ENG(real);
+external function real FunctionButtons_ENG(string);
+external procedure CreditCardWindowHeader_ENG(Boolean,Boolean,Real);
+external procedure CreditCardWindowButtons_ENG(string,string,real);
+external procedure CreditCardWindowInvoiceDetail_ENG(Real);
+external procedure CreditCardWindowDeliveryDetail_ENG(Real);
+external function real DrawPaymentModesButtons_ENG();
+external procedure DrawBarMenuTiles_ENG(string);
+external procedure DrawRestPMOtherPay_ENG();
+external procedure DisplayRecordDetailsRA_ENG2(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,LongInt,Date,string,LongInt,string,string);
+external procedure DrawModifierButtons2_ENG(var integer,var integer);
+external procedure OKCancel_ENG();
+external procedure DefineElearningURLCacheLClass_ENG();
+external procedure DefineElearningURLCacheDClass_ENG();
+external function real TravelLogDeductions_ENG(real,real);
+external procedure LoginButtons_ENG(Real);
+external procedure FORMDEF2_ENG();
+external procedure FORMDEF3_ENG();
+external procedure ARS2RClass_ENG();
+external procedure ALLVATRClass_ENG();
+external function Boolean IsStandardUnused();
+external function Boolean IsEnterprise();
+external function Boolean StandardHansa();
+external function Boolean HasATOL();
+
+external function Boolean HasAccPeriods();
+external function Boolean HasAccessGroups();
+external function Boolean HasAddFee();
+external function Boolean HasApprovals();
+external function Boolean HasCCPayments();
+external function Boolean HasAdvancedAccounting();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasAdvancedProduction();
+external function Boolean HasAdvancedStock();
+external function Boolean HasAged();
+external function Boolean HasBar();
+external function Boolean HasBase2();
+external function Boolean HasBranch();
+external function Boolean HasBuyBack();
+external function Boolean HasCategories();
+//external function Boolean HasConsigmentStock();
+external function Boolean HasCommunicator();
+external function Boolean HasConsignmentStock();
+external function Boolean HasContactClassification();
+external function Boolean HasContactRelations();
+external function Boolean HasConsolidation();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasCreditLimit();
+external function Boolean HasCustItem();
+external function Boolean HasCustomerSearchKey();
+external function Boolean HasCustomerStatusReport();
+external function Boolean HasDownpayments();
+external function Boolean HasDefineColumns();
+external function Boolean HasDeliveryAddress();
+external function Boolean HasDepartments();
+external function Boolean HasETaxDocuments();
+external function Boolean HasEInvoicing();
+external function Boolean HasEndorsedChecks();
+external function Boolean HasExtraNLComment();
+external function Boolean HasExtTax();
+external function Boolean HasFavouriteActTypes();
+external function Boolean HasFiscalPrinter();
+external function Boolean HasFormEditor();
+external function Boolean HasFreightAdvanced();
+external function Boolean HasHideCostPrice();
+external function Boolean HasHotelInterface();
+external function Boolean HasGuestUserDefined();
+external function Boolean HasJewelleryInterface();
+external function Boolean HasIncomeAndExpenseBook();
+external function Boolean HasIOUChecks();
+external function Boolean HasItemClassification();
+external function Boolean HasItemGroups();
+external function Boolean HasKPIs();
+external function Boolean HasLanguages();
+external function Boolean HasLimitedAccess();
+external function Boolean HasLocalMachines();
+external function Boolean HasLoyaltyCards();
+external function Boolean HasMailTags();
+external function Boolean HasMainPartner();
+external function Boolean HasMultiCurrency();
+external function Boolean HasMultiLocations();
+external function Boolean HasNLBudget();
+external function Boolean HasNLBudgetClass();
+external function Boolean HasObjects();
+external function Boolean HasInvoiceOfficialSerNr();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasOrderClasses();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasNumberSeries();
+external function Boolean HasPersons();
+external function Boolean HasPocketScreen();
+external function Boolean HasPositions();
+external function Boolean HasPrepayments();
+external function Boolean HasProjects();//very strange tag
+external function Boolean HasPriceLists();
+external function Boolean HasQualityControl();
+external function Boolean HasReconLevel2();
+external function Boolean HasReminderLevel();
+external function Boolean HasRemoteBackup();
+external function Boolean HasResourceDisplayGroups();
+external function Boolean HasRussianPrepayment();
+external function Boolean HasRetGoodsToSupp();
+external function Boolean HasReturnedGoods();
+external function Boolean HasRoomPackages();
+external function Boolean HasRoomTypes();
+external function Boolean HasRoute();
+external function Boolean HasSalesman();
+external function Boolean HasSalesmanBonus();
+external function Boolean HasSalesGroup();
+external function Boolean HasSecondQuantity();
+external function Boolean HasSerialNumbers();
+external function Boolean HasServerInCloud();
+external function Boolean HasSettlementDiscount();
+external function Boolean HasSimulations();
+external function Boolean hasSimAccruals();
+external function Boolean HasSkypeConnection();
+external function Boolean HasSIPServerConnection();
+external function Boolean HasStrAsSignFType();
+external function Boolean HasTouchScreenDevice();
+external function Boolean HasTaxMatrix();
+external function Boolean HasTestFeatures();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasWorkOrders();
+external function Boolean HasThrouLocation();
+external function Boolean HasTouchScreenLook();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasVATZone();
+external function Boolean HasWithholdingTax();
+external function Boolean HasWithholdingTaxAdvanced();
+external function Boolean HasWorkOrders();
+external function Boolean HasWorkflowOverview();
+
+external function Boolean HasStandardCRM();
+external function Boolean HasStandardOrganizer();
+external function Boolean HasStandardCommunicator();
+
+external function Boolean HasEMail();
+external function Boolean HasExternalEMail();
+
+external function Boolean HasModAT2();
+external function Boolean HasModBA();
+external function Boolean HasModCheck();
+external function Boolean HasModCL();
+external function Boolean HasModCO();
+external function Boolean HasModCons();
+external function Boolean HasModCourses();
+external function Boolean HasModCredMan();
+external function Boolean HasModCRM();
+external function Boolean HasModEDI();
+external function Boolean HasModExp();
+external function Boolean HasModHotel();
+external function Boolean HasModHRM();
+external function Boolean HasModIN();
+external function Boolean HasModIntStock();
+external function Boolean HasModNL();
+external function Boolean HasPaymentGateway();
+external function Boolean HasModPO();
+external function Boolean HasModPOS();
+external function Boolean HasModPL();
+external function Boolean HasModPOProg();
+external function Boolean HasModPP();
+external function Boolean HasModProd();
+external function Boolean HasModQT();
+external function Boolean HasModRent();
+external function Boolean HasModRest();
+external function Boolean HasModRsrt();
+external function Boolean HasModSO();
+external function Boolean HasModSL();
+external function Boolean HasModSVO();
+external function Boolean HasModTS();
+external function Boolean HasModWHM();
+external function Boolean HasModDI();
+external function Boolean UsePostOKButton();
+external function Boolean HasBankImport();
+external function Boolean HasPLIntegratedWithNL();
+external function Boolean HasSLIntegratedWithNL();
+external function Boolean HasIntegratedNL();
+external function Boolean HasConsStockMoveInvoices();
+
+window SHDClass:1
+  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,t,v,vm,vs;
+  Integer tilenr,f,flipnr,rn,pos;
+
+  WindowBegin("Delivery",SHDClass,CGview,-);
+  SetWRect(20,80,750,460);
+  Sizeable(-1,-1,0,0);
+  UseView(SHVc);
+  vs = 20;
+  Tile(0,74,false,"",SerNr);
+  EditField(75,vm=(v=6),95,"No.",Normal,SerNr,false,TSerSClass);
+  EditField(75,v+=20,95,"Customer",ViewOnly,CustCode,false,0);
+  EditField(h=255,v=vm,-40,"Name",Normal,Addr0,false,0);
+  v = v + vs;
+  if (HasOfficialSerNr and (HasLocalization("AGO")==false)) then begin
+    EditField(h,vm=v,135,"Official No.",Normal,OfficialSerNr,false,LegalInvNrSClass);
+  end;
+  if (HasTREO) then begin
+    EditField(h+230,vm,95,"TREO No.",Normal,TREONr,false,0);
+  end;
+  CheckBox(h4=-100,v,0,"OK",OKFlag);
+  tilenr = 1;
+  if (IsEnterprise) then begin
+    TileButton(tilenr,"Terms"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Items"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Del. Terms"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Packaging"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Del. Address"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Comment"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Freight"); tilenr = tilenr + 1;
+  end else begin
+    TileButton(tilenr,"Comment"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Items"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Address"); tilenr = tilenr + 1;
+    if (HasLocalization("PRT")) then begin
+      if (HasModIN and HasModSL) then begin 
+        TileButton(tilenr,"Packaging"); tilenr = tilenr + 1;   
+      end;
+    end;
+    if (HasLocalization("LTU,PRT") or BuildProductCode=="PAYYAPERP") then begin
+      TileButton(tilenr,"Freight"); tilenr = tilenr + 1;
+    end;
+  end;
+  tilenr = 1;
+  Tile(tilenr,70,false,tilenr,ShipDate); tilenr = tilenr + 1;
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,vm=(v=6),82,"Date",Normal,ShipDate,false,PasteCurDate);
+  if (HasMultiLocations) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Location",Normal,Location,false,LocationSClass);
+  end;
+ 
+  /*
+  if (HasRoute) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Route",Normal,Sorting,false,DelRouteSClass);
+  end;
+  */
+  //cust end
+
+  if (IsEnterprise) then begin
+    v = v + vs;
+    SoftEditField(h1,v,82,"Scan Barcode",Normal,"scanbarcode",false,0,M4Str,60);
+  end;
+   //cust start
+  EditField(h2,v,135,"Final.Order.nr.",Normal,Sorting,false,0);
+  if (HasObjects) then begin
+    EditField(h2,v=vm,135,"Tags/Objects",Normal,Objects,false,ObjSClass);
+  end;
+  if (HasBranch) then begin
+    v = v + vs;
+    EditField(h2,v,135,"Branch",ViewOnly,BranchID,false,0);
+  end;
+  if (HasMultiLocations or HasModTS) then begin
+    v = v + vs;
+  end;
+  if (HasModTS) then begin
+    EditField(h2,v,135,"Project",ViewOnly,PRCode,false,0);
+  end;
+  if (HasObjects) then begin
+    EditField(h3,v=vm,80,"Order No.",ViewOnly,OrderNr,false,0);
+  end else begin
+    if (IsEnterprise==false) then begin
+      if (HasModTS) then begin
+        EditField(h3,v=vm,135,"Order No.",ViewOnly,OrderNr,false,0);
+      end else begin
+        EditField(h2,v=vm,135,"Order No.",ViewOnly,OrderNr,false,0);
+      end;
+    end;
+  end;
+  if (IsEnterprise) then begin
+    EditField(h3,v+=vs,80,"Order Class",Normal,SHClass,false,OrderClassSClass);
+    CheckBox(h4,v=6,0,"Tel. Message",Check1);
+  end;
+  if (IsEnterprise==false) then begin
+    if (HasMultiLocations) then begin
+      EditField(h1,v+=2*vs,-40,"Comment",Normal,Comment,false,0);
+    end else begin
+      EditField(h1,v+=vs,-40,"Comment",Normal,Comment,false,0);
+    end;
+    if (HasLanguages) then begin 
+      EditField(h1,v+=vs,82,"Language",Normal,LangCode,false,LangSClass);
+    end;      
+  end;
+  Tile(tilenr,190,true,tilenr,Math); tilenr = tilenr + 1;
+  v = 20;
+  MatrixBegin(4,v,-50,-35,-,200);
+  MatTypedRow(stp);
+  Flip(0);
+  MatCol(1,32,"Item",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(1,94,"Var",0,VARList,false,VARSClass);
+//  MatCol(1,144,"Description",0,Spec,false,0);
+  MatCol(1,94,"Description",0,Spec,false,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Item",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Var",0,VARList,false,VARSClass);
+//  MatCol(t,144,"Description",0,Spec,false,0);
+  MatCol(t,94,"Description",0,Spec,false,0);
+  MatText(t=kInvoiceRowTypeHidden,32,"This row and all rows below it will be hidden on printout",false);
+  t = kInvoiceRowTypePerceptionTax;    
+  flipnr = 1;
+  Flip(flipnr); flipnr = flipnr + 1;
+  if (HasCustItem) then begin
+    MatCol(1,-230,"Cust. Item No.",0,CustArtCode,false,CUINSClass);
+  end;
+  MatCol(1,-150,"Ordered",0,Ordered,true,0);
+  MatCol(1,-98,"Avail.",0,InStock,true,0);
+  MatCol(1,-50,"Del. Qty",0,Ship,true,0);
+  if (HasCustItem) then begin
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-230,"Cust. Item No.",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-150,"Ordered",0,Ordered,true,0);
+  end else begin
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-147,"Ordered",0,Ordered,true,0);
+  end;
+  MatCol(t,-98,"Avail.",0,InStock,true,0);
+  MatCol(t,-50,"Del. Qty",0,Ship,true,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  if (IsEnterprise==false) then begin
+    pos = -350;
+    if (HasSerialNumbers) then begin
+      MatCol(1,pos,"Serial No.",0,SerialNr,false,SerialNrSClass); pos = pos + 100;
+      MatCol(1,pos,"Best Before",0,BestBefore,false,0); pos = pos + 80;
+    end;
+    if (HasObjects) then begin
+      MatCol(1,pos,"Tags/Objects",0,Objects,false,ObjSClass); pos = pos + 100;
+    end;
+    MatCol(1,pos,"#Stock# Value",0,FIFORowVal,false,0);
+    if (HasLocalization("RUS")) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(1,-230,"Unit",0,UnitCode,false,UnitSClass);
+      MatCol(1,-180,"Unit Name",0,UnitComment,false,0);
+    end;
+  end else begin
+    MatCol(1,-350,"Serial No.",0,SerialNr,false,SerialNrSClass);
+    MatCol(1,-250,"Best Before",0,BestBefore,false,0);
+    MatCol(1,-150,"Location",0,Location,false,LocationSClass);
+    if (HasPositions) then begin
+      MatCol(1,-50,"Position",0,PosCode,false,UsedPosSClass);
+    end;
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-350,"Serial No.",0,SerialNr,false,SerialNrSClass);
+    MatCol(t,-250,"Best Before",0,BestBefore,false,0);
+    MatCol(t,-150,"Location",0,Location,false,LocationSClass);
+    if (HasPositions) then begin
+      MatCol(t,-50,"Position",0,PosCode,false,UsedPosSClass);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    if (HasBuyBack) then begin
+      MatCol(1,-400,"BuyBack Cost",0,BBCostPrice,false,0);
+    end;
+    MatCol(1,-320,"Row FIFO",0,FIFORowVal,false,0);
+    if (StandardHansa==false) then begin
+      MatCol(1,-220,"W. Av. Base2",0,WAB2,false,0);
+    end;
+    MatCol(1,-120,"Base Price",0,BasePrice,false,0);
+    MatCol(1,-40,"Coeff",0,Coefficient,false,0);
+    if (HasBuyBack) then begin
+      MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"BuyBack Cost",0,BBCostPrice,false,0);
+      MatCol(t,-320,"Row FIFO",0,FIFORowVal,false,0);
+      if (StandardHansa==false) then begin
+        MatCol(t,-220,"W. Av. Base2",0,WAB2,false,0);
+      end;
+      MatCol(t,-120,"Base Price",0,BasePrice,false,0);
+      MatCol(t,-40,"Coeff",0,Coefficient,false,0);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(1,-400,"Recipe",0,Recepy,false,0);
+    MatCol(1,-320,"Source",0,Source,false,SourceSClass);
+    MatCol(1,-240,"Invoiced",0,Invd,false,0);
+    if (StandardHansa==false) then begin
+      MatCol(1,-160,"#Despatch# Date",0,DespatchRowDate,false,PasteCurDate);
+      MatCol(1,-80,"#Despatch# Time",0,DespatchRowTime,false,PasteCurTime);
+    end;
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"Recipe",0,Recepy,false,0);
+    MatCol(t,-300,"Source",0,Source,false,SourceSClass);
+    MatCol(t,-240,"Invoiced",0,Invd,false,0);
+    if (StandardHansa==false) then begin
+      MatCol(t,-160,"#Despatch# Date",0,DespatchRowDate,false,PasteCurDate);
+      MatCol(t,-80,"#Despatch# Time",0,DespatchRowTime,false,PasteCurTime);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(1,-400,"Sales A/C",0,SalesAcc,false,AccSClass);
+    MatCol(1,-330,"Cost A/C",0,CostAcc,false,AccSClass);
+    MatCol(1,-250,"Tags/Objects",0,Objects,false,ObjSClass);
+    MatCol(1,-135,"Width",0,UnitXval,true,0);
+    MatCol(1,-90,"Height",0,UnitYval,true,0);
+    MatCol(1,-45,"Depth",0,UnitZval,true,0);
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"Sales A/C",0,SalesAcc,false,AccSClass);
+    MatCol(t,-330,"Cost A/C",0,CostAcc,false,AccSClass);
+    MatCol(t,-250,"Tags/Objects",0,Objects,false,ObjSClass);
+    MatCol(t,-135,"Width",0,UnitXval,true,0);
+    MatCol(t,-90,"Height",0,UnitYval,true,0);
+    MatCol(t,-45,"Depth",0,UnitZval,true,0);
+    if (StandardHansa==false) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(1,-300,"Packages",0,RowPackages,false,0);
+      MatCol(1,-220,"P.Type",0,PackageType,false,PackTypeSClass);
+      MatCol(1,-170,"Package Desc",0,PackageDesc,false,0);
+      MatCol(1,-70,"Excise",0,ExciseNr,false,0);
+      MatCol(t=kInvoiceRowTypeStructuredItemComponent,-300,"Packages",0,RowPackages,false,0);
+      MatCol(t,-220,"P.Type",0,PackageType,false,PackTypeSClass);
+      MatCol(t,-170,"Package Desc",0,PackageDesc,false,0);
+      MatCol(t,-70,"Excise",0,ExciseNr,false,0);
+    end;
+  end;
+  InsertRowTest;
+  DeleteRowTest;
+  RowMenuBegin("");
+  RowMenuItem(0,"Item Status",'I','I',0,"ItemStatusSHDsm");
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      RowMenuItem(0,"Split Row",' ',' ',0,"SplitRowSHDsm");
+    end;
+  end;
+  EndRowMenu;
+  EndMatrix;
+  vs = 22;
+//  v = 21;
+  v = v + 1;
+  if (flipnr>2) then begin
+    for (f=1;f<flipnr;f=f+1) begin
+      VTab(-35,v,-16,v+vs,ToolFlip,f,chr(asc("A") + f - 1));
+      v = v + vs;
+    end;
+  end;
+
+//  CheckBox(20,-20,0,"OK",OKFlag);
+  if (HasLocalization("PRT")) then begin
+    EditField(120,-20,150,"Tax Seal",ViewOnly,TaxAdminServSeal,false,0);
+//    SoftEditField(120,-20,150,"Tax Auth. Approval",Normal,"TaxAdminServSeal",false,0,M4Str,200);
+  end;
+  EditField(-131,-20,80,"Total Qty",ViewOnly,TotQty,true,0);
+  if (IsEnterprise) then begin
+    Tile(tilenr,90,false,tilenr,ShipMode); tilenr = tilenr + 1;
+    vs = 20;
+    EditField(h1,v=vm,82,"Del. Mode",Normal,ShipMode,false,DMSClass);
+    EditField(h1,v+=vs,80,"Tax Sum",ViewOnly,TAX1Sum,true,0);
+    if (StandardHansa==false) then begin
+      EditField(h1,v+=vs,80,"Declared Value",Normal,DeclaredVal,true,0);
+      EditField(h1,v+=vs,-20,"E-Shipment status",ViewOnly,EShipStatus,false,0);
+      if (HasLocalization("BRA,BOL,PRT")) then begin
+        EditField(h1,v+=vs,80,"Tax Seal",ViewOnly,TaxAdminServSeal,false,0);
+      end;
+    end;
+    EditField(h2,v=vm,80,"Total Quantity",ViewOnly,TotQty,true,0);
+    EditField(h2,v+=vs,80,"Total Weight",Normal,TotWeight,true,0);
+    EditField(h2,v+=vs,80,"Total Volume",Normal,TotVolume,true,0);
+    CheckBox(473,v=vm,0,"Use Invoice Address",Check2);
+    if (StandardHansa==false) then begin
+      CheckBox(473,v+=16,0,"Electronic Shipment Created",EShipmentCreated);
+      CheckBox(473,v+=16,0,"Electronic Shipment Collected",EShipCollected);
+    end;
+    Tile(tilenr,110,false,tilenr,Packages); tilenr = tilenr + 1;
+    h2 = 310;
+    EditField(h1,v=6,82,"Transport No.",Normal,TransportNumber,false,0);
+    EditField(h1,v+=vs,82,"Packages",Normal,Packages,true,0);
+    if (HasLanguages) then begin 
+      EditField(h1,v+=vs,82,"Language",Normal,LangCode,false,LangSClass);
+    end;  
+    EditField(h1,v+=vs,82,"Currency",Normal,CurncyCode,false,CurncyCodeSClass);
+    if (StandardHansa==false) then begin
+      EditField(h1,v+=vs,-20,"Transp. Directives",Normal,TransportDirect,false,0);
+      EditField(h1,v+=vs,80,"Plan. Sent Date",Normal,PlanSendDate,false,PasteCurDate);
+      EditField(h1,v+=vs,80,"Plan. Sent Time",Normal,PlanSendTime,false,PasteCurTime);
+    end;
+
+    EditField(h2,v=6,135,"From City",Normal,FromCity,false,0);
+    EditField(h2,v+=vs,135,"To City",Normal,ToCity,false,0);
+    EditField(h2,v+=vs,135,"From Dock",Normal,FromDock,false,0);
+    EditField(h2,v+=vs,135,"To Dock",Normal,ToDock,false,0);
+    if (StandardHansa==false) then begin
+      EditField(h2,v+=2*vs,80,"Plan. Arrival Date",Normal,PlanArrDate,false,PasteCurDate);
+      EditField(h2,v+=vs,80,"Plan. Arrival Time",Normal,PlanArrTime,false,PasteCurTime);
+    end;
+  end;
+  Tile(tilenr,150,false,tilenr,Addr1); tilenr = tilenr + 1;
+  vs = 20;
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      EditField(h1,v=6,80,"Address Code",Normal,DelAddrCode,false,DelAddr3SClass);
+      EditField(h1,v+=vs,-20,"Delivery",Normal,Addr1,false,0);
+    end else begin
+      EditField(h1,v=6,-20,"Delivery",Normal,Addr1,false,0);
+    end;
+    EditField(h1,v+=vs,-20,"Address",Normal,Addr2,false,0);
+  end else begin
+    EditField(h1,v=6,-20,"Address",Normal,Addr1,false,0);
+    EditField(h1,v+=vs,-20,"",Normal,Addr2,false,0);
+  end;
+  EditField(h1,v+=vs,-20,"",Normal,Addr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr4,false,0);
+  if (HasCountryPerCustomer) then begin
+    EditField(h1,v+=vs,80,"Country",Normal,DelCountry,false,CountrySClass);
+    if (HasLocalization("BRA")) then begin 
+      EditField(h2-109,v,232,"",ViewOnly,DelCountryName,false,0);
+    end;    
+  end;
+  if (IsEnterprise) then begin
+    EditField(h3,v,-20,"Region",Normal,Region,false,RegionSClass);
+    Tile(tilenr,30,false,tilenr,Comment); tilenr = tilenr + 1;
+    EditField(h1+10,v=6,-20,"Comment",Normal,Comment,false,0);
+    EditField(h1+10,v+=20,-20,"Sales Contract Type",Normal,ORCOType,false,0);
+    if (HasNumberSeries and HasLocalization("PRT")) then begin
+      if (HasOfficialSerNr) then begin
+        EditField(h1+10,v+=vs,100,"Official Ser No. 2",Normal,OfficialSerNr2,false,0);
+        EditField(h2,v,135,"Status",Normal,Status,false,SetSClass);
+      end;    
+    end;
+  end else begin
+    if (HasLocalization("RUS")) then begin
+      EditField(h1,v+=vs,80,"Total Weight",Normal,TotWeight,true,0);
+    end;
+  end;
+  if (IsStandardProduct and HasLocalization("PRT,LTU") and HasModIN and HasModSL) then begin 
+    Tile(tilenr,110,false,tilenr,PlanSendDate); tilenr = tilenr + 1;
+    h2 = 310;
+    EditField(h1,v=6,80,"Plan. Sent Date",Normal,PlanSendDate,false,PasteCurDate);
+    EditField(h1,v+=vs,80,"Plan. Sent Time",Normal,PlanSendTime,false,PasteCurTime);
+    if (HasLocalization("PRT")) then begin
+      EditField(h2,v=6,80,"Plan. Arrival Date",Normal,PlanArrDate,false,PasteCurDate);
+      EditField(h2,v+=vs,80,"Plan. Arrival Time",Normal,PlanArrTime,false,PasteCurTime);      
+    end;
+  end;
+  
+  if (IsEnterprise or HasLocalization("LTU,PRT") or BuildProductCode=="PAYYAPERP") then begin
+    if (IsStandardProduct==false or HasLocalization("PRT,LTU")==false or HasModIN==false or HasModSL==false) then begin
+      Tile(tilenr,130,false,tilenr,FreightCode); tilenr = tilenr + 1;
+      v = 6;
+    end else begin
+      v = v + vs;
+    end;
+    if (IsEnterprise) then begin
+      HalPushButton(473,2,600,22,"UpdateSHPackages","Define Packages");
+    end;
+    EditField(h1,v,80,"Freight Company",Normal,FreightCode,false,FreightCompanySClass);
+    EditField(h1,v+=vs,-20,"Name",Normal,FreightCompany,false,0);
+    EditField(h1,v+=vs,-20,"#Reg. No.#",Normal,FreightCompanyRegNr,false,0);
+    EditField(h1,v+=vs,-20,"Truck Information",Normal,TruckInfo,false,0);
+    if (IsEnterprise or HasLocalization("PRT")) then begin
+      EditField(h1,v+=vs,-20,"Driver",Normal,Driver,false,0);
+      EditField(h1,v+=vs,-20,"CMR",Normal,CMRText,false,0); // International transporting number
+    end;
+  end;  
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Item Status",'I',2,"ItemStatusSHDsm");
+    if (HasIntegratedNL) then begin
+      SpecialMenu("Open #NL# Transaction",'t',3,"OpenTRFromSH");
+    end;
+    SpecialMenu("Print Freight Labels",'l',0,"PrintSHLabSHDsm");
+    if (HasReturnedGoods and HasModIN) then begin
+      SpecialMenu("Create Returned Goods",'B',5,"RetFromSHSpec");
+    end;
+  end else begin
+  SpecialMenu("Print Freight Labels",'l',0,"PrintSHLabSHDsm");
+  if (IsEnterprise) then begin
+    SpecialMenu("Recalculate Weight",'w',1,"SHCalcWeightDsm");
+  end;
+  if (HasIntegratedNL) then begin
+    SpecialMenu("Open #NL# Transaction",'t',3,"OpenTRFromSH");
+  end;
+  if (HasLocalization("SWE")) then begin
+    SpecialMenu("ASG Export",' ',4,"ASGEnSHDsm"); /* Specific for Sweden */
+  end;
+  if (HasLocalization("NOR")) then begin
+    SpecialMenu("Winedi Export",' ',4,"WinEDIEnSHDsm"); /* Specific for Norway */
+  end;
+  if (HasLocalization("PRT")) then begin
+    if (HasETaxDocuments) then begin
+      SpecialMenu("Send to Tax Authorities",'',10,"EShipPRTDsm");
+    end;
+  end;
+  if (IsEnterprise) then begin
+    SpecialMenu("Refill Batch No. Items",' ',6,"INBatchSHSpec");
+  end;
+  if (HasModWHM) then begin
+    SpecialMenu("OK Warehouse #Stock# Movements",' ',8,"OKStockMovSHrDsm");
+    SpecialMenu("Warehouse Picking List",' ',9,"PickingListDsm");
+  end;
+//  SpecialMenu("Calculate Manually",' ',10,"CalcSHMan"); /* Specific for one customer in Portugal, you may comment it out */
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      SpecialMenu("Register Electronic Shipment",' ',9,"EShipRegisterDsm");
+    end;
+    if (GuiType==kGuiiPhone) then begin
+      SpecialMenu("Sign",' ',10,"SignSHDsm");
+    end;
+  end;
+  SpecMenuGroup("",kSpecMenuGroupTypeExtendedPlusMenu,0);
+  if (HasModSL) then begin
+    SpecialMenu("Invoice",'F',1,"IVFromSHDsm");
+  end;
+  if (IsEnterprise or HasReturnedGoods) then begin
+    SpecialMenu("Returned Goods",'B',2,"RetFromSHDsm");
+  end;
+  end;
+  EndWindow;
+end;

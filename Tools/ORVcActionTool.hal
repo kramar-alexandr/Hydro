@@ -1,0 +1,27 @@
+external inner procedure ORVc_PastePrice(var record ORVc,Integer,var Boolean);
+external function val GetAnodPrice(record INVc ,date, var val );
+
+global
+procedure PasteORAnodPrice(var record ORVc ORr,var boolean chsum, integer rownr)
+begin  
+  record INVc INr;
+  row ORVc ORrw;
+  string 255 warning;
+  val res,fprice;
+  
+  MatRowGet(ORr,rownr,ORrw);
+  if nonblank(ORrw.ArtCode) then begin 
+    INr.Code = ORrw.ArtCode;
+    if ReadFirstMain(INr,1,true) then begin
+      res  = GetAnodPrice(INr,ORr.OrdDate,fprice);
+      //11.09.2018 ORrw.Price = (INr.UPrice1 - fprice) + (ORrw.AnodPrice * INr.Perimeter)/1000;
+      
+      ORrw.Price =  (ORrw.UnitFactPrice * INr.UnitCoefficient) + (ORrw.AnodPrice * INr.Perimeter/1000);
+
+      MatRowPut(ORr,rownr,ORrw);
+      ORVc_PastePrice(ORr,rownr,chsum);
+    end;  
+  end;
+  
+  return;
+end;

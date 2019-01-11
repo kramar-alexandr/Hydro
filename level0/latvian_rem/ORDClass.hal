@@ -1,0 +1,509 @@
+external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
+remote   function Boolean ReadPOSButtons(string,string,longint,var string,var string,var string,var record POSButtonsVc,var Integer);
+external function Boolean HasTaxMatrix();
+external function Boolean IsSessionOpen(string,string,Date,Time);
+external function Boolean CUVATNrColumn;
+external function Boolean UseTaxTemplatesforTaxCalc();
+external function string 60 UserDefined(string,string);
+external function real VATZoneButtonsLabelsLAT(real,real,real,real);
+external function Boolean HasJewelleryInterface();
+external function Boolean HasMetroTestFeatures();
+external function Boolean HasLimitedAccess();
+external function Boolean StandardHansa();
+external function Boolean HasModCRM();
+external function Boolean HasApprovals();
+external function Boolean HasTREO();
+external function Boolean HasVarieties();
+external function Boolean HasTouchScreenLook();
+external function Boolean HaseMail();
+external function Boolean HasModPO();
+external function Boolean HasCommunicator();
+external function Boolean HasOfficialSerNr();
+external function Boolean HasMultiCurrency();
+external function Boolean HasBase2();
+external function Boolean IsEnterprise();
+external function Boolean HasPriceLists();
+external function Boolean HasModSL();
+external function Boolean HasModSO();
+external function Boolean HasModIN();
+external function Boolean HasModTS();
+external function Boolean HasAdvancedCRM();
+external function Boolean HasObjects();
+external function Boolean HasSalesman();
+external function Boolean HasStandardCRM();
+external function Boolean HasExtTax();
+external function Boolean HasModNL();
+external function Boolean HasCustItem();
+external function Boolean HasLanguages();
+external function Boolean HasAdvancedPricing();
+external function Boolean HasModSVO();
+external function Boolean HasCountryPerCustomer();
+external function Boolean HasVATZone();
+external function Boolean HasModPOS();
+external function Boolean HasModCredMan();
+external function Boolean HasModPL();
+external function Boolean HasMultiLocations();
+external function Boolean HasRoute();
+external function Boolean HasSerialNumbers();
+external function Boolean HasQualityControl();
+external function Boolean HasAdvancedStock();
+external function Boolean HasModRent();
+external function Boolean HasItemGroups();
+external function Boolean HasItemClassification();
+external function Boolean HasContactClassification();
+external function Boolean HasSecondQuantity();
+external function Boolean HasDepartments();
+external function Boolean HasPreferedOfficialSerNr();
+external function Boolean HasPositions();
+external function Boolean HasCategories();
+
+SetLangMode(LangLatvian,"LAT",2);
+
+window ORDClass:2
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,t,v,vm,vs,h5,flipnr,width;
+  string 255 label;
+  WindowBegin("Klienta pasūtījums",ORDClass,CGview,-);
+  //cust start
+  SetWRect(20,80,850,460);
+  //cust end
+  Sizeable(-1,-1,0,0);
+  UseView(ORVc);
+  ActiveFieldOnNew("CustCode");    
+  CommunicateButton;
+  Tile(0,74,false,"",CustCode);
+  EditField(75,vm=(v=6),95,"Nr.",Normal,SerNr,false,TSerSClass);
+  EditField(75,v+=20,95,"Klients",Normal,CustCode,false,CUSClass);
+  EnterSkip(PayDeal);
+  EditField(h=255,v=vm,-40,"Nosaukums",Normal,Addr0,false,0);
+  if (StandardHansa==false) then begin
+  EditField(h,vm=(v+=20),135,"Pavadz. Nr.",Normal,OfficialSerNr,false,LegalInvNrSClass);
+  CheckBox(h4=-100,v,0,"Apst.",OKFlag);
+  end else begin
+    CheckBox(h4=-100,vm=(v+=20),0,"Apst.",OKFlag);  
+  end;
+//  CheckBox(h+120,vm,0,"Closed",Closed);
+//  CheckBox(h+240,vm,0,"Reserved",Reserved);
+  TileButton(1,"Nosacījumi");
+  TileButton(2,"Artikuli");
+  TileButton(3,"Valūta");
+  TileButton(4,"Nosūt. nos.");
+  TileButton(5,"Cenu lapa");
+  TileButton(6,"Rēķ. adrese");
+  TileButton(7,"Nos. adrese");
+  Tile(1,110,false,"1",OrdDate);
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,vm=(v=6),82,"Datums",Normal,OrdDate,false,PasteCurDate);
+  EditField(h1,v+=vs,25,"Samaksas termiņš",Normal,PayDeal,false,PDSClass);
+  EditField(h1,v+=vs,82,"Plānots nosūtīt",Normal,PlanShip,false,PasteCurDate);
+  EditField(h1,v+=vs,82,"Izsūt. datums",Normal,DespatchDate,false,PasteCurDate);
+  EditField(h1,v+=vs,82,"Izsūt. laiks",Normal,DespatchTime,false,PasteCurTime);
+  EditField(h2,v=vm,135,"Mūsu kontaktp.",Normal,OurContact,false,0);
+  EditField(h2,v+=vs,135,"Kl. kontaktp.",Normal,CustContact,false,ContactSClass);
+  EditField(h2,v+=vs,135,"Objekti",Normal,Objects,false,ObjSClass);
+  EditField(h2,v+=vs,135,"Atsauce",Normal,RefStr,false,0);
+  EditField(h2,v+=vs,135,"Kl. pas. Nr.",Normal,CustOrdNr,false,0);
+  EditField(h3,v=vm,80,"Aģents",Normal,SalesMan,false,UserSClass);
+  if (StandardHansa==false) then begin
+  EditField(h3,v+=vs,80,"Projekts",Normal,PRCode,false,PRSClass);
+  end;
+  EditField(h3,v+=vs,80,"Pasūtījuma veids",Normal,OrderClass,false,OrderClassSClass);
+  if (StandardHansa==false) then begin
+  EditField(h3,v+=vs,80,"Pasūtījuma tips",Normal,OrderType,false,SetSClass);
+  EditField(h3,v+=vs,80,"Realiz. līgums",Normal,ORCONr,false,ORCOSClass);
+  end;
+  CheckBox(h4,v=6,0,"Slēgts",Closed);
+  CheckBox(h4,v+=16,0,"Rezervēts",Reserved);
+  EnterSkip(Math);
+  Tile(2,220,true,"2",Math);
+  //  CheckBox(20,-20,0,"OK",OKFlag);
+  EditField(h=100,-61,50,"T.Qt.1",ViewOnly,TotUnit1Qty,true,0); // OBS
+  EditField(h+100,-61,50,"T.Qt.2",ViewOnly,TotUnit2Qty,true,0); // OBS
+  EditField(55,-41,50,"Valūta",Normal,CurncyCode,false,CurncyCodeSClass);
+  if (UseTaxTemplatesforTaxCalc==false) then begin
+  if (UserCanAction("ViewCostPrice",true)) then begin
+    EditField(160,-41,70,"BP %",Normal,GPProc,true,0);
+    EditField(160,-21,70,"Kopā BP",ViewOnly,TotGP,true,0);
+  end;
+  EditField(290,-41,70,"Nod.2",ViewOnly,TAX2Sum,true,0);
+  EditField(290,-21,70,"Atsk.nod.",ViewOnly,TAX1Sum,true,0);
+  EditField(410,-41,100,"PVN",ViewOnly ,Sum3,true,0);
+  end else begin
+    if (UserCanAction("ViewCostPrice",true)) then begin
+      EditField(290,-41,70,"BP %",Normal,GPProc,true,0);  
+      EditField(290,-21,70,"Kopā BP",ViewOnly,TotGP,true,0);  
+    end;
+    EditField(410,-41,100,"Nod.",ViewOnly ,Sum3,true,0);  
+  end;
+  EditField(410,-21,100,"Pamats.",ViewOnly,BaseSum4,true,0);
+  EditField(-150,-41,100,"Summa",ViewOnly ,Sum1,true,0);
+  EditField(-150,-21,100,"Kopā",ViewOnly ,Sum4,true,0);
+  v = 24;
+  MatrixBegin(3,v,-50,-49,-,200);
+  MatTypedRow(stp);
+  flipnr = 0;
+  Flip(flipnr); flipnr = flipnr + 1;
+  MatText(t=9,32,"Starpsumma",true);
+  MatCol(t,100,"",0,Spec,false,0);
+  MatColTL(t,-80,"Summa",0,-1,ViewOnly,0,Sum,true,0);
+  MatText(t=17,32,"Virsraksts",true);
+  MatCol(t,100,"",0,Spec,false,0);
+  MatCol(t=1,32,"Artikuls",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Veids",0,VARList,true,VARSClass);
+//  MatCol(t,144,"Daudz.",0,Quant,true,0);
+  t = 1;
+  if (HasVarieties) then begin
+  MatCol(t,94,"Qt.1",0,Quant,true,MATVARINSClass); // OBS
+  end else begin
+    MatCol(t,94,"Daudz.",0,Quant,true,0);  
+  end;
+  EnterSkip(ArtCode);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Artikuls",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Var",0,VARList,true,VARSClass);
+//  MatCol(t,144,"Qty",0,Quant,true,0);
+  if (HasVarieties) then begin
+  MatCol(t,94,"Daudz.",0,Quant,true,MATVARINSClass);
+  end else begin
+    MatCol(t,94,"Daudz.",0,Quant,true,0);  
+  end;
+  EnterSkip(ArtCode);
+  MatText(t=10,32,"Šī un visas nākamās rindas nebūs redzamas izdrukā",false);
+  MatText(t=kInvoiceRowTypePerceptionTax,32,"Realiz. nodoklis",true);
+  MatCol(t,132,"",0,Region,false,0);
+  MatCol(t,252,"",0,TAX2Prc,true,0);
+  MatCol(t,292,"",0,Sum,true,0);
+  MatCol(t,372,"",0,SalesAcc,false,0);
+  MatCol(t,452,"",0,Spec,false,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+//  MatCol(t=1,194,"Nosaukums",0,Spec,false,0);
+  t = 1;
+  MatCol(t,h=144,"Vien.1",0,UnitCode,false,UnitSClass); // OBS
+  MatColTL(t,h+=50,"Qt.2",0,M4UVal,ViewOnly,0,Unit2Qty,true,MATVARINSClass);  // OBS
+  MatColTL(t,h+=50,"Vien.2",0,M4Code,ViewOnly,5,Unit2Code,false,UnitSClass);  // OBS
+  MatCol(t,294,"Nosaukums",0,Spec,false,0); // OBS
+    // MatCol(t,144,"Apraksts",0,Spec,false,0);  //OBS 
+  MatCol(t,-325,"Vien. cena",0,Price,true,PLSClass);
+  //cust start
+  MatCol(t,-235,"Anod.cena/m2",0,AnodPrice,true,0);
+  //cust end
+  MatCol(t,-135,"%",0,vRebate,true,0);
+  MatCol(t,-100,"Summa",0,Sum,true,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  MatCol(t,-235,"Vien. cena",0,Price,true,PLSClass);
+  MatCol(t,-135,"%",0,vRebate,true,0);
+  MatCol(t,-100,"Summa",0,Sum,true,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    // MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  if (UseTaxTemplatesforTaxCalc) then begin
+    MatCol(t,-284,"Kl. artikula Nr.",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-224,"Konts",0,SalesAcc,false,AccSClass);
+    MatCol(t,-164,"Objekts",0,Objects,false,ObjSClass);
+    MatCol(t,-70,"PVN kd",0,TaxTemplateCode,false,TaxTemplateSClass);
+  end else begin
+    MatCol(t=1,h=144,"Anod.",0,Anod,true,0);  // OBS
+    MatCol(t,h+=50,"Powd.",0,Powd,true,0);    // OBS
+    MatCol(t,h+=50,"Mec.",0,Mec,true,0);      // OBS
+    MatCol(t,294,"Nosaukums",0,Spec,false,0); // OBS
+    MatCol(t,-264,"Kl. artikula Nr.",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-184,"Konts",0,SalesAcc,false,AccSClass);
+    MatCol(t,-124,"Objekts",0,Objects,false,ObjSClass);
+    MatCol(t,-30,"PVN kd",0,VATCode,false,VATCodeSClass);
+  end;
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  if (UseTaxTemplatesforTaxCalc) then begin
+    MatCol(t,-284,"Kl. artikula Nr.",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-224,"Konts",0,SalesAcc,false,AccSClass);
+    MatCol(t,-164,"Objekts",0,Objects,false,ObjSClass);
+    MatCol(t,-70,"PVN kd",0,TaxTemplateCode,false,TaxTemplateSClass);
+  end else begin
+    MatCol(t,-264,"Kl. artikula Nr.",0,CustArtCode,false,CUINSClass);
+    MatCol(t,-184,"Konts",0,SalesAcc,false,AccSClass);
+    MatCol(t,-124,"Objekts",0,Objects,false,ObjSClass);
+    MatCol(t,-30,"PVN kd",0,VATCode,false,VATCodeSClass);
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  MatCol(t,344,"Pasūt. tips",0,OrderType,false,SetSClass);  
+   if (UserCanAction("ViewCostPrice",true)) then begin
+    MatCol(t,-245,"Vien. cena",0,Price,true,PLSClass);
+    MatCol(t,-175,"%",0,vRebate,true,0);
+    MatCol(t,-140,"Pašizmaksa",0,BasePrice,true,0);
+    MatCol(t,-70,"BP",0,rowGP,true,0);
+  end else begin
+    MatCol(t,-235,"Vien. cena",0,Price,true,PLSClass);
+    MatCol(t,-135,"%",0,vRebate,true,0);
+    MatCol(t,-100,"Summa",0,Sum,true,0);
+  end;  
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  if (UserCanAction("ViewCostPrice",true)) then begin
+    MatCol(t,-245,"Vien. cena",0,Price,true,PLSClass);
+    MatCol(t,-175,"%",0,vRebate,true,0);
+    MatCol(t,-140,"Pašizmaksa",0,BasePrice,true,0);
+    MatCol(t,-70,"BP",0,rowGP,true,0);
+  end else begin
+    MatCol(t,-235,"Vien. cena",0,Price,true,PLSClass);
+    MatCol(t,-135,"%",0,vRebate,true,0);
+    MatCol(t,-100,"Summa",0,Sum,true,0);
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+  MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  MatCol(t,-300,"Aģenti",0,Salesmen,false,UserSClass); 
+  MatCol(t,-236,"Nos. 1",0,Shipd1,true,0); 
+  MatCol(t,-184,"Nos. 2",0,Shipd2,true,0); 
+  MatCol(t,-132,"Izr. rēķ.",0,Invd,true,0); 
+  MatCol(t,-80,"Specifikācija",0,Recepy,false,RecSClass);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nos.",0,Spec,false,0);
+  MatCol(t,-290,"Nosūtīts",0,Shipd1,true,0);
+  MatCol(t,-220,"Nos.kopā",0,Shipd2,true,0);
+  MatCol(t,-150,"Izr. rēķins",0,Invd,true,0);
+  MatCol(t,-80,"Specifikācija",0,Recepy,false,RecSClass);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  MatCol(t,-290,"Sēr. Nr.",0,SerialNr,false,SerialNrSClass);
+  MatCol(t,-150,"Plān. nos.",0,PlanShipRow,true,PasteCurDate);
+  MatCol(t,-70,"Cenas faktors",0,PriceFactor,true,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  MatCol(t,-290,"Sēr. Nr.",0,SerialNr,false,SerialNrSClass);
+  MatCol(t,-150,"Plān. nos.",0,PlanShipRow,true,PasteCurDate);
+  MatCol(t,-70,"Cenas faktors",0,PriceFactor,true,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  MatCol(t,-315,"Nos.pavadzīme",0,ShipNote,false,0);
+  MatCol(t,-210,"Noliktava",0,Location,false,LocationSClass);
+  if (StandardHansa==false) then begin
+  MatCol(t,-145,"Vieta",0,Position,true,UsedPosSClass);
+  end;
+  MatCol(t,-90,"Avots",0,Source,true,SourceSClass);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  MatCol(t,-315,"Nos.pavadzīme",0,ShipNote,false,0);
+  MatCol(t,-210,"Noliktava",0,Location,false,LocationSClass);
+  if (StandardHansa==false) then begin
+  MatCol(t,-145,"Vieta",0,Position,true,UsedPosSClass);
+  end;
+  MatCol(t,-90,"Avots",0,Source,true,SourceSClass);
+  if (StandardHansa==false) then begin
+    Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(t=1,144,"Saņ. dat.",0,PickingDate,false,PasteCurDate);
+  MatCol(t,-390,"Saņ. laiks",0,PickingTime,false,PasteCurTime);
+  MatCol(t,-320,"Iekr. dat.",0,InloadingDate,true,PasteCurDate);
+  MatCol(t,-230,"Iekr. laiks",0,InloadingTime,true,PasteCurTime);
+  MatCol(t,-160,"Izv. dat.",0,DespatchRowDate,true,PasteCurDate);
+  MatCol(t,-70,"Izv. laiks",0,DespatchRowTime,true,PasteCurTime);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Saņ. dat.",0,PickingDate,false,PasteCurDate);
+  MatCol(t,-390,"Saņ. laiks",0,PickingTime,false,PasteCurTime);
+  MatCol(t,-320,"Iekr. dat.",0,InloadingDate,true,PasteCurDate);
+  MatCol(t,-230,"Iekr. laiks",0,InloadingTime,true,PasteCurTime);
+  MatCol(t,-160,"Izv. dat.",0,DespatchRowDate,true,PasteCurDate);
+  MatCol(t,-70,"Izv. laiks",0,DespatchRowTime,true,PasteCurTime);
+  end;
+  Flip(flipnr); flipnr = flipnr + 1;
+  t = 1;
+    MatCol(t,144,"Apraksts",0,Spec,false,0);  
+  MatCol(t,-315,"Vienība",0,UnitCode,false,UnitSClass);
+  MatCol(t,-260,"Vien.daudz.",0,UnitFactQuant,true,0);
+  MatCol(t,-200,"Plat.",0,UnitXval,true,0);
+  MatCol(t,-160,"Augst.",0,UnitYval,true,0);
+  MatCol(t,-120,"Biez.",0,UnitZval,true,0);
+  //cust start
+  MatCol(t,-80,"KG cena",0,UnitFactPrice,true,0);
+  //cust end
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Nosaukums",0,Spec,false,0);
+  MatCol(t,-315,"Vienība",0,UnitCode,false,UnitSClass);
+  MatCol(t,-260,"Vien.daudz.",0,UnitFactQuant,true,0);
+  MatCol(t,-200,"Plat.",0,UnitXval,true,0);
+  MatCol(t,-160,"Augst.",0,UnitYval,true,0);
+  MatCol(t,-120,"Biez.",0,UnitZval,true,0);
+  //cust start
+  MatCol(t,-80,"KG cena",0,UnitFactPrice,true,0);
+  //cust end
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  vs = 20;
+  v = 18; VTab(-35,v,-16,v+vs,ToolFlip,1,"A");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,2,"B");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,3,"C");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,4,"D");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,5,"E");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,6,"F");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,7,"G");
+  if (StandardHansa==false) then begin
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,8,"H");
+  end;
+  Tile(3,70,false,"3",FrRate);
+  vs = 20;
+  EditField(h=110,v=6,50,"Valūta",Normal,CurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+vs,50,"Bāzes valūta 1",Normal,BaseRate1,true,0);  
+  EditField(h,v+(vs*2),50,"Bāzes valūta 2",Normal,BaseRate2,true,0);    
+  EditField(h2=295,v,50,"Kurss",Normal,FrRate,true,0);  
+  RateField(h3=360,v,50,":",Normal,"ToRateB1",true,h3+60,v+14,"Bāzes valūta 1",false);  
+  RateField(h3,v+=vs,50,":",Normal,"ToRateB2",true,h3+60,v+14,"Bāzes valūta 2",false);     
+  Tile(4,110,false,"4",ShipDeal);
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,v=6,80,"Nosūt. nosac.",Normal,ShipDeal,false,ShipDealSClass);
+  EditField(h1,v+=vs,80,"Nosūt. veids",Normal,ShipMode,false,DMSClass);
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,80,"Maršruts",Normal,Sorting,false,DelRouteSClass);
+  end;
+  EditField(h1,v+=vs,80,"Noliktava",Normal,Location,false,LocationSClass);
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,80,"Filiāle",Normal,BranchID,false,AllCUSClass);
+  end;
+  EditField(h2,v=vm,80,"Kopējais daudz.",ViewOnly,TotQty,true,0);
+  EditField(h2,v+=vs,80,"Kopējais svars",ViewOnly,TotWeight,true,0);
+  EditField(h2,v+=vs,80,"Kopējais tilpums",ViewOnly,TotVolume,true,0);
+  EditField(h2,v+=vs,80,"Krava",Normal,FrPrice,true,0);
+  EditField(h2,v+=vs,80,"Intrastat kods",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass);  
+  if (StandardHansa==false) then begin
+  EditField(h3,v,80,"Piegādes PVN kods",Normal,FrVATCode,true,VATCodeSClass);
+  end;
+  CheckBox(473,v=vm,0,"Rēķins pirms nosūtīšanas",InvBeforeShip);
+  Tile(5,130,false,"5",PriceList);
+  h3 = 530;
+  EditField(h1,v=vm,80,"Cenu lapa",Normal,PriceList,false,PLDefSClass);
+  EditField(h1,v+=vs,80,"Atlaižu matrica",ViewOnly,RebCode,false,0); 
+//  EditField(h2,v+=vs,80,"Disc %",ViewOnly,DiscPerc,false,0);
+//  EditField(h2,v+=vs,80,"Disc Amnt",ViewOnly,DiscSum,false,0);
+  EditField(h1,v+=vs,80,"Maksātājs",Normal,InvoiceToCode,false,CUSClass);
+  if (StandardHansa==false) then begin
+  EditField(h1,v+=vs,80,"Kredītkarte",Normal,CreditCard,false,CreditCardSClass);
+  EditField(h1,v+=vs,80,"",Normal,AuthorizationCode,false,0);
+  end;
+  EditField(h1,v+=vs,-20,"Komentārs",Normal,Comment,false,0);
+  v = vm;
+  if (StandardHansa==false) then begin
+    EditField(h2,v,80,"Aģentu grupa",Normal,SalesGroup,false,SalesGroupSClass);  
+    v = v + vs;
+  end;
+  EditField(h2,v,80,"Valoda",Normal,LangCode,false,LangSClass);  
+  if (StandardHansa==false) then begin
+    EditField(h2,v+=vs,80,"Komisija",Normal,Commision,true,0);  
+    EditField(h2,v+=vs,80,"Sum. ar komisiju",ViewOnly,SumIncCom,true,0);  
+  end;
+  if (HasTREO) then begin
+  EditField(h3,v=vm,80,"TREO Nr.",Normal,TREONr,false,0);
+  EditField(h3,v+=vs,80,"TREO derīgs līdz",Normal,TREOExpDate,false,PasteCurDate);
+  end;
+  Tile(6,250,false,"6",Addr1);
+  label = UserDefined("CUVc","InvAddr0");
+  if (blank(label)) then begin label = "Rēķina"; end;
+  EditField(h=110,v=6,-20,label,Normal,Addr1,false,0);
+  label = UserDefined("CUVc","InvAddr1");
+  if (blank(label)) then begin label = "adrese"; end;
+  EditField(h,v+=vs, -20,label,Normal,Addr2,false,0);
+  label = UserDefined("CUVc","InvAddr2");
+  EditField(h,v+=vs, -20,label,Normal,Addr3,false,0);
+  label = UserDefined("CUVc","InvAddr3");
+  EditField(h,v+=vs, -20,label,Normal,InvAddr3,false,0);
+  label = UserDefined("CUVc","InvAddr4");
+  EditField(h,v+=vs, -20,label,Normal,InvAddr4,false,0);
+  EditField(h,vm=(v+=vs),80,"Valsts",Normal,InvCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin   
+    EditField(h2-89,v,232,"",ViewOnly,InvCountryName,false,0);  
+    h5 = -170;
+    width = 150;
+  end else begin
+    h5 = -270;
+    width = 135;
+  end;
+  EditField(h5,v,width,"Banka",Normal,BankCode,false,BankSClass);  
+  if (StandardHansa==false) then begin
+  ButtonFrame(h3=h+4,v=(vm+=40),123,6,"Apstiprinājuma statuss");
+  RadioButton(h3,v,kAcceptanceStateNotRequired,0,"Nav nepieciešams",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotStarted,0,"Nav sākts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateNotRequested,0,"Nav prasīts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStatePending,0,"Procesā",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateApproved,0,"Apstiprināts",AcceptanceStatus);
+  RadioButton(h3,v+=16,kAcceptanceStateRejected,0,"Noraidīts",AcceptanceStatus);  
+  v = VATZoneButtonsLabelsLAT(h3=290,v=vm,140,16);
+  end else begin
+    v = VATZoneButtonsLabelsLAT(h3=290,v=vm+20,140,16);
+  end;
+  EditField(h2=-170,v=vm,150,"Reģions",Normal,Region,false,RegionSClass); 
+  EditField(h2,v+=vs,150,"PVN reģ. Nr.",Normal,VATNr,false,0);
+  EditField(h2,v+=vs,150,"GLN",ViewOnly,RecipientGLN,false,0);  
+  EditField(h2,v+=vs,150,"Tālrunis",Normal,Phone,false,0);
+  EditField(h2,v+=vs,150,"Fakss",Normal,Fax,false,0);
+  Tile(7,170,false,"7",ShipAddr0);
+  if (StandardHansa==false) then begin
+  EditField(h1,v=6,80,"Adreses kods",Normal,DelAddrCode,false,DelAddr3SClass);
+  EditField(h1,v+=vs,-20,"Nosūtīšanas",Normal,ShipAddr0,false,0);
+  end else begin
+    EditField(h1,v=6,-20,"Nosūtīšanas",Normal,ShipAddr0,false,0);  
+  end;
+  EditField(h1,v+=vs,-20,"adrese",Normal,ShipAddr1,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,ShipAddr2,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,ShipAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr4,false,0);
+  EditField(h1,v+=vs,80,"Valsts",Normal,DelCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin   
+    EditField(h1+91,v,232,"",ViewOnly,DelCountryName,false,0);  
+    h5 = -170;
+    width = -20;
+  end;  
+  EditField(h2,v,150,"Piegādes GLN",ViewOnly,DelRecipientGLN,false,0);  
+//  EditField(h1+200,v,80,"PVN kods",Normal,CustVATCode,false,0);
+  EnterSkip(OrdDate);
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Pasūtījumu statuss",'r',5,"ORInfoRnORDsm");  
+    SpecialMenu("Artikula statuss",'I',2,"ItemStatusORDsm");  
+    SpecialMenu("Veidot nosūtīšanu",'L',0,"SHFromORDsm");  
+    SpecialMenu("Veidot rēķinu",'F',1,"IVFromORDsm");  
+    SpecialMenu("Starpsumma",' ',14,"SubtotalORDsm");  
+/*
+email not working yet
+    SpecialMenu("Create E-Mail",'m',11,"CreateMailFromORDsm");  
+*/    
+  end else begin
+  SpecialMenu("Virsraksta līnija",' ',13,"ORAddHeaderLine");
+  SpecialMenu("Slēptā rinda",' ',13,"ORAddHidLine");
+  SpecialMenu("Starpsumma",' ',14,"SubtotalORDsm");
+  SpecialMenu("Pārrēķināt atlaidi",' ',11,"RecalcDiscountORDsm");
+  if (StandardHansa==false) then begin
+  SpecialMenu("Pārrēķināt svaru un tilpumu",' ',10,"RecalculateWeightORDsm");
+  end;
+  SpecialMenu("Atjaunot valūtas cenu lapas artikulus",' ',7,"UpdatePricesORDsm");
+  SpecialMenu("Artikula statuss",'I',2,"ItemStatusORDsm");
+  SpecialMenu("Artikulu meklēšana",'f',1,"ItemSearchDsm");
+  SpecialMenu("Pasūtījumu statuss",'r',5,"ORInfoRnORDsm");
+  if (StandardHansa==false) then begin
+  SpecialMenu("Iepriekšējās pārdošanas cenas",' ',12,"ORLastSPrsm");
+  SpecialMenu("Drukāt iekšējos pasūtījumus",' ',4,"Or2FormORDsm");
+  end;
+  SpecialMenu("Rezervācijas",' ',15,"OrderReservORDsm");
+  if (StandardHansa==false) then begin
+  SpecialMenu("Nosūtīt apstiprināšanai",' ',6,"ORSendforAcceptanceORDsm");
+  SpecialMenu("Atcelt apstiprināšanas pieprasījumu",' ',2,"CancelApprovalRequestDsm");
+  end;
+  SpecialMenu("Veidot aktivitāti",'c',9,"CreateActFromORDsm");
+  SpecialMenu("Veidot nosūtīšanu",'L',0,"SHFromORDsm");
+  SpecialMenu("Veidot priekšapmaksas rēķinu",'o',3,"DownPayFromORDsm");
+  if (HaseMail) then begin
+  SpecialMenu("Veidot e-pastu",'m',11,"CreateMailFromORDsm");
+  end;
+  SpecialMenu("Veidot rēķinu",'F',1,"IVFromORDsm");
+  if (HasModTS) then begin
+  SpecialMenu("Veidot projektu",' ',9,"CreatePRFromORDsm");
+  SpecialMenu("Veidot projektu budžetu",' ',10,"CreateTBBUFromORDsm");
+  end;
+  if (HasModPO) then begin
+    SpecialMenu("Veidot pasūtījumu",' ',16,"POFromORDsm");  // OBS
+  end;
+  if (GuiType==kGuiiPhone) then begin
+    SpecialMenu("Paraksts",' ',10,"SignORDsm");  
+  end;
+  SpecialMenu("Veidot atgriezto preci",'B',6,"RetFromORsm");
+  SpecialMenu("Veidot noliktavas kustību",' ',8,"StockMovFromORDsm");
+  if (HasTaxMatrix) then begin
+    SpecialMenu("Atvērt nod. matricu",' ',25,"OpenVatMatrixORDsm"); 
+  end;
+  end;
+  EndWindow;
+end;

@@ -1,0 +1,291 @@
+external procedure S_EmptyString(integer); 
+external procedure S_Export(string,integer); 
+external inner procedure FindUserMailboxName(string,var string,var string);
+external inner function Boolean PasteActTypeInAct(string,var record ActVc);
+
+procedure ExportSapaCustomer(record CUVc CUr,string prefix,string IC1, string IC2)
+begin
+
+  record ExportAutoBlock ExportAutoBl;
+  record CountryVc Countryr;
+  record UserVc Userr;
+  string 255 tstr;
+  string 5 t1,t2;
+  integer dev;
+  
+  BlockLoad(ExportAutoBl);
+  dev = ExportAutoBl.CSeparator;
+  
+  //1
+  tstr = prefix & CUr.Code;
+
+  S_Export(tstr,dev); //1
+  //2
+  /*
+  tstr = "M";
+  
+  if (CUr.DateCreated==CurrentDate) then begin 
+    tstr = "A";
+  end;
+  if (CUr.blockedFlag==1) then begin 
+    tstr = "D";
+  end;
+  */
+  tstr = "A";
+  S_Export(tstr,dev); //2
+  //3  
+  tstr = Left(CUr.Name,10);
+  S_Export(tstr,dev);
+  //4
+  tstr = Left(CUr.Name,30);
+  S_Export(tstr,dev);
+  
+  S_EmptyString(dev); //5
+  S_EmptyString(dev); //6
+  S_EmptyString(dev); //7
+  //8
+  tstr = CUr.Code;
+  S_Export(tstr,dev);
+  
+  Userr.Code = CUr.SalesMan;
+  if ReadFirstMain(Userr,1,true) then begin 
+    S_Export(Userr.DV1,dev); // 9
+    S_Export(Userr.DV2,dev); // 10
+    S_Export(Userr.DV3,dev); // 11
+  end else begin   
+    S_EmptyString(dev); // 9
+    S_EmptyString(dev); // 10
+    S_EmptyString(dev); // 11
+  end;
+  
+  S_EmptyString(dev); //12
+  S_EmptyString(dev); //13
+  S_EmptyString(dev); //14
+  S_EmptyString(dev); //15
+  if (CUr.CustCat == "C") then begin 
+    S_Export("C",dev); //16
+  end else begin
+    S_Export("D",dev); //16
+  end;
+  S_EmptyString(dev); //16
+  S_EmptyString(dev); //17
+  S_EmptyString(dev); //18
+  /*
+  Countryr.Code = CUr.CountryCode;
+  if ReadFirstMain(Countryr,1,true) then begin 
+    t1 = Countryr.D1AQCD;
+    t2 = Countryr.D2ARCD;
+  end;
+  */
+  t1 = IC1;
+  t2 = IC2;
+  
+  S_Export(t1,dev); //20
+  S_Export(t2,dev); //21 
+  S_EmptyString(dev); //19
+  S_EmptyString(dev); //22
+  S_EmptyString(dev); //23
+  S_EmptyString(dev); //24
+  S_EmptyString(dev); //25
+  S_EmptyString(dev); //26
+  S_EmptyString(dev); //27
+  S_EmptyString(dev); //28
+  S_EmptyString(dev); //29
+  S_EmptyString(dev); //30
+  
+  tstr = CUr.InvAddr1;
+  S_Export(tstr,dev); //31
+
+  tstr = CUr.InvAddr3;
+  S_Export(tstr,dev); //32
+
+  tstr = CUr.InvAddr0;
+  S_Export(tstr,dev); //33
+
+  tstr = CUr.InvAddr2;
+  S_Export(tstr,dev); //34
+  
+  S_EmptyString(dev); //35
+  S_EmptyString(dev); //36
+  S_EmptyString(dev); //37
+  //cust start
+  tstr = CUr.VATNr;
+  S_Export(tstr,dev); //38
+  //cust end
+  S_EmptyString(dev); //39
+  S_EmptyString(dev); //40
+  S_EmptyString(dev); //41
+  S_EmptyString(dev); //42
+  S_EmptyString(dev); //43
+  S_EmptyString(dev); //44
+  S_EmptyString(dev); //45
+  
+  NewLine;
+  return;
+end;  
+
+
+global updating
+procedure SapaCustomerEn1(record RcVc RepSpec)
+begin
+  record ActVc Actr;
+  record CUVc CUr;
+  boolean TrHs,test;
+  record ExportAutoBlock ExportAutoBl;
+  string 255 tstr,filename;
+  string 5 s;
+  string 255 mailboxnr,mailboxname;
+  record MailVc Mailr;
+  row MailVc Mailrw;
+
+    
+  BlockLoad(ExportAutoBl);
+  if blank(ExportAutoBl.CUStart) then begin 
+    MessageBox(1936,"");
+    goto LSapaCustomeEn;
+  end;
+
+  
+  //s = "UTF-8";
+  /*if (WindowsMode) then begin
+    s = "CP1252";
+  end else begin
+    s = "MACINTOSH";
+  end;
+  */
+  
+  //s = "MACINTOSH";
+ 
+  if (RepSpec.ArtMode!=99) then begin 
+    if blank(ExportAutoBl.CUPath) then begin 
+      MessageBox(1936,"");
+      goto LSapaCustomeEn;
+    end;
+    s = ExportAutoBl.DefExpCodepage;
+    if nonblank(s) then begin 
+     if (SetExportCodePage(s)) then begin
+       LogText(0,"Code Page is set up: " & s);
+     end else begin 
+       LogText(0,"Code Page is not set up: " & s);
+     end;
+    end; 
+    filename = ExportAutoBl.CUPath & "//customer.csv";
+    CreateFile(filename);
+  end;  
+ 
+  TrHs = true;
+  CUr.Code = "";
+  while LoopMain(CUr,1,TrHs) begin
+    test = true;
+    if (CUr.CUType!=1) then begin 
+      test = false;
+    end;
+    if test then begin 
+      ExportSapaCustomer(CUr,ExportAutoBl.CUStart,ExportAutoBl.IC1,ExportAutoBl.IC2);
+    end;
+  end;
+  if (RepSpec.ArtMode!=99) then begin 
+    CloseFile;
+  end;  
+  //for testing
+  if (ExportAutoBl.Test==1) then begin
+  /* 
+    FindUserMailboxName(CurrentUser,mailboxnr,mailboxname);
+    RecordNew(Mailr);
+    ClearRow(Mailr,Mailrw,1);
+    Mailrw.RowTyp = kMailRowTypeFrom;
+    Mailrw.AddrCode = mailboxname;
+    MatRowPut(Mailr,0,Mailrw);
+    Mailr.Header = "Customers " & ExportAutoBl.DefExpCodepage ;
+    Mailr.TransDate = CurrentDate;
+    Mailr.SerNr = NextSerNr("MailVc",Mailr.TransDate,-1,false,"");          
+    if RecordStore(Mailr,false) then begin 
+    end;
+    RecordLinkFile(filename,0,Mailr,CurrentCompany);
+    */
+    
+        RecordNew(Actr);
+        Actr.TransDate = CurrentDate;
+        Actr.StartTime = CurrentTime;
+        Actr.EndTime = AddHours(CurrentTime,1);
+        Actr.ActType = "TEST";
+        if (PasteActTypeInAct("",Actr)) then begin
+        end;
+        Actr.Comment = "Customers " & ExportAutoBl.DefExpCodepage;
+        Actr.MainPersons = "LEELO";
+        Actr.SerNr = NextSerNr("ActVc",Actr.TransDate,-1,false,"");  
+        if (RecordInsert(Actr,false)) then begin
+          RecordLinkFile(filename,0,Actr,CurrentCompany);
+        end;  
+
+  end;  
+  
+LSapaCustomeEn:;  
+  return;
+end;  
+
+
+
+global
+updating procedure CustomerFromServer(string arg)
+begin
+  record ExportAutoBlock ExportAutoBl;
+  integer compnr;
+  record RcVc RepSpec;
+
+  compnr = StringToInt(arg);
+  if (SetCompany(compnr,false)) then begin
+    BlockLoad(ExportAutoBl);
+    LogText(0,"Customer_EXPORT scheduled task is executed  : " & CurrentDate & CurrentTime);
+    ReportDefaults(RepSpec,"SapaCustomerEClass");
+   
+    SapaCustomerEn1(RepSpec);
+    ExportAutoBl.CULastExportDate = CurrentDate;
+    ExportAutoBl.CULastExportTime = CurrentTime;
+    BlockStore(ExportAutoBl);
+  end;
+  return;
+end;
+
+
+global
+updating procedure SapaCustomerEn(record RcVc RepSpec)
+begin
+  Date d;
+  Time t;
+  string  20 compcode;  
+  record ExportAutoBlock ExportAutoBl;
+  
+  BlockLoad(ExportAutoBl);
+  
+  if blank(ExportAutoBl.CUStart) then begin 
+    MessageBox(1936,"");
+    goto LSapaCustomerEn;
+  end;
+  
+  if blank(ExportAutoBl.CUPath) then begin 
+    MessageBox(1936,"");
+    goto LSapaCustomerEn;
+  end;
+  
+  t = CurrentTime;
+  t.second = t.second + 20;
+  d = CurrentDate;
+  if (TaskExists("Customer_EXPORT")) then begin      
+    RemoveTask("Customer_EXPORT");
+  end;
+  
+  compcode = CurrentCompany;
+  NewTimedTask("Customer_EXPORT","customer.csv eksport","CustomerFromServer",compcode,d,t,"","");
+LSapaCustomerEn:;
+  return;
+end;
+
+global
+updating procedure SapaCustomerMn(record RcVc RepSpec)
+begin
+
+  SapaCustomerEn(RepSpec);
+   
+  return; 
+end;  

@@ -1,0 +1,24 @@
+window SapaCustomerEClass:1
+  wtag("language","EST,LAT,LIT,ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Run sales export",SapaCustomerEClass,CGEc2W,RcType); 
+  SetWRect(64,80,450,430);
+  
+  StaticText(50,20,"Press the Run button",false);
+
+  EndWindow;
+end;
+
+
+window SapaCustomerVClass:1
+  wtag("language","EST,LAT,LIT,ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Run sales export",SapaCustomerVClass,CGMnt,RcType); 
+  SetWRect(64,80,450,430);
+  
+  StaticText(50,20,"Press the Run button",false);
+
+  EndWindow;
+end;

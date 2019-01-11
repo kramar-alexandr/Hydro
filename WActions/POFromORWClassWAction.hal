@@ -1,0 +1,139 @@
+remote inner procedure POVc_PastePrice(var record POVc,Integer);
+remote inner procedure POVc_PastevRebate(var record POVc,Integer);
+remote inner procedure POVc_PasteQuant(var record POVc,Integer);
+remote inner function Boolean POVc_PasteVECode(var record POVc,Boolean);
+remote inner procedure POVc_PasteCurncyCode(var record POVc,string,Boolean);
+remote inner function Boolean POVc_PasteArtCode(var record POVc,Integer,Boolean);
+external inner function Boolean PODchrsum(record POVc,Integer);
+external inner procedure GetLocationName(string,var string);
+
+SetLangMode(LangLatvian,"LAT",2);
+
+global
+procedure POFromORWClassCancel()
+begin
+
+  CloseWindow(CurWindow);
+  return;
+end; 
+
+updating procedure CreatePOFromOR(record ORVc ORr,var record POVc POr,string VECode,string CurncyCode)
+begin
+  record CUVc VEr,CUr;
+  row POVc POrw;
+  row ORVc ORrw;
+  string 255 LocationName;
+  integer i,rw,curcomp,poi;
+
+  curcomp = CurrentCompany;
+  RecordNew(POr);
+  POr.SerNr = NextSerNr("POVc",POr.TransDate,-1,false,"");
+  POr.PlanShip = ORr.PlanShip;
+  POr.WONr = ORr.SerNr;
+  POr.VECode = VECode;
+  POVc_PasteVECode(POr,false);
+  POr.CurncyCode = CurncyCode;
+  POVc_PasteCurncyCode(POr,"",false);
+  VEr.Code = POr.VECode;
+  if ReadFirstMain(VEr,1,true) then begin end;
+  if ORr.Location=="TP" then begin
+    CUr.Code = ORr.CustCode;
+    if ReadFirstMain(CUr,1,true) then begin end;
+    POr.Location = ORr.Location;
+    GetLocationName(POr.Location,LocationName);
+    POr.ShipAddr0 = LocationName;
+    POr.ShipAddr1 = CUr.Name;
+    POr.ShipAddr2 = CUr.DelAddr0;
+    if nonblank(CUr.SearchKey) then begin
+      POr.ShipAddr3 = "Customer No.: " & CUr.SearchKey;
+    end;
+  end;
+  rw = MatRowCnt(ORr);
+  for(i=0;i<rw;i=i+1)begin
+    MatRowGet(ORr,i,ORrw);
+    if ORrw.stp==1 and NonBlank(ORrw.ArtCode) then begin
+      ClearRow(POr,POrw,1);
+      POrw.ArtCode = ORrw.ArtCode;
+      if nonblank(POrw.ArtCode) then begin
+        MatRowPut(POr,poi,POrw);
+        if POVc_PasteArtCode(POr,poi,false) then begin end;
+        MatRowGet(POr,poi,POrw);
+      end;
+      POrw.Quant = ORrw.Quant;
+      MatRowPut(POr,poi,POrw);
+      POVc_PasteQuant(POr,poi);
+      MatRowGet(POr,poi,POrw);
+      
+      POrw.UnitCode = ORrw.UnitCode;
+      POrw.Objects = ORrw.Objects;
+      POrw.Price = ORrw.Price;
+      MatRowPut(POr,poi,POrw);
+      POVc_PastePrice(POr,poi);
+      MatRowGet(POr,poi,POrw);
+      
+      POrw.vRebate = ORrw.vRebate;
+      MatRowPut(POr,poi,POrw);
+      POVc_PastevRebate(POr,poi);
+      MatRowGet(POr,poi,POrw);
+      
+      POrw.Anod = ORrw.Anod;
+      POrw.Powd = ORrw.Powd;
+      POrw.Mec = ORrw.Mec;
+      MatRowPut(POr,poi,POrw);
+      if (PODchrsum(POr,poi)) then begin end;
+    end;
+    poi = poi + 1;
+  end;
+  if RecordStore(POr,true) then begin end;
+  CreateRecordLink(POr,curcomp,ORr,curcomp);
+  CreateRecordLink(ORr,curcomp,POr,curcomp);
+end;
+
+global
+updating procedure POFromORWClassCreate()
+begin
+  record RcVc RepSpec;
+  record ORVc ORr;
+  record POVc POr;
+  integer wn,mwn;
+  longint tmpSerNr;
+
+  wn = CurWindow;
+  DeselectWindow(wn,true);
+  GetWindowRecord(wn,RepSpec);
+  if nonblank(RepSpec.f1) and nonblank(RepSpec.CurncyCode) then begin
+    tmpSerNr = NextSerNr("POVc",CurrentDate,-1,false,"");
+    if tmpSerNr<>-1 then begin
+      mwn = MotherWindow(wn);//OR window
+      GetWindowRecord(mwn,ORr);
+      CloseWindow(wn);
+      CreatePOFromOR(ORr,POr,RepSpec.f1,RepSpec.CurncyCode);
+      wn = OpenWindow("PODClass",1,0,"","",POr);
+    end else begin
+      MessageBox(0,"Purchase Order Number Serias are not specified, check the setting");
+    end;
+  end else begin
+    MessageBox(0,"Specify Supplier and Currency Code");
+  end;
+end;
+
+/* removed
+
+global
+procedure POFromORDsm()
+begin
+  record RcVc RepSpec;
+  record ORVc ORr;
+  integer wn,nwn;
+
+  wn = CurWindow;
+  if WindowState(wn)==0 then begin
+    GetWindowRecord(wn,ORr);
+    RepSpec.CurncyCode = ORr.CurncyCode;
+    RepSpec.f1 = "";
+    nwn = OpenWindow("POFromORWClass",0,wn,"","",RepSpec);
+  end else begin
+    MessageBox(0,"Save Sales Order");
+  end;
+end;
+*/

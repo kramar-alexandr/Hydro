@@ -1,0 +1,53 @@
+event startup
+begin
+  SetLangMode(LangEnglish,"ENG",0);
+
+  Report("SAPA - Item History", Sapa_INrsRClass, Sapa_INrsRn, 0, modIN);
+  Maintenance("Add Item Classification",BEAddINVcClassVClass,BEAddINVcMn,modIN);
+  Report("Items List, qty 2", Sapa_IVJRClass, Sapa_InvoiceRn, 0, modSL);
+  Report("UUS:Sales Invoices",NewArveClass,NewArveRn,0,modSL);
+  Report("UUS:Sales Orders",UusTellimClass,UusTellimRn,0,modSO);
+  Report("VANA:Sales Orders",TellimClass,TellimRn,0,modSO);
+  Maintenance("SAPA:Create Purchase Order", OstuClass, OstuMn, modSO);
+  Report("SAPA:Purchase Orders 24.11.00",PakkumClass,PakkumRn,0,modQT);
+  Report("SAPA:Activities 2003",TegevusClass,TegevusRn,0,modCRM);
+  Report("Loading List",LListRClass,LListRn,0,modIN);
+  
+  Report("SAPA: Sales Report",SapaSalesRClass,SapaSalesRn,0,modSL);
+  Maintenance("SAPA: customer.csv",SapaCustomerVClass,SapaCustomerMn,modSL);
+  Maintenance("SAPA: delivery.csv",SapaDeliveryVClass,SapaDeliveryMn,modSL);
+  Maintenance("SAPA: bookings.csv",SapaBookingVClass,SapaBookingMn,modSL);
+  Maintenance("SAPA: orders.csv",SapaOrderVClass,SapaOrderMn,modSL);
+  
+  Export("SAPA: customer.csv",SapaCustomerEClass,SapaCustomerEn,modSL);
+  Export("SAPA: delivery.csv",SapaDeliveryEClass,SapaDeliveryEn,modSL);
+  Export("SAPA: bookings.csv",SapaBookingEClass,SapaBookingEn,modSL);
+  Export("SAPA: orders.csv",SapaOrderEClass,SapaOrderEn,modSL);
+  
+  Setting("Auto SAPA Export",ExportAutoTClass,modSL);
+  Setting("Auto SAPA Export - All Companies",H_AllEksportTClass,modSL);
+
+  Setting("Metal Price ",MetalPriceTClass,modSL);
+
+  SString(1000000,"Qty (kg)");
+  
+  SString(1000001,"Add Salesman");
+  SString(1000002,"Add Country");
+  SString(1000003,"Add Perimeter");
+  SString(1000004,"Add Plan.Sent Date.");
+  SString(1000005,"Add Plan Arrival Date");
+  SString(1000006,"Customer is without VAT Nr.");
+  SString(1000007,"Salesman is on Contact Card");
+  SString(1000008,"Country Code is not on Contact Card");
+  SString(1000009,"Item without Perimeter");
+  SString(1000010,"Salesman is on Contact Card ");
+  SString(1000011,"Country Code is on Contact Card ");
+  //fix patch
+  
+  
+  SString(17961,"Contact Classification ");
+
+  // 17.11.2010, not used in HALCUST
+  //sString(23000, "Sisesta lähetusviis"); //nk this number is used in standard
+  return;
+end;

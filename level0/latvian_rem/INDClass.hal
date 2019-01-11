@@ -1,0 +1,392 @@
+external function string 60 UserDefined(string,string);
+external function string 255 VATZoneNameLAT();
+external function Boolean HasJewelleryInterface();
+external function Boolean StandardHansa();
+external function Boolean HasItemClassification();
+external function Boolean HasCharts();
+
+window INDClass:8
+  wtag("language","LAT"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  integer tilenr;
+  real h,h1,h2,h3,h4,h5,h6,v,vm,vs;
+  string 255 label;
+  
+  SetLangMode(LangLatvian,"LAT",2);
+  
+  WindowBegin("Artikuls",INDClass,CGview,-);
+  SetWRect(20,80,800,400);
+  Sizeable(-1,-1,-1,0);
+  DynamicWindow;
+  UseView(INVc);
+  if (HasJewelleryInterface) then begin
+    Tile(0,107,false,"",Code);  
+  end else begin
+  Tile(0,87,false,"",Code);
+  end;
+  v = 6; vs = 20; h = 155; h1 = 300; h2 = 385; h3 = 395; h4 = 285; h5 = 433;
+  EditField(h,v, 150,"Nr.",Normal,Code,false,0);
+  EditField(h2,v,80,"Grupa",Normal,Group,false,ITSClass);
+  EditField(h,v+=vs,-40,"Apraksts",Normal,Name,false,0);
+  if (HasJewelleryInterface) then begin
+    EditField(h,v+=vs,150,"Alt. kods",Normal,AlternativeCode,false,0);  
+  end;
+  tilenr = 1;
+  TileButton(tilenr,"Cenas"); tilenr = tilenr + 1;
+  if (HasJewelleryInterface) then begin
+    TileButton(tilenr,"Dārglietas"); tilenr = tilenr + 1; 
+    TileButton(tilenr,"Pulksteņi"); tilenr = tilenr + 1; 
+  end;
+  TileButton(tilenr,"Nol."); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+  TileButton(tilenr,"Nol. vad."); tilenr = tilenr + 1;
+  end;
+  if (UserCanAction("ViewCostPrice",true)) then begin
+  TileButton(tilenr,"Izm."); tilenr = tilenr + 1;
+  end;
+  TileButton(tilenr,"Specif."); tilenr = tilenr + 1;
+  TileButton(tilenr,"Konti"); tilenr = tilenr + 1;
+  if (GuiType==kGuiiPhone) then begin
+    TileButton(tilenr,"Attēls"); tilenr = tilenr + 1;  
+  end;
+  TileButton(tilenr,"Variāc."); tilenr = tilenr + 1;
+  TileButton(tilenr,"Teksti"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Izm. mod."); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+  TileButton(tilenr,"Liet. vērt."); tilenr = tilenr + 1;
+  end;
+  TileButton(tilenr,"Piezīmes"); tilenr = tilenr + 1;  
+  if (HasCharts) then begin
+    TileButton(tilenr,"BI"); tilenr = tilenr + 1;  
+  end;
+  tilenr = 1;
+  CheckBox(h,v+=vs,0,"Slēgts ",Terminated);
+  CheckBox(h2,v,0,"Nav paredzēts pārdošanai",NotForSales);
+  Tile(tilenr,209,false,tilenr,Unittext); tilenr = tilenr + 1;
+  EditField(h,v=6 ,100,"Vienība",Normal,Unittext,false,UnitSClass);
+  if (HasJewelleryInterface) and (UserCanAction("ViewCostPrice",true)) then begin
+    EditField(h,v+=vs,100,"Pašizmaksa",Normal,InPrice,true,0); 
+  end;
+  EditField(h,v+=vs,100,"Cena",Normal,UPrice1,true,0);
+  EditField(h,v+=vs,100,"Cenas izmaiņas",ViewOnly,LastBasePriceChange,true,0);
+  EditField(h,v+=vs,100,"Cenas faktors",Normal,PriceFactor,true,0);
+  EditField(h,v+=vs,100,"Cenas formula",Normal,CalcPrice,false,CPMSClass);
+  EditField(h,v+=vs,100,"Uzcenojums",Normal,Markup,true,0);
+  EditField(h,v+=vs,-240,"Īsais nosaukums",Normal,AlternativeCode,false,0); // OBS
+  EditField(h,v+=vs,100,"Prēmijas %",Normal,Bonus,true,0);
+  EditField(h,v+=vs,-240,"Objekti",Normal,Objects,false,ObjSClass);
+  if (HasItemClassification) then begin
+  EditField(h,v+=vs,-240,"Artikulu klase",Normal,DispGroups,false,DISClass);
+  end;
+  if (StandardHansa==false) then begin
+  ButtonFrame(h1,v=24,120,4,"Artikula tips");
+  end else begin
+    ButtonFrame(h1,v=24,120,3,"Artikula tips");  
+  end;
+  RadioButton(h1,v,kItemTypePlain,0,"Vienkāršs",ItemType);
+  RadioButton(h1,v+=16,kItemTypeStocked,0,"Noliktavas",ItemType);
+  RadioButton(h1,v+=16,kItemTypeStructured,0,"Strukturētais",ItemType);
+  if (StandardHansa==false) then begin
+  RadioButton(h1,v+=16,kItemTypeService,0,"Servisa",ItemType);
+  end;
+  Pict_Field(-205,8,-35,178,"");
+  if (GuiType==kGuiCocoa) then begin
+    PushButton(-160,182,-80,202,ToolImagePicker,"Pievienot att.");
+  end;  
+  if (StandardHansa==false) then begin
+  CheckBox(h1,v+=32,0,"Projektos uzskatīt par nol. artikulu",ItemMaterial);
+  end;
+  if (HasJewelleryInterface) then begin
+    Tile(tilenr,110,false,tilenr,Metal); tilenr = tilenr + 1;
+    EditField(h,v=6, 140,"Metāls",Normal,Metal,false,0); 
+    EditField(h,v+=vs, 140,"Svars",Normal,RowWeight,false,0); 
+    EditField(h,v+=vs, 140,"Izmērs",Normal,Size,false,0); 
+    EditField(h,v+=vs, 140,"Garums",Normal,Length,false,0); 
+    EditField(h,v+=vs, 140,"Atsauksme",Normal,Reference,false,0); 
+    v = 6; 
+    EditField(h5,v, 140,"Pamatakments",Normal,MajStoneDet,false,0); 
+    EditField(h5,v+=vs, 140,"Krāsa",Normal,Colour,false,0); 
+    EditField(h5,v+=vs, 140,"Tīrība",Normal,Clarity,false,0); 
+    EditField(h5,v+=vs, 140,"Sertifikāts",Normal,Cert,false,0); 
+    EditField(h5,v+=vs, 140,"Papildu akmens",Normal,MinStoneDet,false,0); 
+    Tile(tilenr,90,false,tilenr,WatchBrand); tilenr = tilenr + 1;
+    EditField(h,v=6, 140,"Pulksteņa zīmols",Normal,WatchBrand,false,0); 
+    EditField(h,v+=vs, 140,"Stila nosaukums",Normal,StyleName,false,0); 
+    EditField(h,v+=vs, 140,"Pulksteņa metāls",Normal,WatchMetal,false,0); 
+    EditField(h,v+=vs, 140,"Izplatība",Normal,Movement,false,0); 
+    v = 6; 
+    EditField(h5,v, 140,"Sprādze",Normal,BrcStr,false,0); 
+    EditField(h5,v+=vs, 140,"Dzimuma",Normal,Gender,false,0); 
+    EditField(h5,v+=vs, 140,"Cits",Normal,Other,false,0); 
+    EditField(h5,v+=vs, 140,"Cits 2",Normal,Other2,false,0); 
+  end;
+  Tile(tilenr,170,false,tilenr,MinLevel);  tilenr = tilenr + 1; // Need to clean this Tile up!
+  v = 6;
+  vm = v;
+  ButtonFrame(h1,v+=24,143,3,"Sērijas numurs");
+  RadioButton(h1,v,0,0,"Nekāds",SerNrf);
+  RadioButton(h1,v+=16,1,0,"Vienības",SerNrf);
+  RadioButton(h1,v+=16,2,0,"Partijas",SerNrf);
+  CheckBox(h1+200,v,0,"Neprasīt partijas nr. POS rēķinā",DonotRequireBatchNrOnIVCash);
+  EditField(h,v=6,100,"Min. daudz",Normal,MinLevel,true,0);
+  EditField(h,v+=vs,100,"Maks. daudz",Normal,MaxLevel,true,0);
+  EditField(h,v+=vs  ,100,"Departaments",Normal,Department,false,DepSClass);
+  EditField(h,v+=vs  ,100,"Plaukta Nr.",Normal,InvCode,false,0);
+  EditField(h,v+=vs,100,"Info par art. izcelsmi",Normal,DefaultSource,false,SourceSClass);  
+  EditField(h5,v ,50,"Vides nodoklis par kg",Normal,RepaPricePerWeight,true,0);
+  EditField(h6=650,v ,80,"Noklus. pasūtījuma tips",Normal,DefOrderType,false,SetSClass);  
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Piesārņ. līmenis",Normal,HazLevCode,false,HazLevSClass);
+  EditField(h5,v ,50,"Alkohols %",Normal,AlcPrc,true,0);
+  end;
+  EditField(h,v+=vs ,100,"Vienība 2",Normal,Unittext2,false,UnitSClass);
+  EditField(h5,v ,50,"Daudzums 1",Normal,Conversion1,true,0);
+  EditField(h,v+=vs,100,"Koeficients",Normal,UnitCoefficient,true,0);
+  EditField(h5,v ,50,"Daudzums 2",Normal,Conversion2,true,0);
+  if (StandardHansa==true) then begin
+    EditField(h,v+=vs ,50,"Artik. platums",Normal,Width,true,0);  
+    EditField(h4,v ,50,"Augstums",Normal,Height,true,0);  
+    EditField(h5,v ,50,"Biezums",Normal,Depth,true,0);  
+    EditField(h,v+=vs ,50,"Artik. tilpums",Normal,Volume,true,0);  
+    EditField(h4,v ,50,"Blīvums",Normal,Density,true,0);  
+    EditField(h5,v ,50,"Platums",Normal,Weight,true,0);  
+  end;
+  if (StandardHansa==false) then begin
+  Tile(tilenr,170,false,tilenr,LocArea);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6) ,100,"Nokl. paletes artikuls",Normal,DefPalletItem,true,INSClass);
+  EditField(h5,v ,80,"Saņemšanas vieta",Normal,PickArea,false,LocAreaSClass);
+  EditField(h,v+=vs ,100,"Nokl. atraš. vieta",Normal,LocArea,false,LocAreaSClass);
+  EditField(h5,v ,50,"Paletes iekraušanas vietā",Normal,PalletsInPickArea,true,0);
+  EditField(h,v+=vs ,50,"Maks. daudz. uz paletes",Normal,QtyonPallet,true,0);
+  EditField(h4,v ,50,"Kārtas paletē",Normal,PalletLayers,true,0);
+  EditField(h5,v ,50,"Daudz. kārtā",Normal,QtyonPalletLayer,true,0);
+  EditField(h,v+=vs ,50,"Paletes platums",Normal,PalletWidth,true,0);
+  EditField(h4,v ,50,"Augstums",Normal,PalletHeight,true,0);
+  EditField(h5,v ,50,"Biezums",Normal,PalletDepth,true,0);
+  EditField(h,v+=vs ,50,"Nokl. pozīcijas platums",Normal,DefPosWidth,true,0);
+  EditField(h4,v ,50,"Augstums",Normal,DefPosHeight,true,0);
+  EditField(h5,v ,50,"Biezums",Normal,DefPosDepth,true,0);
+  EditField(h,v+=vs ,50,"Artikula platums",Normal,Width,true,0);
+  EditField(h4,v ,50,"Augstums",Normal,Height,true,0);
+  EditField(h5,v ,50,"Biezums",Normal,Depth,true,0);
+  EditField(h,v+=vs ,50,"Artikula tilpums",Normal,Volume,true,0);
+  EditField(h4,v ,50,"Blīvums",Normal,Density,true,0);
+  EditField(h5,v ,50,"Neto svars",Normal,NetWeight,true,0);
+  EditField(h5,v+=vs ,50,"Svars",Normal,Weight,true,0);
+  end;
+  if (UserCanAction("ViewCostPrice",true)) then begin
+  Tile(tilenr,190,false,tilenr,InPrice);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),100,"Pašizmaksa",Normal,InPrice,true,0);
+  if (StandardHansa==false) then begin
+  EditField(h5,v,70,"Pašizm. izmaiņas",ViewOnly,LastPriceChange,true,0);
+  end else begin
+    EditField(h3,v,70,"Pašizm. izmaiņas",ViewOnly,LastPriceChange,true,0);  
+  end;
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Pašizmaksa bāzes 2",Normal,InPriceB2,true,0);
+  ButtonFrame(h1,v+=24,200,4,"Pašizmaksa pie preču saņemšanas");
+  end else begin
+    ButtonFrame(h1,v+=40,210,4,"Atjaunot pašizm. pie preču saņemšanas");  
+  end;
+  RadioButton(h1,v,0,0,"Nemainīt",UpdateCost);
+  RadioButton(h1,v+=16,1,0,"Pēd.pašizm.(ar papildizm.)",UpdateCost);
+  RadioButton(h1,v+=16,2,0,"Vidējā svērtā",UpdateCost);
+  RadioButton(h1,v+=16,3,0,"Pēd.pašizm.(bez papildizm.)",UpdateCost);
+  ButtonFrame(h5=540,v=v-3*16,200,3,"Atjaunot pašizm. pie pārvērtēšanas");
+  RadioButton(h5,v,0,0,"Nē",SRUpdateCost);
+  RadioButton(h5,v+=16,1,0,"Pēdējā pārvērtēšanas cena",SRUpdateCost);
+  RadioButton(h5,v+=16,2,0,"Vidējā svērtā",SRUpdateCost);
+  if (StandardHansa==false) then begin
+  EditField(h,v=vm+2*vs,100,"Papildizm.",Normal,ExtraCost,true,0);
+  end else begin
+    EditField(h,v=vm+vs,100,"Papildizm.",Normal,ExtraCost,true,0);  
+  end;
+  EditField(h,v+=vs ,100,"Vidējā svērtā",Normal,WeighedAvPrice,true,0);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs ,100,"Vidējā svērtā bāzes 2",Normal,WeighedAvPriceB2,true,0);
+  end;
+  EditField(h,v+=vs ,100,"Pēd.pašizm.(ar papildizm.)",Normal,LastPurchPrice,true,0);
+  EditField(h,v+=vs ,100,"Pēd.pašizm.(bez papildizm)",Normal,LastPurchPrice2,true,0);
+  EditField(h,v+=vs ,100,"Pēdējā pirkuma valūta",Normal,LastPurchCurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+=vs ,100,"Piegāde",Normal,FixedFreight,true,0);
+  CheckBox(h1,v,0,"Iekļaut artikula piegādes izmaksas",InclItemFreight);
+  CheckBox(h5,v,0,"Ir akcīze",HasExcise);    
+  end;
+  Tile(tilenr,170,false,tilenr,Recepy);  tilenr = tilenr + 1;
+  EditField(h,v=6 ,120,"Specifikācija",Normal,Recepy,false,RecSClass);
+  CheckBox(h1,v,0,"Ievietot sastāvdaļas ievadot",ExplodeRec); // "Show components on documents" is better English but VERY confusing
+  EditField(h,v+=vs ,120,"Rēķina specifikācija",Normal,InvRecepy,false,RecSClass);
+  EditField(h2,v,150,"Svītru kods",Normal,BarCode,false,0);
+  EditField(h,v+=vs ,120,"Līguma artikuls",Normal,ContractItem,false,INSClass);
+  EditField(h2,v,150,"EAN kods",Normal,EUCodex,false,CommoditySClass);
+  v = v + vs;
+  if (StandardHansa==false) then begin
+    EditField(h,v,120,"Nomas rēķini",Normal,RentalItem,false,INSClass);  
+  end;
+  EditField(h2,v,150,"EKN kods",Normal,EKNCode,false,0); // i think it is same as Commodity Code
+  if (StandardHansa==false) then begin
+  EditField(h2,v+=vs,150,"Preču un pakalpojumu klasifikācija",Normal,CPSCode,false,0);
+  end;
+  EditField(h,v+=vs ,120,"Garantijas mēneši",Normal,WarrantyLength,true,0);
+  EditField(h2,v,150,"Krāsa",Normal,colnr,false,SetSClass);
+  EditField(h,v+=vs,-40,"Īsais nosaukums",Normal,AlternativeCode,false,0);
+  EditField(h,v+=vs,-40,"Brīdinājums",Normal,WarnText1,false,0);
+  Tile(tilenr,170,false,tilenr,SalesAcc);  tilenr = tilenr + 1;
+  v = 6;
+  vm = v;
+  EditField(h,vm,55,"Realizāc. konts",Normal,SalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,VATZoneNameLAT & "Realiz. konts",Normal,EUSalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,"Eksporta realiz.",Normal,ExpSalesAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+  EditField(h,v+=vs,55,"Serv.realiz.konts",Normal,SVOInvbleSalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,"Serv.garantijas realiz.konts",Normal,SVOWarrantySalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,"Serv.līguma realiz.konts",Normal,SVOContractSalesAcc,false,AccSClass);
+  EditField(h,v+=vs,55,"Nemat.vērt.realiz.konts",Normal,SVOGoodwillSalesAcc,false,AccSClass);
+  end;
+  EditField(h,v+=vs,55,"Komponentes",Normal,CompUsage,false,AccSClass);
+  EditField(h,v+=vs,55,"Projekta mater. izm. konts",Normal,ProjMaterialsUsageAcc,false,AccSClass);  
+  
+  EditField(h2=360,v=vm,55,"Viet.izm. konts",Normal,CostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,VATZoneNameLAT & "Izm. konts",Normal,EUCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Eksporta izm.konts",Normal,ExpCostAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+  EditField(h2,v+=vs,55,"Serv.izm.konts",Normal,SVOInvbleCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Serv.garantijas izm.konts",Normal,SVOWarrantyCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Serv.līguma izm.konts",Normal,SVOContractCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Nemat.vērt.izm.konts",Normal,SVOGoodwillCostAcc,false,AccSClass);
+  EditField(h2,v+=vs,55,"Viesn.nepab.raž.konts",Normal,HotelWIPAcc,false,AccSClass);
+  end;
+  EditField(h2=530,v=vm,20,"Viet. PVN kods",Normal,VATCode,false,VATCodeSClass);
+  EditField(h2,v+=vs,20,VATZoneNameLAT & "PVN kods",Normal,VATCodeEU,false,VATCodeSClass);
+  EditField(h2,v+=vs,20,"Eksporta PVN kods",Normal,VATCodeExp,false,VATCodeSClass);
+  CheckBox(h2,v+=20,0,"Aprēķināt ienākuma nodokli",Perceptions);
+  if (StandardHansa==false) then begin
+  CheckBox(h2,v+=16,0,"Aprēķināt ieturētos nodokļus",Withholdings);
+  EditField(h2=670,v=vm,50,"Viet. nod. veidne",Normal,TaxTemplateCode,false,TaxTemplateSClass);
+  EditField(h2,v+=vs,50,VATZoneNameLAT & "nod. veidne",Normal,TaxTemplateCodeEU,false,TaxTemplateSClass);
+  EditField(h2,v+=vs,50,"Ārpus ES nod.veidne",Normal,TaxTemplateCodeExp,false,TaxTemplateSClass);
+  end;
+  if (GuiType==kGuiiPhone) then begin
+    Tile(tilenr,70,false,tilenr,-);  tilenr = tilenr + 1;
+    AttachmentDisplay(10,10,200,200);
+//    PushButton(30,10,-80,40,ToolImagePicker,"Take picture");
+//    ControlLabel(0,0,0,0,"Take picture","SystemFont",17,kTextStyleBold,AdjCenter,patM4ReportsTextBlue);
+  end;
+  Tile(tilenr,70,false,tilenr,VARMask);  tilenr = tilenr + 1;
+  EditField(h,v=6,-40,"Variāciju šablons",Normal,VARMask,false,VARMasksSClass);
+  EditField(h,v+=vs,-40,"Secība atskaitēs",Normal,VARRepOrder,false,VARMasksSClass);
+  EditField(h,v+=vs,-40,"Apakškomplekts",Normal,VARSubsets,false,VARSubsetsSClass);
+  Tile(tilenr,120,true,tilenr,Math);  tilenr = tilenr + 1;
+  v = 24;
+  MatrixBegin(4,v,-32,-40,-,99);
+  MatCol(1,24,"Valoda",0,LangCode,false,LangSClass);
+  MatCol(1,94,"Teksts",0,Text,false,0);
+  EndMatrix;
+  //cust start
+  EditField(85,-21,50,"Perimeter",Normal,Perimeter,true,0);
+  EditField(225,-21,50,"Length",Normal,Spread,true,0);
+  EditField(335,-21,80,"PG1",Normal,PG1,false,0);
+  EditField(510,-21,80,"PG2",Normal,PG2,false,0);
+  //cust end
+  Tile(tilenr,220,false,tilenr,CostPerc);  tilenr = tilenr + 1;
+  ButtonFrame(h=100,vm=(v=20),230,6,"Primārais izmaksu modelis");
+  RadioButton(h,v,0,0,"Noklusējuma",PrimaryCostModel);
+  RadioButton(h,v+=16,1,0,"Pašizmaksa",PrimaryCostModel);
+  RadioButton(h,v+=16,2,0,"% _no cenas",PrimaryCostModel);
+  EditField(h+150,v,55,"%",Normal,CostPerc,true,0);
+  RadioButton(h,v+=16,3,0,"Vidējā svērtā",PrimaryCostModel);
+  RadioButton(h,v+=16,4,0,"Rindas",PrimaryCostModel);
+  RadioButton(h,v+=16,kCostModelNoneItem,0,"Nekāds",PrimaryCostModel);
+  ButtonFrame(h,v+=40,230,3,"Rindas izmaksu modelis");
+  RadioButton(h,v,0,0,"Noklusējuma",QueuedCostModel);
+  RadioButton(h,v+=16,1,0,"F_IFO cena",QueuedCostModel);
+  RadioButton(h,v+=16,2,0,"LIFO cena",QueuedCostModel);  
+  
+  ButtonFrame(h2=380,v=vm,200,3,"Pašizmaksa pa sēriju numuriem");
+  RadioButton(h2,v,0,0,"Noklusējuma",FIFOPerSerialNr);
+  RadioButton(h2,v+=16,1,0,"Pašizmaksa neizmantojot Sēr. Nr.",FIFOPerSerialNr);
+  RadioButton(h2,v+=16,2,0,"Pašizmaksa pa sēriju numuriem",FIFOPerSerialNr);  
+  ButtonFrame(h2,v+=40,200,3,"Rindas izmaksu modelis pa nolikt.");
+  RadioButton(h2,v,0,0,"Noklusējuma",FIFOPerLocation);
+  RadioButton(h2,v+=16,1,0,"Sekundārā pašizm.bez noliktavām",FIFOPerLocation);
+  RadioButton(h2,v+=16,2,0,"Sekundārā pašizm.pa noliktavām",FIFOPerLocation);  
+  ButtonFrame(h2,v+=40,200,3,"Vid. svērtā pa noliktavām");
+  RadioButton(h2,v,0,0,"Noklusējuma",WAPerLocation);
+  RadioButton(h2,v+=16,1,0,"Vid. svērtā bez noliktavām",WAPerLocation);
+  RadioButton(h2,v+=16,2,0,"Vid. svērtā pa noliktavām",WAPerLocation);  
+/*5.3  
+  ButtonFrame(h2,v+=40,200,3,"Pašizmaksa pa noliktavām");
+  RadioButton(h2,v,0,0,"Noklusējuma",CostPricePerLocation);
+  RadioButton(h2,v+=16,1,0,"Pašizmaksa neatkarīgi no nol.",CostPricePerLocation);
+  RadioButton(h2,v+=16,2,0,"Pašizmaksa pa noliktavām",CostPricePerLocation);  
+*/  
+  if (StandardHansa==false) then begin
+    Tile(tilenr,240,false,tilenr,-); tilenr = tilenr + 1;
+  h = 180; v = 6;
+  label = UserDefined("INVc","UserStr1");
+  if (nonblank(label)) then begin
+    EditField(h,v=6 ,-40,label,Normal,UserStr1,false,0);
+  end;
+  label = UserDefined("INVc","UserStr2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr2,false,0);
+  end;
+  label = UserDefined("INVc","UserStr3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr3,false,0);
+  end;
+  label = UserDefined("INVc","UserStr4");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr4,false,0);
+  end;
+  label = UserDefined("INVc","UserStr5");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-40,label,Normal,UserStr5,false,0);
+  end;
+  label = UserDefined("INVc","UserVal1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal1,true,0);
+  end;
+  label = UserDefined("INVc","UserVal2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal2,true,0);
+  end;
+  label = UserDefined("INVc","UserVal3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,50,label,Normal,UserVal3,true,0);
+  end;
+  label = UserDefined("INVc","UserDate1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate1,true,PasteCurDate);
+  end;
+  label = UserDefined("INVc","UserDate2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate2,true,PasteCurDate);
+  end;
+  label = UserDefined("INVc","UserDate3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,80,label,Normal,UserDate3,true,PasteCurDate);
+  end;
+  end;
+  Tile(tilenr,400,false,tilenr,Math2); tilenr = tilenr + 1;
+  StaticText(50,v=20,"Piezīmes",true);  
+  TextField(60,v-5,-20,370,Math2,0);
+  if (HasCharts) then begin
+    Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
+    ChartArea(10,6,-10,390,"$INDCLass_BIChart");  
+  end;
+  if (UserCanReport("INInfoRn","",true)) then begin 
+  SpecialMenu("Artikula statusa atskaite",'I',0,"INStatusINDsm");
+  end;
+  SpecialMenu("Veidot pasūtījuma artikulu",' ',1,"PIFromINDsm");
+  SpecialMenu("Veidot specifikāciju",' ',2,"RecFromINDsm");
+//  SpecMenuItem("Recalculate Price List",' ',2);
+  if (UserCanReport("INrsRn","INrsRClass",true)) then begin 
+    SpecialMenu("Artikula kustības pārskats",'h',3,"INHistINDsm");//CMD H DOES HIDE HANSA
+  end;
+  SpecialMenu("Artikula novietojuma statuss",' ',4,"LocItemStatDsm");
+  if (HasJewelleryInterface) and (UserCanReport("INInfoRn","",true)) then begin 
+    SpecialMenu("Artikula statuss pa alternatīvajiem kodiem",'S',5,"ItemStatusAltINDsm");
+  end;
+  EndWindow;
+end;
