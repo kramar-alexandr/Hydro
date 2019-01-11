@@ -1496,6 +1496,10 @@ BEGIN
   if (FIELDINFORM("F_CURUSERNAME")) then begin
     GetUserName(CurrentUser,tstr);
     OUTFORMFIELD("F_CURUSERNAME",tstr);
+  end; 
+  if (FIELDINFORM("BPIF_CURUSERNAME")) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - 05, 11 01 2019 y. at 10:36:09 AM
+    GetUserName(CurrentUser,tstr);
+    OUTFORMFIELD("BPIF_CURUSERNAME",tstr);
   end;  
   GetFullCurncyRateText(true,tstr,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2);
   OUTFORMFIELD("F_RATE",tstr);
